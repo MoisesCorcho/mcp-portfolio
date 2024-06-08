@@ -91,7 +91,7 @@
                       email: '',
                       body: '',
                     };
-                    this.successMessage = 'Thanks for your contact request. I will get back to you shortly.';
+                    this.successMessage = 'Gracias por su solicitud de contacto. Me pondré en contacto con usted en breve.';
                   })
                   .catch( async (response) => {
 
