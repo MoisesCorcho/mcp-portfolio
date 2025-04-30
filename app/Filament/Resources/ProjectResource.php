@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use LucasGiovanny\FilamentMultiselectTwoSides\Forms\Components\Fields\MultiselectTwoSides;
 
 class ProjectResource extends Resource
 {
@@ -26,20 +27,16 @@ class ProjectResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('title')
                     ->required(),
+                Forms\Components\TextInput::make('github')
+                    ->url()
+                    ->nullable(),
                 Forms\Components\FileUpload::make('image')
-                    ->required(),
-                Forms\Components\Select::make('category_id')
-                    ->label('Categoría')
-                    ->relationship('categories', 'name')
-                    ->options(Category::all()->pluck('name', 'id'))
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->maxLength(255),
-                    ])
+                    ->image(),
+                Forms\Components\CheckboxList::make('categories')
+                    ->relationship(titleAttribute: 'name')
+                    ->columns(6)
                     ->searchable()
-                    ->preload()
-                    ->required()
+                    ->required(),
             ])->columns([
                 'sm' => 1,
                 'xl' => 1,
