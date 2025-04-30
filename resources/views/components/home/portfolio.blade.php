@@ -32,7 +32,7 @@
               :class="selectedTab == 'all' ? activeClasses : inactiveClasses "
               class="inline-block py-2 md:py-3 px-5 lg:px-8 rounded-lg text-base font-semibold text-center transition "
             >
-              Tdoos Los Proyectos
+              Todos Los Proyectos
             </button>
           </li>
           @foreach($tabs as $tab)
@@ -51,10 +51,10 @@
     <div class="flex flex-wrap -mx-4">
       @foreach ($items as $item)
         <x-portfolio-item
-            :title="$item['title']"
-            :categories="$item['category']"
-            :image="$item['image']"
-            :github="$item['github']">
+            :title="$item->title"
+            :categories="$item->categories->pluck('name')->toArray()"
+            :image="$item->image"
+            :github="$item->github ?? '#'">
         </x-portfolio-item>
       @endforeach
     </div>
