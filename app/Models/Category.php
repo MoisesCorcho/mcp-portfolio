@@ -12,7 +12,7 @@ class Category extends Model
 
     protected $fillable = ['name'];
 
-    public function project(): BelongsToMany
+    public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class);
     }

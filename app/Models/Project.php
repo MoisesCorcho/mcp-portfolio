@@ -10,7 +10,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'image'];
+    protected $fillable = ['title', 'image', 'github'];
 
     public function categories(): BelongsToMany
     {
