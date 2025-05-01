@@ -26,9 +26,9 @@
   </style>
 
   <div class="container">
-    <p><span class="highlight">Name:</span> John Doe</p>
-    <p><span class="highlight">Email:</span> johndoe@example.com</p>
-    <p><span class="highlight">Message:</span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida eros a dapibus ultrices.</p>
+    <p><span class="highlight">Name: </span>{{ $name }}</p>
+    <p><span class="highlight">Email: </span>{{ $email }}</p>
+    <p><span class="highlight">Message: </span>{{ $body }}</p>
   </div>
 
 
