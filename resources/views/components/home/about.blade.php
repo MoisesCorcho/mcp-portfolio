@@ -45,7 +45,7 @@
                         única a la hora de colaborar y resolver problemas.
                     </p>
 
-                    <x-button-link href="" variant="black" target="_blank">
+                    <x-button-link href="https://github.com/MoisesCorcho" variant="black" target="_blank">
                         Mira mi Github
                     </x-button-link>
                 </div>
