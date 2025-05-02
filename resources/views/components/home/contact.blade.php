@@ -122,7 +122,7 @@
               </template>
             </div>
             <div class="mb-6">
-              <x-forms.textarea placeholder="Tu Mensaje" name="body" rows="6" x-model="formData.body" ::class="errors.body ? 'border-red-500 focus:border-red-500' : ''"></x-forms.textarea>
+              <x-forms.text-area placeholder="Tu Mensaje" name="body" rows="6" x-model="formData.body" ::class="errors.body ? 'border-red-500 focus:border-red-500' : ''"></x-forms.text-area>
               <template x-if="errors.body">
                 <div x-text="errors.body[0]" class="text-red-500"></div>
               </template>
