@@ -91,7 +91,7 @@
                       email: '',
                       body: '',
                     };
-                    this.successMessage = 'Gracias por su solicitud de contacto. Me pondré en contacto con usted en breve.';
+                    this.successMessage = 'Gracias por su solicitud de contacto. Nos contactaremos con usted lo antes posible.';
                   })
                   .catch( async (response) => {
 
@@ -116,7 +116,7 @@
               </template>
             </div>
             <div class="mb-6">
-              <x-forms.input type="Correo Electrónico" placeholder="Your Email" name="email" x-model="formData.email" ::class="errors.email ? 'border-red-500 focus:border-red-500' : ''"></x-forms.input>
+              <x-forms.input type="Correo Electrónico" placeholder="Tu Email" name="email" x-model="formData.email" ::class="errors.email ? 'border-red-500 focus:border-red-500' : ''"></x-forms.input>
               <template x-if="errors.email">
                 <div x-text="errors.email[0]" class="text-red-500"></div>
               </template>
