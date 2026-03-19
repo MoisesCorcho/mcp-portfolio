@@ -1445,6 +1445,33 @@ function initVgFireworks() {
     io.observe(section);
 }
 
+// ─── Experience Section — Star Field ─────────────────────────────────────────
+function initExpStars() {
+    const sm = document.getElementById('exp-stars-sm');
+    const md = document.getElementById('exp-stars-md');
+    const lg = document.getElementById('exp-stars-lg');
+    if (!sm || !md || !lg) return;
+
+    /**
+     * Generates N random box-shadow values spread across a 2000×2000px canvas.
+     * The same shadow is applied to both the element and its ::after (via CSS var)
+     * to create a seamless infinite scroll loop.
+     */
+    function multipleBoxShadow(n) {
+        const shadows = [];
+        for (let i = 0; i < n; i++) {
+            const x = Math.floor(Math.random() * 2000);
+            const y = Math.floor(Math.random() * 2000);
+            shadows.push(`${x}px ${y}px #FFF`);
+        }
+        return shadows.join(', ');
+    }
+
+    sm.style.setProperty('--exp-shadow-sm', multipleBoxShadow(700));
+    md.style.setProperty('--exp-shadow-md', multipleBoxShadow(200));
+    lg.style.setProperty('--exp-shadow-lg', multipleBoxShadow(100));
+}
+
 // ─── Experience Section — 3D Cylindrical Carousel ────────────────────────────
 function initExperienceSection() {
     const section  = document.getElementById('experience');
@@ -1454,21 +1481,22 @@ function initExperienceSection() {
     const progress = document.getElementById('exp-progress');
     if (!section || !outer || !scene || !track) return;
 
-    const cards = gsap.utils.toArray('#experience .exp-card');
+    const cards  = gsap.utils.toArray('#experience .exp-card');
     if (!cards.length) return;
+
+    // Pre-resolve inner bodies so onUpdate avoids per-frame querySelector calls
+    const bodies = cards.map(card => card.querySelector('.exp-card__body'));
 
     // ── Mobile: flat vertical stack — JS untouched, CSS handles layout ────────
     if (window.innerWidth < 768) return;
 
     const n         = cards.length;
-    const angleStep = 360 / n;   // degrees between adjacent cards on the wheel
+    const angleStep = 360 / n;
 
-    // Read card dimensions after CSS has applied clamp()
     const cardW = cards[0].offsetWidth;
     const cardH = cards[0].offsetHeight;
 
     // Cylinder radius: cards tangent to surface + extra gap for visual breathing room
-    // r = (cardW/2 + gap) / tan(π/n)  — gap pushes adjacent cards further apart
     const CARD_GAP = 60;
     const radius = Math.round((cardW / 2 + CARD_GAP) / Math.tan(Math.PI / n));
 
@@ -1479,13 +1507,12 @@ function initExperienceSection() {
     track.style.width  = `${cardW}px`;
     track.style.height = `${cardH}px`;
 
-    // ── Place every card on the wheel ────────────────────────────────────────
+    // Place every card on the wheel
     cards.forEach((card, i) => {
         card.style.transform = `rotateY(${i * angleStep}deg) translateZ(${radius}px)`;
     });
 
-    // ── Total rotation to visit every card once (card 0 → card n-1) ─────────
-    // Negative because we rotate the cylinder "toward" the viewer going right
+    // Total rotation to visit every card once (card 0 → card n-1)
     const totalAngle = -(n - 1) * angleStep;
 
     // Scroll budget: 120px per card feels natural, min 1 viewport height
@@ -1499,30 +1526,32 @@ function initExperienceSection() {
         start: 'top top',
         end: () => `+=${scrollBudget}`,
         invalidateOnRefresh: true,
+        snap: {
+            snapTo: 1 / (n - 1),
+            duration: { min: 0.3, max: 0.6 },
+            ease: 'power2.inOut',
+            delay: 0.05,
+        },
         onUpdate(self) {
             const angle = totalAngle * self.progress;
 
-            // Rotate the whole cylinder
             track.style.transform = `rotateY(${angle}deg)`;
 
-            // ── Per-card depth effect ─────────────────────────────────────
             let frontIdx = 0;
             let minAbs   = Infinity;
 
             cards.forEach((card, i) => {
-                // World angle of this card face relative to the viewer (0° = front)
                 let world = ((i * angleStep + angle) % 360 + 360) % 360;
-                if (world > 180) world -= 360;          // normalise to [-180, 180]
+                if (world > 180) world -= 360;
                 const abs = Math.abs(world);
 
                 // Smooth opacity via cosine: 1 at front, ~0.06 at back
-                const t       = (1 - Math.cos(abs * Math.PI / 180)) / 2;
+                const t = (1 - Math.cos(abs * Math.PI / 180)) / 2;
                 card.style.opacity = Math.max(0.06, 1 - t * 0.94);
 
                 if (abs < minAbs) { minAbs = abs; frontIdx = i; }
             });
 
-            // Highlight the frontmost card
             cards.forEach((card, i) => card.classList.toggle('is-front', i === frontIdx));
 
             if (progress) progress.style.width = `${self.progress * 100}%`;
@@ -1546,5 +1575,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // initVgSquiggles(); // disabled — background effect preserved but inactive
     initVgFireworks();
     initVideogameSection();
+    initExpStars();
     initExperienceSection();
 });

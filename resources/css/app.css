@@ -956,23 +956,70 @@ body {
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background-image:
-        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.55) 0%, transparent 100%),
-        radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.45) 0%, transparent 100%),
-        radial-gradient(1px 1px at 40% 30%, rgba(255,255,255,0.35) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 55% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 82% 50%, rgba(255,255,255,0.55) 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 75%, rgba(255,255,255,0.35) 0%, transparent 100%),
-        radial-gradient(1px 1px at 15% 85%, rgba(245,158,11,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 60% 10%, rgba(245,158,11,0.25) 0%, transparent 100%),
-        radial-gradient(1px 1px at 35% 45%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 78% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 5%  55%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 48% 92%, rgba(255,255,255,0.45) 0%, transparent 100%),
-        radial-gradient(1px 1px at 92% 12%, rgba(245,158,11,0.2) 0%, transparent 100%),
-        radial-gradient(1px 1px at 20% 38%, rgba(255,255,255,0.35) 0%, transparent 100%);
-    background-size: 100% 100%;
+    overflow: hidden;
+}
+
+/* Shared base for all star layers */
+.exp-stars__layer {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+}
+
+/* Small stars — 700 units, 50s cycle */
+.exp-stars__sm {
+    width: 1px;
+    height: 1px;
+    box-shadow: var(--exp-shadow-sm);
+    animation: exp-anim-stars 50s linear infinite;
+}
+.exp-stars__sm::after {
+    content: '';
+    position: absolute;
+    top: 2000px;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: var(--exp-shadow-sm);
+}
+
+/* Medium stars — 200 units, 100s cycle */
+.exp-stars__md {
+    width: 2px;
+    height: 2px;
+    box-shadow: var(--exp-shadow-md);
+    animation: exp-anim-stars 100s linear infinite;
+}
+.exp-stars__md::after {
+    content: '';
+    position: absolute;
+    top: 2000px;
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: var(--exp-shadow-md);
+}
+
+/* Large stars — 100 units, 150s cycle */
+.exp-stars__lg {
+    width: 3px;
+    height: 3px;
+    box-shadow: var(--exp-shadow-lg);
+    animation: exp-anim-stars 150s linear infinite;
+}
+.exp-stars__lg::after {
+    content: '';
+    position: absolute;
+    top: 2000px;
+    width: 3px;
+    height: 3px;
+    background: transparent;
+    box-shadow: var(--exp-shadow-lg);
+}
+
+@keyframes exp-anim-stars {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-2000px); }
 }
 
 /* ── Radial vignette ───────────────────────────────────────────────────── */
@@ -1025,10 +1072,7 @@ body {
     padding: 2rem 2rem 1.75rem;
     display: flex;
     flex-direction: column;
-    will-change: transform, opacity;
-    /* backface hidden: cards facing away disappear cleanly */
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    will-change: opacity;
     /* No backdrop-filter in preserve-3d — causes GPU crash with 8 layers */
     background: rgba(13, 20, 38, 0.94);
     border: 1px solid rgba(245, 158, 11, 0.15);
@@ -1044,6 +1088,15 @@ body {
         0 12px 48px rgba(0, 0, 0, 0.55),
         0 0 28px rgba(245, 158, 11, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+/* Content wrapper — receives JS-driven depth-of-field blur (not the card
+   itself, to avoid disrupting preserve-3d z-sorting between siblings) */
+.exp-card__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 /* ── Card elements ─────────────────────────────────────────────────────── */

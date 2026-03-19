@@ -65,8 +65,12 @@ $experience = [
     {{-- Parallax bg text --}}
     <div class="bg-text" style="top: 50%; left: 50%; transform: translate(-50%, -50%);" data-parallax-bg>EXPERIENCIA</div>
 
-    {{-- Stars background --}}
-    <div class="exp-stars" aria-hidden="true"></div>
+    {{-- Stars background — 3 layers (sm/md/lg) animated via JS box-shadow --}}
+    <div class="exp-stars" aria-hidden="true">
+        <div class="exp-stars__layer exp-stars__sm" id="exp-stars-sm"></div>
+        <div class="exp-stars__layer exp-stars__md" id="exp-stars-md"></div>
+        <div class="exp-stars__layer exp-stars__lg" id="exp-stars-lg"></div>
+    </div>
     <div class="exp-vignette" aria-hidden="true"></div>
 
     {{-- Section header --}}
@@ -88,16 +92,18 @@ $experience = [
         <div class="exp-track" id="exp-track">
             @foreach($experience as $i => $job)
             <div class="exp-card glass" data-exp-index="{{ $i }}">
-<h3 class="exp-role">{{ $job['role'] }}</h3>
-                <div class="exp-company-row">
-                    <span class="exp-company">{{ $job['company'] }}</span>
-                    <span class="exp-date">{{ $job['date'] }}</span>
-                </div>
-                <p class="exp-description">{{ $job['description'] }}</p>
-                <div class="exp-stack">
-                    @foreach($job['stack'] as $tech)
-                        <span class="exp-tag">{{ $tech }}</span>
-                    @endforeach
+                <div class="exp-card__body">
+                    <h3 class="exp-role">{{ $job['role'] }}</h3>
+                    <div class="exp-company-row">
+                        <span class="exp-company">{{ $job['company'] }}</span>
+                        <span class="exp-date">{{ $job['date'] }}</span>
+                    </div>
+                    <p class="exp-description">{{ $job['description'] }}</p>
+                    <div class="exp-stack">
+                        @foreach($job['stack'] as $tech)
+                            <span class="exp-tag">{{ $tech }}</span>
+                        @endforeach
+                    </div>
                 </div>
             </div>
             @endforeach
