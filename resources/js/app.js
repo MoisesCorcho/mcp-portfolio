@@ -824,7 +824,7 @@ function initVideogameSection() {
         });
     }
 
-    // ── Title pixel glitch effect — fires on enter, then repeats every ~4s ──
+    // ── Title pixel glitch — repeats every 4s while section is visible ─────
     const title = section.querySelector('.vg-title');
     if (title) {
         const originalShadow = title.style.textShadow;
@@ -845,17 +845,24 @@ function initVideogameSection() {
             }, 80);
         }
 
-        ScrollTrigger.create({
-            trigger: title,
-            start: 'top 80%',
-            onEnter: () => {
-                runGlitch();
-                glitchLoop = setInterval(runGlitch, 4000);
-            },
-            onLeave:      () => { clearInterval(glitchLoop); title.style.textShadow = originalShadow; },
-            onEnterBack:  () => { runGlitch(); glitchLoop = setInterval(runGlitch, 4000); },
-            onLeaveBack:  () => { clearInterval(glitchLoop); title.style.textShadow = originalShadow; },
-        });
+        // IntersectionObserver — immune to GSAP ScrollTrigger refreshes
+        // (pins in prior sections can cause ScrollTrigger to mis-fire onLeave)
+        const glitchObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    runGlitch();
+                    if (!glitchLoop) {
+                        glitchLoop = setInterval(runGlitch, 4000);
+                    }
+                } else {
+                    clearInterval(glitchLoop);
+                    glitchLoop = null;
+                    title.style.textShadow = originalShadow;
+                }
+            });
+        }, { threshold: 0.3 });
+
+        glitchObserver.observe(title);
     }
 
     // ── CRT wipe transition on enter ────────────────────────────────────────
@@ -904,6 +911,60 @@ function initVideogameSection() {
     });
 }
 
+// ─── Experience Section — Horizontal Scroll ───────────────────────────────────
+function initExperienceSection() {
+    const section  = document.getElementById('experience');
+    const outer    = section?.querySelector('.exp-carousel-outer');
+    const track    = document.getElementById('exp-track');
+    const progress = document.getElementById('exp-progress');
+    if (!section || !track || !outer) return;
+
+    // Mobile: cards stack vertically, no horizontal scroll
+    if (window.innerWidth < 768) return;
+
+    const cards = gsap.utils.toArray('#experience .exp-card');
+    if (!cards.length) return;
+
+    const cardW      = cards[0].offsetWidth;
+    const gapPx      = parseFloat(getComputedStyle(track).gap) || 32;
+    const scrollDist = (cardW + gapPx) * (cards.length - 1);
+
+    // Main horizontal pin + scrub
+    const mainTween = gsap.to(track, {
+        x: -scrollDist,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: outer,
+            pin: true,
+            scrub: 1.2,
+            start: 'top top',
+            end: () => '+=' + scrollDist,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+                if (progress) progress.style.width = (self.progress * 100) + '%';
+            },
+        },
+    });
+
+    // Per-card rotateY effect via containerAnimation
+    cards.forEach((card) => {
+        gsap.fromTo(card,
+            { rotateY: 18, scale: 0.88, opacity: 0.3 },
+            {
+                rotateY: 0, scale: 1, opacity: 1,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: card,
+                    containerAnimation: mainTween,
+                    start: 'left 92%',
+                    end: 'left 42%',
+                    scrub: true,
+                },
+            }
+        );
+    });
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     initNoiseCircles();
@@ -919,4 +980,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initParallaxBgText();
     initVgSquiggles();
     initVideogameSection();
+    initExperienceSection();
 });

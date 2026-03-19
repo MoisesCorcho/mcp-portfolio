@@ -15,6 +15,7 @@
     <x-home.about></x-home.about>
     <x-home.portfolio></x-home.portfolio>
     {{-- <x-home.video-tutorials></x-home.video-tutorials> --}}
+    <x-home.experience></x-home.experience>
     <x-home.videogame></x-home.videogame>
     <x-home.contact></x-home.contact>
 
