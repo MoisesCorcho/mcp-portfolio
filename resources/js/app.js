@@ -619,6 +619,291 @@ function initParallaxBgText() {
     });
 }
 
+// ─── Videogame Section: SVG Squiggles Background ──────────────────────────────
+function initVgSquiggles() {
+    const section = document.getElementById('videogame');
+    const svg     = document.getElementById('vg-squiggles-stage');
+    if (!section || !svg) return;
+
+    const BG_COLOR  = '#0a0a1a';
+    const VG_COLORS = ['#00d4ff', '#ff0080', '#39ff14', '#f7df1e', '#ff6b35', '#a855f7'];
+
+    function randomColor() {
+        return VG_COLORS[Math.floor(Math.random() * VG_COLORS.length)];
+    }
+
+    function onResize() {
+        svg.setAttribute('width',  String(section.offsetWidth));
+        svg.setAttribute('height', String(section.offsetHeight));
+    }
+    onResize();
+    window.addEventListener('resize', onResize);
+
+    function buildPath(s, grid) {
+        let x = s.x, y = s.y, dx = s.directionX, dy = s.directionY;
+        const parts = ['M', x, y, 'Q'];
+        let step = 0;
+
+        function newDir(axis, goAnywhere) {
+            const key = 'direction' + axis.toUpperCase();
+            if (!goAnywhere && s[key] !== 0) return s[key];
+            return Math.random() < 0.5 ? -1 : 1;
+        }
+
+        while (step < s.sections * 2) {
+            step++;
+            x += (dx * (step / 30)) * grid;
+            y += (dy * (step / 30)) * grid;
+            if (step !== 1) parts.push(',');
+            parts.push(x, y);
+            if (step % 2 !== 0) {
+                dx = dx === 0 ? newDir('x', step > 8) : 0;
+                dy = dy === 0 ? newDir('y', step > 8) : 0;
+            }
+        }
+        return parts.join(' ');
+    }
+
+    function spawnSquiggle(settings, grid) {
+        const pathStr  = buildPath(settings, grid);
+        const count    = 3;
+        let completed  = 0;
+
+        for (let i = 0; i < count; i++) {
+            const isEraser = i === count - 1;
+            const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            el.setAttribute('d', pathStr);
+            el.style.fill         = 'none';
+            el.style.stroke       = isEraser ? BG_COLOR : randomColor();
+            el.style.strokeLinecap = 'round';
+            el.style.strokeWidth  = '0px';
+
+            const totalLen = el.getTotalLength();
+            const chunkLen = totalLen / 6;
+            el.style.strokeDasharray  = `${chunkLen}, ${totalLen + chunkLen}`;
+            el.style.strokeDashoffset = `${chunkLen}`;
+
+            svg.appendChild(el);
+
+            const proxy = { offset: chunkLen, width: 0 };
+            gsap.to(proxy, {
+                offset:   -totalLen,
+                width:    settings.sections * 0.9,
+                duration: settings.sections * 0.1,
+                ease:     'power1.out',
+                delay:    i * (settings.sections * 0.01),
+                onUpdate() {
+                    el.style.strokeDashoffset = `${proxy.offset}`;
+                    el.style.strokeWidth      = `${proxy.width}px`;
+                },
+                onComplete() {
+                    el.remove();
+                    completed++;
+                },
+            });
+        }
+    }
+
+    let lastMousePos = null;
+    let direction    = null;
+
+    function getPos(e) {
+        const rect = section.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    function createFromMouse(pos) {
+        let sections = 4;
+        if (lastMousePos) {
+            const newDir = { x: 0, y: 0 };
+            const xAmt = Math.abs(lastMousePos.x - pos.x);
+            const yAmt = Math.abs(lastMousePos.y - pos.y);
+            if (xAmt > yAmt) {
+                newDir.x = lastMousePos.x - pos.x < 0 ? 1 : -1;
+                sections += Math.round(xAmt / 4);
+            } else {
+                newDir.y = lastMousePos.y - pos.y < 0 ? 1 : -1;
+                sections += Math.round(yAmt / 4);
+            }
+            direction = newDir;
+        }
+        if (direction && lastMousePos) {
+            spawnSquiggle({
+                x:          lastMousePos.x,
+                y:          lastMousePos.y,
+                directionX: direction.x,
+                directionY: direction.y,
+                sections:   Math.min(sections, 20),
+            }, 10 + Math.random() * (Math.min(sections, 20) * 1.5));
+        }
+        lastMousePos = pos;
+    }
+
+    function burst(fromMouse) {
+        for (let i = 0; i < 5; i++) {
+            const dx = Math.random() > 0.5 ? 1 : -1;
+            spawnSquiggle({
+                x:          fromMouse && lastMousePos ? lastMousePos.x : section.offsetWidth  / 2,
+                y:          fromMouse && lastMousePos ? lastMousePos.y : section.offsetHeight / 2,
+                directionX: dx,
+                directionY: 0,
+                sections:   5 + Math.round(Math.random() * 15),
+            }, 15 + Math.random() * 25);
+        }
+    }
+
+    // Mousemove always triggers squiggles (no hold needed — matches original behaviour)
+    section.addEventListener('mousedown', e  => { lastMousePos = getPos(e); });
+    section.addEventListener('mousemove', e  => {
+        const pos = getPos(e);
+        for (let i = 0; i < 3; i++) createFromMouse(pos);
+    });
+    section.addEventListener('mouseup',   ()  => burst(true));
+
+    section.addEventListener('touchstart', e => {
+        lastMousePos = getPos(e.changedTouches[0]);
+    }, { passive: true });
+    section.addEventListener('touchmove', e => {
+        e.preventDefault();
+        const pos = getPos(e.changedTouches[0]);
+        for (let i = 0; i < 3; i++) createFromMouse(pos);
+    }, { passive: false });
+    section.addEventListener('touchend', () => burst(true));
+}
+
+// ─── Videogame Section ────────────────────────────────────────────────────────
+function initVideogameSection() {
+    const section = document.querySelector('#videogame');
+    if (!section) return;
+
+    // ── Screenshot gallery ───────────────────────────────────────────────────
+    const gallery = section.querySelector('#vg-gallery');
+    if (gallery) {
+        const shots = Array.from(gallery.querySelectorAll('.vg-screenshot'));
+        const dots  = Array.from(gallery.querySelectorAll('.vg-gallery-dot'));
+        let current = 0;
+        let autoTimer;
+
+        function showSlide(index) {
+            shots[current].classList.remove('vg-screenshot--active');
+            dots[current].classList.remove('vg-gallery-dot--active');
+            current = index;
+            shots[current].classList.add('vg-screenshot--active');
+            dots[current].classList.add('vg-gallery-dot--active');
+        }
+
+        function nextSlide() {
+            showSlide((current + 1) % shots.length);
+        }
+
+        autoTimer = setInterval(nextSlide, 3500);
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                clearInterval(autoTimer);
+                showSlide(i);
+                autoTimer = setInterval(nextSlide, 3500);
+            });
+        });
+    }
+
+    // ── Stagger entrance of .vg-animate-in elements ─────────────────────────
+    const animEls = section.querySelectorAll('.vg-animate-in');
+    if (animEls.length) {
+        gsap.to(animEls, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 70%',
+                toggleActions: 'play none none none',
+            },
+        });
+    }
+
+    // ── Title pixel glitch effect — fires on enter, then repeats every ~4s ──
+    const title = section.querySelector('.vg-title');
+    if (title) {
+        const originalShadow = title.style.textShadow;
+        let glitchLoop = null;
+
+        function runGlitch() {
+            let count = 0;
+            const burst = setInterval(() => {
+                if (count >= 8) {
+                    clearInterval(burst);
+                    title.style.textShadow = originalShadow;
+                    return;
+                }
+                title.style.textShadow = count % 2 === 0
+                    ? `${4 + count}px 4px 0px #ff0080, -4px -4px 0px #00d4ff`
+                    : `4px 4px 0px #ff0080, 8px 8px 0px rgba(255,0,128,0.3)`;
+                count++;
+            }, 80);
+        }
+
+        ScrollTrigger.create({
+            trigger: title,
+            start: 'top 80%',
+            onEnter: () => {
+                runGlitch();
+                glitchLoop = setInterval(runGlitch, 4000);
+            },
+            onLeave:      () => { clearInterval(glitchLoop); title.style.textShadow = originalShadow; },
+            onEnterBack:  () => { runGlitch(); glitchLoop = setInterval(runGlitch, 4000); },
+            onLeaveBack:  () => { clearInterval(glitchLoop); title.style.textShadow = originalShadow; },
+        });
+    }
+
+    // ── CRT wipe transition on enter ────────────────────────────────────────
+    gsap.fromTo(section,
+        { clipPath: 'inset(0 100% 0 0)' },
+        {
+            clipPath: 'inset(0 0% 0 0)',
+            duration: 1.2,
+            ease: 'steps(12)',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 90%',
+                toggleActions: 'play none none none',
+            },
+        }
+    );
+
+    // ── Scroll indicator hide when leaving section ──────────────────────────
+    const scrollIndicator = document.getElementById('vg-scroll-indicator');
+    if (scrollIndicator) {
+        gsap.to(scrollIndicator, {
+            y: 10,
+            repeat: -1,
+            yoyo: true,
+            duration: 0.9,
+            ease: 'sine.inOut',
+        });
+        ScrollTrigger.create({
+            trigger: section,
+            start: 'bottom 80%',
+            onEnter: () => gsap.to(scrollIndicator, { opacity: 0, duration: 0.4 }),
+            onLeaveBack: () => gsap.to(scrollIndicator, { opacity: 1, duration: 0.4 }),
+        });
+    }
+
+    // ── Scroll-out: pixel elements fly upward ───────────────────────────────
+    gsap.to(section.querySelector('.container'), {
+        y: -40,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: section,
+            start: 'bottom 60%',
+            end: 'bottom top',
+            scrub: 1,
+        },
+    });
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     initNoiseCircles();
@@ -632,4 +917,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTextScramble();
     initClipReveal();
     initParallaxBgText();
+    initVgSquiggles();
+    initVideogameSection();
 });
