@@ -619,13 +619,13 @@ function initParallaxBgText() {
     });
 }
 
-// ─── Videogame Section: SVG Squiggles Background ──────────────────────────────
-function initVgSquiggles() {
-    const section = document.getElementById('videogame');
-    const svg     = document.getElementById('vg-squiggles-stage');
+// ─── SVG Squiggles Background (parametrizable) ────────────────────────────────
+function initVgSquiggles(sectionId = 'videogame', svgId = 'vg-squiggles-stage', bgColor = '#0a0a1a') {
+    const section = document.getElementById(sectionId);
+    const svg     = document.getElementById(svgId);
     if (!section || !svg) return;
 
-    const BG_COLOR  = '#0a0a1a';
+    const BG_COLOR  = bgColor;
     const VG_COLORS = ['#00d4ff', '#ff0080', '#39ff14', '#f7df1e', '#ff6b35', '#a855f7'];
 
     function randomColor() {
@@ -920,13 +920,14 @@ function initVgFireworks() {
     const ctx = canvas.getContext('2d', { alpha: false });
 
     // ── Config ────────────────────────────────────────────────────────────────
-    const PX       = 4;   // pixel grid size
+    const PX       = 4;      // pixel grid size
     const GRAVITY  = 0.10;
     const FRICTION = 0.986;
     const TRAIL    = 10;
     const STARS    = 200;
-    const MAX_R    = 20;
-    const MAX_P    = 4000;
+    const MAX_R    = 24;
+    const MAX_P    = 5000;
+    const HOLD_MS  = 3200;   // ms formation particles hold their position
 
     const PALETTE = [
         '#00d4ff', '#ff0080', '#39ff14', '#f59e0b',
@@ -937,15 +938,18 @@ function initVgFireworks() {
     const rand    = (a, b) => Math.random() * (b - a) + a;
     const randInt = (a, b) => Math.floor(rand(a, b + 1));
     const rColor  = ()     => PALETTE[randInt(0, PALETTE.length - 1)];
+    const lerp    = (a, b, t) => a + (b - a) * t;
+    const dist2   = (x1, y1, x2, y2) => Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 
     // ── State ─────────────────────────────────────────────────────────────────
     let W = 0, H = 0;
-    let stars    = [];
-    let rockets  = [];
+    let stars     = [];
+    let rockets   = [];
     let particles = [];
-    let animId   = null;
-    let running  = false;
-    let nextLaunch = 0;
+    let animId    = null;
+    let running   = false;
+    let nextLaunch      = 0;
+    let nextShapeLaunch = 0;
 
     // ── Audio Engine ──────────────────────────────────────────────────────────
     const Audio = {
@@ -1006,24 +1010,91 @@ function initVgFireworks() {
             } catch (_) {}
         },
 
+        // Regular firework explosion — boom + crackle
         explode() {
             if (!this.ready) return;
+            const now = this.ac.currentTime;
             try {
-                const now = this.ac.currentTime;
-                const osc = this.ac.createOscillator();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(140, now);
-                osc.frequency.exponentialRampToValueAtTime(14, now + 0.5);
-                const g = this.ac.createGain();
-                g.gain.setValueAtTime(0.3, now);
-                g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                const boom = this.ac.createOscillator();
+                boom.type = 'sine';
+                boom.frequency.setValueAtTime(150, now);
+                boom.frequency.exponentialRampToValueAtTime(15, now + 0.5);
+                const bGain = this.ac.createGain();
+                bGain.gain.setValueAtTime(0.35, now);
+                bGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
                 const lp = this.ac.createBiquadFilter();
                 lp.type = 'lowpass'; lp.frequency.value = 260;
-                osc.connect(lp); lp.connect(g); g.connect(this.master);
-                osc.start(); osc.stop(now + 0.5);
-                // crackle
-                this._noise(0.18, 1200, 4000, 0.15);
+                boom.connect(lp); lp.connect(bGain); bGain.connect(this.master);
+                boom.start(); boom.stop(now + 0.5);
+
+                // crackle burst
+                const crk = this.ac.createBuffer(1, this.ac.sampleRate * 0.2, this.ac.sampleRate);
+                const cd  = crk.getChannelData(0);
+                for (let i = 0; i < cd.length; i++) {
+                    const t = i / this.ac.sampleRate;
+                    cd[i] = (Math.random() * 2 - 1) * Math.exp(-t * 15);
+                }
+                const cSrc = this.ac.createBufferSource();
+                cSrc.buffer = crk;
+                const cFilt = this.ac.createBiquadFilter();
+                cFilt.type = 'highpass'; cFilt.frequency.value = 1000;
+                const cGain = this.ac.createGain();
+                cGain.gain.setValueAtTime(0.2, now);
+                cGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                cSrc.connect(cFilt); cFilt.connect(cGain); cGain.connect(this.master);
+                cSrc.start();
             } catch (_) {}
+        },
+
+        // Formation shape explosion — softer, higher-pitched sparkle disperse
+        formation() {
+            if (!this.ready) return;
+            const now = this.ac.currentTime;
+            try {
+                const osc = this.ac.createOscillator();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(2400, now + 0.3);
+                const g = this.ac.createGain();
+                g.gain.setValueAtTime(0.12, now);
+                g.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                osc.connect(g); g.connect(this.master);
+                osc.start(); osc.stop(now + 0.35);
+                this._noise(0.25, 2000, 6000, 0.08);
+            } catch (_) {}
+        },
+
+        // Single crackle tick — short noise burst, highpass filtered
+        _crackle() {
+            if (!this.ready) return;
+            try {
+                const noise = this.ac.createBuffer(1, this.ac.sampleRate * 0.05, this.ac.sampleRate);
+                const data  = noise.getChannelData(0);
+                for (let i = 0; i < data.length; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (noise.length * 0.3));
+                }
+                const src    = this.ac.createBufferSource();
+                src.buffer   = noise;
+                const filter = this.ac.createBiquadFilter();
+                filter.type  = 'highpass';
+                filter.frequency.value = 3000;
+                const gain       = this.ac.createGain();
+                gain.gain.value  = 0.07;
+                src.connect(filter); filter.connect(gain); gain.connect(this.master);
+                src.start();
+            } catch (_) {}
+        },
+
+        // Shape dissolve — papeletas/chisporroteo: burst of crackle ticks
+        dissolve() {
+            if (!this.ready) return;
+            const count  = 12 + Math.floor(Math.random() * 6);   // 12–17 ticks
+            const spread = 320;                                    // total duration ms
+            for (let i = 0; i < count; i++) {
+                // Non-uniform spacing: more dense at start, sparse at end
+                const t = (i / count) ** 1.6 * spread;
+                setTimeout(() => this._crackle(), t);
+            }
         },
     };
 
@@ -1033,8 +1104,8 @@ function initVgFireworks() {
         if (audioUnlocked) return;
         audioUnlocked = true;
         Audio.init();
-        section.removeEventListener('click',   unlockAudio);
-        window .removeEventListener('scroll',  unlockAudio);
+        section.removeEventListener('click',  unlockAudio);
+        window .removeEventListener('scroll', unlockAudio);
     }
     section.addEventListener('click',  unlockAudio);
     window .addEventListener('scroll', unlockAudio, { passive: true, once: true });
@@ -1045,7 +1116,6 @@ function initVgFireworks() {
         H = section.offsetHeight;
         canvas.width  = W;
         canvas.height = H;
-        // Reseed stars spread over new dimensions
         stars = Array.from({ length: STARS }, () => ({
             x:  rand(0, W),
             y:  rand(0, H),
@@ -1059,6 +1129,26 @@ function initVgFireworks() {
     ro.observe(section);
     resize();
 
+    // ── Shape generators ──────────────────────────────────────────────────────
+    function genCircle(cx, cy, r, n) {
+        const pts = [];
+        for (let i = 0; i < n; i++) {
+            const a = (Math.PI * 2 * i) / n;
+            pts.push({ x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r });
+        }
+        return pts;
+    }
+
+    function genStar(cx, cy, or, ir, n) {
+        const pts = [];
+        for (let i = 0; i < n * 2; i++) {
+            const a = (Math.PI * 2 * i) / (n * 2) - Math.PI / 2;
+            const r = i % 2 === 0 ? or : ir;
+            pts.push({ x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r });
+        }
+        return pts;
+    }
+
     // ── Rocket helpers ────────────────────────────────────────────────────────
     function spawnRocket() {
         if (rockets.length >= MAX_R) return;
@@ -1070,29 +1160,96 @@ function initVgFireworks() {
             speed:   rand(16, 22),
             trail:   [],
             done:    false,
+            targets: null,
         });
         Audio.launch();
     }
 
+    // Launch a shape: splits pts into groups, each group = one rocket
+    function launchShape(pts, color) {
+        const groups = Math.min(8, Math.ceil(pts.length / 25));
+        const size   = Math.ceil(pts.length / groups);
+        for (let g = 0; g < groups; g++) {
+            setTimeout(() => {
+                if (!running) return;
+                const group = pts.slice(g * size, (g + 1) * size);
+                const ax    = group.reduce((s, p) => s + p.x, 0) / group.length;
+                const ay    = group.reduce((s, p) => s + p.y, 0) / group.length;
+                if (rockets.length < MAX_R) {
+                    rockets.push({
+                        x:       ax,
+                        y:       H + 10,
+                        targetY: ay,
+                        color,
+                        speed:   rand(16, 22),
+                        trail:   [],
+                        done:    false,
+                        targets: group,
+                    });
+                    Audio.launch();
+                }
+            }, g * 65);
+        }
+    }
+
+    // Schedule a random shape (circle or star)
+    function spawnShape() {
+        const cx    = rand(W * 0.15, W * 0.85);
+        const cy    = rand(H * 0.10, H * 0.52);
+        const color = rColor();
+        const pts   = Math.random() < 0.55
+            ? genCircle(cx, cy, rand(55, Math.min(130, W * 0.12)), 40)
+            : genStar(cx, cy, rand(70, Math.min(150, W * 0.14)), rand(30, 60), 5);
+        launchShape(pts, color);
+    }
+
     function explodeRocket(r) {
         r.done = true;
-        Audio.explode();
-        const count = randInt(60, 90);
-        for (let p = 0; p < count; p++) {
-            if (particles.length >= MAX_P) break;
-            const angle = (Math.PI * 2 * p / count) + rand(-0.12, 0.12);
-            const speed = rand(3, 11);
-            particles.push({
-                x:       r.x,
-                y:       r.y,
-                color:   Math.random() < 0.15 ? '#ffffff' : r.color,
-                vx:      Math.cos(angle) * speed,
-                vy:      Math.sin(angle) * speed,
-                life:    rand(70, 130),
-                maxLife: 130,
-                size:    rand(PX * 0.4, PX),
-                shimmer: rand(0, Math.PI * 2),
+
+        if (r.targets && r.targets.length) {
+            // Formation explosion — particles fly to shape targets
+            Audio.formation();
+            r.targets.forEach((tg) => {
+                if (particles.length >= MAX_P) return;
+                particles.push({
+                    x:       r.x + rand(-12, 12),
+                    y:       r.y + rand(-12, 12),
+                    tx:      tg.x,
+                    ty:      tg.y,
+                    color:   r.color,
+                    vx:      rand(-9, 9),
+                    vy:      rand(-9, 9),
+                    phase:   'flying',
+                    holdMs:  HOLD_MS,
+                    life:    255,
+                    maxLife: 255,
+                    size:    PX,
+                    shimmer: rand(0, Math.PI * 2),
+                    isFormation: true,
+                    dissolved: false,
+                });
             });
+        } else {
+            // Regular radial explosion
+            Audio.explode();
+            const count = randInt(60, 90);
+            for (let p = 0; p < count; p++) {
+                if (particles.length >= MAX_P) break;
+                const angle = (Math.PI * 2 * p / count) + rand(-0.12, 0.12);
+                const speed = rand(3, 11);
+                particles.push({
+                    x:       r.x,
+                    y:       r.y,
+                    color:   Math.random() < 0.15 ? '#ffffff' : r.color,
+                    vx:      Math.cos(angle) * speed,
+                    vy:      Math.sin(angle) * speed,
+                    life:    rand(70, 130),
+                    maxLife: 130,
+                    size:    rand(PX * 0.4, PX),
+                    shimmer: rand(0, Math.PI * 2),
+                    isFormation: false,
+                });
+            }
         }
     }
 
@@ -1120,10 +1277,16 @@ function initVgFireworks() {
         }
         ctx.globalAlpha = 1;
 
-        // ── Auto-launch ───────────────────────────────────────────────────────
+        // ── Auto-launch regular rockets ───────────────────────────────────────
         if (now >= nextLaunch) {
             spawnRocket();
             nextLaunch = now + rand(1800, 4500);
+        }
+
+        // ── Auto-launch shape rockets ─────────────────────────────────────────
+        if (now >= nextShapeLaunch) {
+            spawnShape();
+            nextShapeLaunch = now + rand(10000, 18000);
         }
 
         // ── Rockets ───────────────────────────────────────────────────────────
@@ -1136,7 +1299,6 @@ function initVgFireworks() {
             r.y    -= r.speed;
             r.speed *= 0.982;
 
-            // Trail
             for (let t = 0; t < r.trail.length; t++) {
                 const tp = r.trail[t];
                 ctx.globalAlpha = (1 - t / r.trail.length) * 0.65;
@@ -1149,7 +1311,6 @@ function initVgFireworks() {
             }
             ctx.globalAlpha = 1;
 
-            // Head
             ctx.save();
             ctx.shadowColor = r.color;
             ctx.shadowBlur  = 14;
@@ -1165,25 +1326,92 @@ function initVgFireworks() {
         // ── Particles ─────────────────────────────────────────────────────────
         for (let i = particles.length - 1; i >= 0; i--) {
             const p = particles[i];
-            p.vy      += GRAVITY;
-            p.vx      *= FRICTION;
-            p.vy      *= FRICTION;
-            p.x       += p.vx;
-            p.y       += p.vy;
             p.shimmer += 0.22;
-            p.life    -= 1.6;
 
-            if (p.life <= 0 || p.y > H + 80) { particles.splice(i, 1); continue; }
+            if (p.isFormation) {
+                // ── Formation particle — phase state machine ──────────────────
+                if (p.phase === 'flying') {
+                    const d = dist2(p.x, p.y, p.tx, p.ty);
+                    if (d > 3) {
+                        const spd = Math.min(d * 0.20, 22);
+                        p.vx = lerp(p.vx, ((p.tx - p.x) / d) * spd, 0.18);
+                        p.vy = lerp(p.vy, ((p.ty - p.y) / d) * spd, 0.18);
+                        p.x += p.vx;
+                        p.y += p.vy;
+                    } else {
+                        p.x = p.tx;
+                        p.y = p.ty;
+                        p.phase = 'holding';
+                    }
+                } else if (p.phase === 'holding') {
+                    p.x = p.tx;
+                    p.y = p.ty;
+                    p.holdMs -= 16;
+                    if (p.holdMs <= 0) {
+                        p.phase = 'falling';
+                        p.vx = rand(-2, 2);
+                        p.vy = rand(-1, 1);
+                        if (!p.dissolved) { p.dissolved = true; Audio.dissolve(); }
+                    }
+                } else {
+                    // falling
+                    p.vy += GRAVITY;
+                    p.vx *= FRICTION;
+                    p.vy *= FRICTION;
+                    p.x  += p.vx;
+                    p.y  += p.vy;
+                    p.life -= 2.2;
+                }
 
-            const ratio = p.life / p.maxLife;
-            const sh    = (Math.sin(p.shimmer) + 1) / 2;
-            ctx.globalAlpha = ratio;
-            ctx.fillStyle   = sh > 0.75 && Math.random() < 0.15 ? '#ffffff' : p.color;
-            ctx.fillRect(
-                Math.floor(p.x / PX) * PX,
-                Math.floor(p.y / PX) * PX,
-                p.size, p.size,
-            );
+                if (p.life <= 0 || p.y > H + 80) { particles.splice(i, 1); continue; }
+
+                const sh = (Math.sin(p.shimmer) + 1) / 2;
+
+                if (p.phase === 'flying' || p.phase === 'holding') {
+                    ctx.save();
+                    ctx.shadowColor = p.color;
+                    ctx.shadowBlur  = 8 + sh * 6;
+                    ctx.globalAlpha = p.phase === 'holding' ? 0.82 + sh * 0.18 : 0.9;
+                    ctx.fillStyle   = sh > 0.8 ? '#ffffff' : p.color;
+                    ctx.fillRect(
+                        Math.floor(p.x / PX) * PX,
+                        Math.floor(p.y / PX) * PX,
+                        p.size, p.size,
+                    );
+                    ctx.restore();
+                } else {
+                    ctx.globalAlpha = (p.life / p.maxLife);
+                    ctx.fillStyle   = p.color;
+                    ctx.fillRect(
+                        Math.floor(p.x / PX) * PX,
+                        Math.floor(p.y / PX) * PX,
+                        p.size, p.size,
+                    );
+                    ctx.globalAlpha = 1;
+                }
+
+            } else {
+                // ── Regular particle — gravity + fade ─────────────────────────
+                p.vy += GRAVITY;
+                p.vx *= FRICTION;
+                p.vy *= FRICTION;
+                p.x  += p.vx;
+                p.y  += p.vy;
+                p.life -= 1.6;
+
+                if (p.life <= 0 || p.y > H + 80) { particles.splice(i, 1); continue; }
+
+                const ratio = p.life / p.maxLife;
+                const sh    = (Math.sin(p.shimmer) + 1) / 2;
+                ctx.globalAlpha = ratio;
+                ctx.fillStyle   = sh > 0.75 && Math.random() < 0.15 ? '#ffffff' : p.color;
+                ctx.fillRect(
+                    Math.floor(p.x / PX) * PX,
+                    Math.floor(p.y / PX) * PX,
+                    p.size, p.size,
+                );
+                ctx.globalAlpha = 1;
+            }
         }
         ctx.globalAlpha = 1;
 
@@ -1203,8 +1431,9 @@ function initVgFireworks() {
     const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
             if (e.isIntersecting) {
-                running    = true;
-                nextLaunch = performance.now() + 400;
+                running         = true;
+                nextLaunch      = performance.now() + 400;
+                nextShapeLaunch = performance.now() + rand(5000, 9000);
                 draw();
             } else {
                 running = false;

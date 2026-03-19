@@ -4,15 +4,20 @@
     class="relative pt-24 lg:pt-32 pb-20 lg:pb-28 overflow-hidden"
     style="background: linear-gradient(180deg, #020617 0%, #0f172a 50%, #020617 100%);"
 >
+    {{-- Squiggles interactive SVG background --}}
+    <svg id="about-squiggles-stage"
+         class="absolute inset-0 w-full h-full"
+         xmlns="http://www.w3.org/2000/svg"
+         style="z-index:0; pointer-events:none;"></svg>
+
     {{-- Noise circles container (JS populates this) --}}
-    <div id="noise-circles" class="absolute inset-0 pointer-events-none" style="z-index:0; overflow:hidden;"></div>
+    <div id="noise-circles" class="absolute inset-0 pointer-events-none" style="z-index:1; overflow:hidden;"></div>
 
     {{-- Decorative oversized bg text (parallax via JS) --}}
     <div class="bg-text" style="top: 50%; left: 50%; transform: translate(-50%, -50%);" data-parallax-bg>SOBRE MÍ</div>
 
     {{-- Background orb --}}
     <div style="position:absolute; width:600px; height:600px; background:rgba(245,158,11,0.05); top:50%; right:-200px; transform:translateY(-50%); border-radius:50%; filter:blur(100px); pointer-events:none;"></div>
-    <div class="dot-grid absolute inset-0 opacity-20 pointer-events-none"></div>
 
     <div class="container relative z-10">
 

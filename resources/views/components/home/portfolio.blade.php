@@ -7,11 +7,8 @@
         get inactiveTabClasses() { return 'filter-tab'; },
     }"
     class="relative pt-24 lg:pt-32 pb-20 lg:pb-28 overflow-hidden"
-    style="background: linear-gradient(180deg, #020617 0%, #0f172a 40%, #020617 100%);"
+    style="background: linear-gradient(180deg, #040d1b 0%, #131e35 50%, #040d1b 100%);"
 >
-    {{-- Decorative oversized bg text (parallax via JS) --}}
-    <div class="bg-text" style="top: 50%; left: 50%; transform: translate(-50%, -50%);" data-parallax-bg>PROYECTOS</div>
-
     {{-- Decorative background --}}
     <div style="position:absolute; width:700px; height:700px; background:rgba(245,158,11,0.04); top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; filter:blur(120px); pointer-events:none;"></div>
     <div class="dot-grid absolute inset-0 opacity-20 pointer-events-none"></div>
