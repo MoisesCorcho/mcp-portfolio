@@ -1445,57 +1445,88 @@ function initVgFireworks() {
     io.observe(section);
 }
 
-// ─── Experience Section — Horizontal Scroll ───────────────────────────────────
+// ─── Experience Section — 3D Cylindrical Carousel ────────────────────────────
 function initExperienceSection() {
     const section  = document.getElementById('experience');
     const outer    = section?.querySelector('.exp-carousel-outer');
+    const scene    = section?.querySelector('.exp-scene');
     const track    = document.getElementById('exp-track');
     const progress = document.getElementById('exp-progress');
-    if (!section || !track || !outer) return;
-
-    // Mobile: cards stack vertically, no horizontal scroll
-    if (window.innerWidth < 768) return;
+    if (!section || !outer || !scene || !track) return;
 
     const cards = gsap.utils.toArray('#experience .exp-card');
     if (!cards.length) return;
 
-    const cardW      = cards[0].offsetWidth;
-    const gapPx      = parseFloat(getComputedStyle(track).gap) || 32;
-    const scrollDist = (cardW + gapPx) * (cards.length - 1);
+    // ── Mobile: flat vertical stack — JS untouched, CSS handles layout ────────
+    if (window.innerWidth < 768) return;
 
-    // Main horizontal pin + scrub
-    const mainTween = gsap.to(track, {
-        x: -scrollDist,
-        ease: 'none',
-        scrollTrigger: {
-            trigger: outer,
-            pin: true,
-            scrub: 1.2,
-            start: 'top top',
-            end: () => '+=' + scrollDist,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-                if (progress) progress.style.width = (self.progress * 100) + '%';
-            },
-        },
+    const n         = cards.length;
+    const angleStep = 360 / n;   // degrees between adjacent cards on the wheel
+
+    // Read card dimensions after CSS has applied clamp()
+    const cardW = cards[0].offsetWidth;
+    const cardH = cards[0].offsetHeight;
+
+    // Cylinder radius: cards tangent to surface + extra gap for visual breathing room
+    // r = (cardW/2 + gap) / tan(π/n)  — gap pushes adjacent cards further apart
+    const CARD_GAP = 60;
+    const radius = Math.round((cardW / 2 + CARD_GAP) / Math.tan(Math.PI / n));
+
+    // Perspective: ~3× the radius keeps distortion visually balanced
+    scene.style.perspective = `${Math.round(radius * 3)}px`;
+
+    // Match track dimensions exactly to one card (it's the cylinder's axle)
+    track.style.width  = `${cardW}px`;
+    track.style.height = `${cardH}px`;
+
+    // ── Place every card on the wheel ────────────────────────────────────────
+    cards.forEach((card, i) => {
+        card.style.transform = `rotateY(${i * angleStep}deg) translateZ(${radius}px)`;
     });
 
-    // Per-card rotateY effect via containerAnimation
-    cards.forEach((card) => {
-        gsap.fromTo(card,
-            { rotateY: 18, scale: 0.88, opacity: 0.3 },
-            {
-                rotateY: 0, scale: 1, opacity: 1,
-                ease: 'power2.out',
-                scrollTrigger: {
-                    trigger: card,
-                    containerAnimation: mainTween,
-                    start: 'left 92%',
-                    end: 'left 42%',
-                    scrub: true,
-                },
-            }
-        );
+    // ── Total rotation to visit every card once (card 0 → card n-1) ─────────
+    // Negative because we rotate the cylinder "toward" the viewer going right
+    const totalAngle = -(n - 1) * angleStep;
+
+    // Scroll budget: 120px per card feels natural, min 1 viewport height
+    const scrollBudget = Math.max(window.innerHeight, 120 * n);
+
+    // ── ScrollTrigger: pin outer, drive cylinder rotation ────────────────────
+    ScrollTrigger.create({
+        trigger: outer,
+        pin: true,
+        scrub: 1.4,
+        start: 'top top',
+        end: () => `+=${scrollBudget}`,
+        invalidateOnRefresh: true,
+        onUpdate(self) {
+            const angle = totalAngle * self.progress;
+
+            // Rotate the whole cylinder
+            track.style.transform = `rotateY(${angle}deg)`;
+
+            // ── Per-card depth effect ─────────────────────────────────────
+            let frontIdx = 0;
+            let minAbs   = Infinity;
+
+            cards.forEach((card, i) => {
+                // World angle of this card face relative to the viewer (0° = front)
+                let world = ((i * angleStep + angle) % 360 + 360) % 360;
+                if (world > 180) world -= 360;          // normalise to [-180, 180]
+                const abs = Math.abs(world);
+
+                // Smooth opacity via cosine: 1 at front, ~0.06 at back
+                const t       = (1 - Math.cos(abs * Math.PI / 180)) / 2;
+                card.style.opacity = Math.max(0.06, 1 - t * 0.94);
+
+                if (abs < minAbs) { minAbs = abs; frontIdx = i; }
+            });
+
+            // Highlight the frontmost card
+            cards.forEach((card, i) => card.classList.toggle('is-front', i === frontIdx));
+
+            if (progress) progress.style.width = `${self.progress * 100}%`;
+        },
     });
 }
 

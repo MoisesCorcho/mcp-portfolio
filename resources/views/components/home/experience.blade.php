@@ -84,11 +84,11 @@ $experience = [
 
     {{-- Pinned carousel --}}
     <div class="exp-carousel-outer">
+      <div class="exp-scene">
         <div class="exp-track" id="exp-track">
             @foreach($experience as $i => $job)
             <div class="exp-card glass" data-exp-index="{{ $i }}">
-                <span class="exp-index">// {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
-                <h3 class="exp-role">{{ $job['role'] }}</h3>
+<h3 class="exp-role">{{ $job['role'] }}</h3>
                 <div class="exp-company-row">
                     <span class="exp-company">{{ $job['company'] }}</span>
                     <span class="exp-date">{{ $job['date'] }}</span>
@@ -102,6 +102,7 @@ $experience = [
             </div>
             @endforeach
         </div>
+      </div>
     </div>
 
     {{-- Progress bar --}}
