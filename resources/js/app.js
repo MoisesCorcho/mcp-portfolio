@@ -81,11 +81,11 @@ function initHeroAnimations() {
     const socialIcons = heroSection.querySelectorAll('.hero-social a');
     if (socialIcons.length) {
         tl.from(socialIcons, {
-            scale: 0,
+            y: 12,
             opacity: 0,
-            duration: 0.4,
+            duration: 0.5,
             stagger: 0.08,
-            ease: 'back.out(2)',
+            ease: 'power3.out',
         }, 1.4);
     }
 
@@ -511,8 +511,117 @@ function initHeroParticles() {
     loop();
 }
 
+// ─── Noise Circles (SimplexNoise + GSAP scrub) ───────────────────────────────
+function initNoiseCircles() {
+    const container = document.getElementById('noise-circles');
+    if (!container || typeof SimplexNoise === 'undefined') return;
+
+    const simplex = new SimplexNoise();
+    // Fewer circles on mobile to preserve performance
+    const COUNT = window.innerWidth < 768 ? 800 : 2500;
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < COUNT; i++) {
+        const div = document.createElement('div');
+        div.classList.add('noise-circle');
+
+        const n1 = simplex.noise2D(i * 0.003,  i * 0.0033);
+        const n2 = simplex.noise2D(i * 0.002,  i * 0.001);
+
+        div.style.transform  = `translate(${n2 * 260}px) rotate(${n2 * 270}deg) scale(${3 + n1 * 2}, ${3 + n2 * 2})`;
+        div.style.boxShadow  = `0 0 0 .2px hsla(${Math.floor(i * 0.3)}, 75%, 65%, 0.45)`;
+
+        fragment.appendChild(div);
+    }
+    container.appendChild(fragment);
+
+    const circles = container.querySelectorAll('.noise-circle');
+
+    // Sequential reveal tied to scroll — faithful to the original technique
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: '#about',
+            scrub: 0.7,
+            start: 'top 75%',
+            end:   'bottom 25%',
+        },
+    });
+
+    circles.forEach((circle) => tl.to(circle, { opacity: 1 }));
+}
+
+// ─── Text Scramble ────────────────────────────────────────────────────────────
+function initTextScramble() {
+    const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&';
+
+    function scramble(el) {
+        const original = el.getAttribute('data-original') || el.textContent.trim();
+        if (!el.getAttribute('data-original')) el.setAttribute('data-original', original);
+
+        let frame = 0;
+        const totalFrames = original.length * 4;
+
+        const interval = setInterval(() => {
+            el.textContent = original.split('').map((char, i) => {
+                if (char === ' ') return ' ';
+                if (i < Math.floor(frame / 4)) return char;
+                return CHARS[Math.floor(Math.random() * CHARS.length)];
+            }).join('');
+            frame++;
+            if (frame >= totalFrames) {
+                clearInterval(interval);
+                el.textContent = original;
+            }
+        }, 30);
+    }
+
+    document.querySelectorAll('[data-scramble]').forEach((el) => {
+        ScrollTrigger.create({
+            trigger: el,
+            start: 'top 85%',
+            onEnter: () => scramble(el),
+        });
+    });
+}
+
+// ─── Clip-path Reveal ─────────────────────────────────────────────────────────
+function initClipReveal() {
+    document.querySelectorAll('[data-clip-reveal]').forEach((el) => {
+        gsap.fromTo(el,
+            { clipPath: 'inset(0 100% 0 0)' },
+            {
+                clipPath: 'inset(0 0% 0 0)',
+                duration: 1.1,
+                ease: 'power4.out',
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none',
+                },
+            }
+        );
+    });
+}
+
+// ─── Parallax Background Text ─────────────────────────────────────────────────
+function initParallaxBgText() {
+    document.querySelectorAll('[data-parallax-bg]').forEach((el) => {
+        gsap.to(el, {
+            yPercent: -25,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: el.parentElement,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1.5,
+            },
+        });
+    });
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    initNoiseCircles();
     initHeroParticles();
     initHeroAnimations();
     initScrollAnimations();
@@ -520,4 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMagneticButtons();
     initParallax();
     initCardHovers();
+    initTextScramble();
+    initClipReveal();
+    initParallaxBgText();
 });

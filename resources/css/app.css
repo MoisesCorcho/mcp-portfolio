@@ -448,7 +448,10 @@ body {
     border-radius: 50%;
     border: 1px solid var(--glass-border);
     color: var(--text-muted);
-    transition: all var(--transition-base);
+    transition: color var(--transition-base),
+                border-color var(--transition-base),
+                background var(--transition-base),
+                box-shadow var(--transition-base);
     background: var(--glass-bg);
 }
 
@@ -519,4 +522,68 @@ body {
     opacity: 0.2;
     font-family: var(--font-display);
     font-style: normal;
+}
+
+/* ── Marquee strip ───────────────────────────────────────────────────────── */
+/* ── Noise circles (SimplexNoise GSAP effect) ────────────────────────────── */
+.noise-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 40%;
+    opacity: 0;
+    margin: -19px auto;
+    pointer-events: none;
+    position: relative;
+}
+
+@keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* ── Clip-path text reveal ───────────────────────────────────────────────── */
+.clip-reveal {
+    clip-path: inset(0 100% 0 0);
+    display: inline-block;
+}
+
+/* ── Decorative background text ──────────────────────────────────────────── */
+.bg-text {
+    position: absolute;
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(245, 158, 11, 0.07);
+    user-select: none;
+    pointer-events: none;
+    line-height: 1;
+    white-space: nowrap;
+    font-size: clamp(80px, 14vw, 180px);
+}
+
+/* ── Heading glow orb ────────────────────────────────────────────────────── */
+.heading-glow {
+    position: relative;
+}
+.heading-glow::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 120px;
+    background: rgba(245, 158, 11, 0.12);
+    filter: blur(60px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* ── Scramble text (JS adds this class while scrambling) ─────────────────── */
+.scrambling {
+    color: var(--amber);
+    opacity: 0.7;
 }

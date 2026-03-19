@@ -7,6 +7,7 @@
     <meta name="description" content="Moisés Corcho Pérez — Desarrollador Web Backend con 4 años de experiencia en Laravel, PHP y MySQL.">
     <title>Moisés Corcho — Dev Portfolio</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
 </head>
 <body class="bg-[#020617] text-slate-200 overflow-x-hidden">
 

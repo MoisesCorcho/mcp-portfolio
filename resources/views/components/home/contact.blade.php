@@ -4,6 +4,9 @@
     class="relative pt-24 lg:pt-32 pb-24 lg:pb-36 overflow-hidden"
     style="background: linear-gradient(180deg, #020617 0%, #0f172a 50%, #020617 100%);"
 >
+    {{-- Decorative oversized bg text (parallax via JS) --}}
+    <div class="bg-text" style="top: 50%; left: 50%; transform: translate(-50%, -50%);" data-parallax-bg>CONTACTO</div>
+
     {{-- Background glow --}}
     <div style="position:absolute; width:600px; height:600px; background:rgba(245,158,11,0.06); bottom:-100px; left:50%; transform:translateX(-50%); border-radius:50%; filter:blur(100px); pointer-events:none;"></div>
     <div class="dot-grid absolute inset-0 opacity-20 pointer-events-none"></div>
@@ -12,9 +15,10 @@
 
         {{-- Section header --}}
         <div class="text-center mb-16 reveal-up">
-            <span class="section-label justify-center">Contacto</span>
-            <h2 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-slate-100 mb-4"
-                style="font-family:var(--font-display);">
+            <span class="section-label justify-center" data-scramble data-original="Contacto">Contacto</span>
+            <h2 class="heading-glow font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-slate-100 mb-4"
+                style="font-family:var(--font-display); overflow:hidden;"
+                data-clip-reveal>
                 ¿Trabajamos
                 <span class="gradient-text-static">juntos?</span>
             </h2>

@@ -6,9 +6,12 @@
         get activeTabClasses() { return 'filter-tab active'; },
         get inactiveTabClasses() { return 'filter-tab'; },
     }"
-    class="relative pt-24 lg:pt-32 pb-20 lg:pb-28"
+    class="relative pt-24 lg:pt-32 pb-20 lg:pb-28 overflow-hidden"
     style="background: linear-gradient(180deg, #020617 0%, #0f172a 40%, #020617 100%);"
 >
+    {{-- Decorative oversized bg text (parallax via JS) --}}
+    <div class="bg-text" style="top: 50%; left: 50%; transform: translate(-50%, -50%);" data-parallax-bg>PROYECTOS</div>
+
     {{-- Decorative background --}}
     <div style="position:absolute; width:700px; height:700px; background:rgba(245,158,11,0.04); top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; filter:blur(120px); pointer-events:none;"></div>
     <div class="dot-grid absolute inset-0 opacity-20 pointer-events-none"></div>
@@ -17,9 +20,10 @@
 
         {{-- Section header --}}
         <div class="text-center mb-14 reveal-up">
-            <span class="section-label justify-center">Portafolio</span>
+            <span class="section-label justify-center" data-scramble data-original="Portafolio">Portafolio</span>
             <h2 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-slate-100 mb-4"
-                style="font-family:var(--font-display);">
+                style="font-family:var(--font-display); overflow:hidden;"
+                data-clip-reveal>
                 Mis proyectos
                 <span class="gradient-text-static">recientes</span>
             </h2>
