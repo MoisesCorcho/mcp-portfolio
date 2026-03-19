@@ -1,56 +1,138 @@
-<!-- ====== About Section Start -->
-<section id="about" class="dark:bg-slate-800 pt-20 lg:pt-[120px] pb-12 lg:pb-[90px] overflow-hidden">
-    <div class="container">
-        <div class="flex flex-wrap justify-between items-center -mx-4">
-            <div class="w-full lg:w-6/12 px-4">
-                <div class="flex items-center -mx-3 sm:-mx-4">
-                    <div class="w-full xl:w-1/2 px-3 sm:px-4">
-                        <div class="py-3 sm:py-4">
-                            <img src="{{ url('/img/MoisesPiano.jpeg') }}" alt="" class="rounded-2xl w-full" />
+{{-- ====== About Section ====== --}}
+<section
+    id="about"
+    class="relative pt-24 lg:pt-32 pb-20 lg:pb-28 overflow-hidden"
+    style="background: linear-gradient(180deg, #020617 0%, #0f172a 50%, #020617 100%);"
+>
+    {{-- Background orb --}}
+    <div style="position:absolute; width:600px; height:600px; background:rgba(245,158,11,0.05); top:50%; right:-200px; transform:translateY(-50%); border-radius:50%; filter:blur(100px); pointer-events:none;"></div>
+    <div class="dot-grid absolute inset-0 opacity-20 pointer-events-none"></div>
+
+    <div class="container relative z-10">
+
+        {{-- Section header --}}
+        <div class="text-center mb-16 reveal-up">
+            <span class="section-label justify-center">Acerca de mí</span>
+            <h2 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-slate-100 mb-4"
+                style="font-family:var(--font-display);">
+                Quién soy
+                <span class="gradient-text-static">más allá del código</span>
+            </h2>
+            <span class="section-line mx-auto" style="width:60px;"></span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+            {{-- ── LEFT: Images grid ── --}}
+            <div class="about-images-grid relative">
+                <div class="grid grid-cols-2 gap-4">
+                    {{-- Column A --}}
+                    <div class="flex flex-col gap-4 pt-8">
+                        <div class="about-img-item rounded-2xl overflow-hidden"
+                             style="border:1px solid rgba(255,255,255,0.06);">
+                            <img
+                                src="{{ url('/img/MoisesPiano.jpeg') }}"
+                                alt="Moisés tocando piano"
+                                class="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
+                            />
                         </div>
-                        <div class="py-3 sm:py-4">
-                            <img src="{{ url('/img/GataMascotaPc.jpeg') }}" alt="" class="rounded-2xl w-full" />
+                        <div class="about-img-item rounded-2xl overflow-hidden"
+                             style="border:1px solid rgba(255,255,255,0.06);">
+                            <img
+                                src="{{ url('/img/GataMascotaPc.jpeg') }}"
+                                alt="Gata con PC"
+                                class="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
+                            />
                         </div>
                     </div>
-                    <div class="w-full xl:w-1/2 px-3 sm:px-4">
-                        <div class="my-4 relative z-10">
-                            <img src="{{ url('/img/GataMascota.jpeg') }}" alt="" class="rounded-2xl w-full" />
-                            <x-about-dots></x-about-dots>
+                    {{-- Column B --}}
+                    <div class="flex flex-col gap-4">
+                        <div class="about-img-item rounded-2xl overflow-hidden"
+                             style="border:1px solid rgba(245,158,11,0.2); height:100%;">
+                            <img
+                                src="{{ url('/img/GataMascota.jpeg') }}"
+                                alt="Gata mascota"
+                                class="w-full h-full object-cover min-h-[250px] transition-transform duration-500 hover:scale-105"
+                            />
                         </div>
+                    </div>
+                </div>
+
+                {{-- Stat cards overlay --}}
+                <div class="absolute -bottom-6 -right-4 hidden lg:grid grid-cols-2 gap-3 z-10">
+                    <div class="stat-card">
+                        <span class="stat-number count-up" data-target="4">0</span>
+                        <span class="text-xs text-slate-400 font-display uppercase tracking-widest mt-1 block"
+                              style="font-family:var(--font-display);">años exp.</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number count-up" data-target="12">0</span>
+                        <span class="text-xs text-slate-400 font-display uppercase tracking-widest mt-1 block"
+                              style="font-family:var(--font-display);">proyectos</span>
                     </div>
                 </div>
             </div>
-            <div class="w-full lg:w-1/2 xl:w-5/12 px-4">
-                <div class="mt-10 lg:mt-0">
-                    <span class="font-semibold text-lg text-primary mb-2 block">
-                        <blockquote class="text-sm text-gray-500 italic py-2 px-3 border-l-4 border-amber-500">
-                            "Not everything is achievable with hard work, but... It helps a lot"
-                        </blockquote>
-                    </span>
-                    <h2 class="font-bold text-3xl sm:text-4xl dark:text-slate-200 mb-8">
-                        {{ __('Acerca de mi') }}
-                    </h2>
-                    <p class="text-base dark:text-slate-400 mb-6">
-                        Mi formación como Ingeniero de Sistemas, culminada con honores, me ha dotado de una aguda
-                        capacidad para el análisis y la resolución lógica de problemas. El conocimiento que he adquirido
-                        en todo estos años permite construir soluciones robustas y eficientes. Consciente del valor del
-                        trabajo en equipo, mi naturaleza comprensiva y mi habilidad para escuchar activamente
-                        contribuyen a una dinámica colaborativa positiva y productiva.
-                    </p>
 
-                    <p class="text-base dark:text-slate-400 mb-6">
-                        Cuando no estoy inmerso en el mundo de la programación, probablemente esté
-                        compartiendo mimos con mis gatos o dejándome llevar por la música escuchándola o tocándola.
-                        Estas pasiones, aunque personales, son parte de lo que me motiva y me aporta una perspectiva
-                        única a la hora de colaborar y resolver problemas.
-                    </p>
+            {{-- ── RIGHT: Text Content ── --}}
+            <div class="reveal-right">
 
-                    <x-button-link href="https://github.com/MoisesCorcho" variant="black" target="_blank">
-                        Mira mi Github
-                    </x-button-link>
+                {{-- Quote card --}}
+                <div class="quote-card mb-8">
+                    <p class="text-slate-300 text-base leading-relaxed">
+                        "Not everything is achievable with hard work, but… it helps a lot."
+                    </p>
                 </div>
+
+                <p class="text-slate-400 leading-relaxed mb-5" style="font-size:0.95rem; font-family:var(--font-body);">
+                    Mi formación como <strong class="text-slate-200">Ingeniero de Sistemas</strong>, culminada con honores, me dotó de una aguda capacidad para el análisis y la resolución lógica de problemas. El conocimiento acumulado a lo largo de estos años me permite construir soluciones robustas y eficientes.
+                </p>
+
+                <p class="text-slate-400 leading-relaxed mb-8" style="font-size:0.95rem; font-family:var(--font-body);">
+                    Cuando no estoy inmerso en el código, probablemente estoy compartiendo mimos con mis gatos o dejándome llevar por la música — escuchándola o tocándola. Estas pasiones me aportan perspectiva y creatividad a la hora de colaborar.
+                </p>
+
+                {{-- Skills tags --}}
+                <div class="mb-8">
+                    <p class="section-label mb-3">Stack técnico</p>
+                    <div class="flex flex-wrap gap-2">
+                        @php
+                            $skills = [
+                                'PHP', 'Laravel', 'MySQL', 'PostgreSQL',
+                                'Vue.js', 'Alpine.js', 'Docker', 'Git',
+                                'REST APIs', 'Tailwind CSS', 'Linux', 'Filament'
+                            ];
+                        @endphp
+                        @foreach($skills as $skill)
+                            <span class="skill-tag">{{ $skill }}</span>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Mobile stats --}}
+                <div class="flex gap-4 mb-8 lg:hidden">
+                    <div class="stat-card flex-1">
+                        <span class="stat-number count-up" data-target="4">0</span>
+                        <span class="text-xs text-slate-400 uppercase tracking-widest block mt-1"
+                              style="font-family:var(--font-display);">años exp.</span>
+                    </div>
+                    <div class="stat-card flex-1">
+                        <span class="stat-number count-up" data-target="12">0</span>
+                        <span class="text-xs text-slate-400 uppercase tracking-widest block mt-1"
+                              style="font-family:var(--font-display);">proyectos</span>
+                    </div>
+                </div>
+
+                <a
+                    href="https://github.com/MoisesCorcho"
+                    target="_blank"
+                    class="btn-outline inline-flex magnetic"
+                >
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    Ver mi GitHub
+                </a>
             </div>
         </div>
     </div>
 </section>
-<!-- ====== About Section End -->
