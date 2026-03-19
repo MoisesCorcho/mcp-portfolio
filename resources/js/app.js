@@ -911,6 +911,311 @@ function initVideogameSection() {
     });
 }
 
+// ─── Videogame Section — Pixel Fireworks Canvas ───────────────────────────────
+function initVgFireworks() {
+    const section = document.getElementById('videogame');
+    const canvas  = document.getElementById('vg-fireworks-canvas');
+    if (!section || !canvas) return;
+
+    const ctx = canvas.getContext('2d', { alpha: false });
+
+    // ── Config ────────────────────────────────────────────────────────────────
+    const PX       = 4;   // pixel grid size
+    const GRAVITY  = 0.10;
+    const FRICTION = 0.986;
+    const TRAIL    = 10;
+    const STARS    = 200;
+    const MAX_R    = 20;
+    const MAX_P    = 4000;
+
+    const PALETTE = [
+        '#00d4ff', '#ff0080', '#39ff14', '#f59e0b',
+        '#f7df1e', '#ff6b35', '#ffffff', '#c084fc',
+        '#4040FF', '#FFD700', '#FF60B0', '#00FFFF',
+    ];
+
+    const rand    = (a, b) => Math.random() * (b - a) + a;
+    const randInt = (a, b) => Math.floor(rand(a, b + 1));
+    const rColor  = ()     => PALETTE[randInt(0, PALETTE.length - 1)];
+
+    // ── State ─────────────────────────────────────────────────────────────────
+    let W = 0, H = 0;
+    let stars    = [];
+    let rockets  = [];
+    let particles = [];
+    let animId   = null;
+    let running  = false;
+    let nextLaunch = 0;
+
+    // ── Audio Engine ──────────────────────────────────────────────────────────
+    const Audio = {
+        ac: null, master: null, ready: false,
+
+        init() {
+            if (this.ac) return;
+            try {
+                this.ac     = new (window.AudioContext || window.webkitAudioContext)();
+                this.master = this.ac.createGain();
+                this.master.gain.value = 0.22;
+                this.master.connect(this.ac.destination);
+                this.ready  = true;
+            } catch (_) {}
+        },
+
+        _noise(dur, bandF1, bandF2, gainPeak) {
+            if (!this.ready) return;
+            const now = this.ac.currentTime;
+            try {
+                const buf  = this.ac.createBuffer(1, this.ac.sampleRate * dur, this.ac.sampleRate);
+                const data = buf.getChannelData(0);
+                for (let i = 0; i < data.length; i++) {
+                    const t = i / this.ac.sampleRate;
+                    data[i] = (Math.random() * 2 - 1)
+                        * (1 - Math.exp(-t * 30))
+                        * Math.exp(-t * 2.8)
+                        * 0.5;
+                }
+                const src = this.ac.createBufferSource();
+                src.buffer = buf;
+                const filt = this.ac.createBiquadFilter();
+                filt.type = 'bandpass'; filt.Q.value = 2;
+                filt.frequency.setValueAtTime(bandF1, now);
+                filt.frequency.exponentialRampToValueAtTime(bandF2, now + dur * 0.6);
+                const g = this.ac.createGain();
+                g.gain.setValueAtTime(gainPeak, now);
+                g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+                src.connect(filt); filt.connect(g); g.connect(this.master);
+                src.start(); src.stop(now + dur);
+            } catch (_) {}
+        },
+
+        launch() {
+            if (!this.ready) return;
+            this._noise(0.7, 400, 3000, 0.6);
+            try {
+                const now = this.ac.currentTime;
+                const osc = this.ac.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(2600, now + 0.7);
+                const g = this.ac.createGain();
+                g.gain.setValueAtTime(0.08, now);
+                g.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+                osc.connect(g); g.connect(this.master);
+                osc.start(); osc.stop(now + 0.7);
+            } catch (_) {}
+        },
+
+        explode() {
+            if (!this.ready) return;
+            try {
+                const now = this.ac.currentTime;
+                const osc = this.ac.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(140, now);
+                osc.frequency.exponentialRampToValueAtTime(14, now + 0.5);
+                const g = this.ac.createGain();
+                g.gain.setValueAtTime(0.3, now);
+                g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                const lp = this.ac.createBiquadFilter();
+                lp.type = 'lowpass'; lp.frequency.value = 260;
+                osc.connect(lp); lp.connect(g); g.connect(this.master);
+                osc.start(); osc.stop(now + 0.5);
+                // crackle
+                this._noise(0.18, 1200, 4000, 0.15);
+            } catch (_) {}
+        },
+    };
+
+    // Unlock audio on first scroll or click inside section
+    let audioUnlocked = false;
+    function unlockAudio() {
+        if (audioUnlocked) return;
+        audioUnlocked = true;
+        Audio.init();
+        section.removeEventListener('click',   unlockAudio);
+        window .removeEventListener('scroll',  unlockAudio);
+    }
+    section.addEventListener('click',  unlockAudio);
+    window .addEventListener('scroll', unlockAudio, { passive: true, once: true });
+
+    // ── Canvas resize ─────────────────────────────────────────────────────────
+    function resize() {
+        W = section.offsetWidth;
+        H = section.offsetHeight;
+        canvas.width  = W;
+        canvas.height = H;
+        // Reseed stars spread over new dimensions
+        stars = Array.from({ length: STARS }, () => ({
+            x:  rand(0, W),
+            y:  rand(0, H),
+            br: rand(0, Math.PI * 2),
+            sp: rand(0.02, 0.06),
+            sz: randInt(1, 2),
+        }));
+    }
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(section);
+    resize();
+
+    // ── Rocket helpers ────────────────────────────────────────────────────────
+    function spawnRocket() {
+        if (rockets.length >= MAX_R) return;
+        rockets.push({
+            x:       rand(W * 0.08, W * 0.92),
+            y:       H + 10,
+            targetY: rand(H * 0.05, H * 0.50),
+            color:   rColor(),
+            speed:   rand(16, 22),
+            trail:   [],
+            done:    false,
+        });
+        Audio.launch();
+    }
+
+    function explodeRocket(r) {
+        r.done = true;
+        Audio.explode();
+        const count = randInt(60, 90);
+        for (let p = 0; p < count; p++) {
+            if (particles.length >= MAX_P) break;
+            const angle = (Math.PI * 2 * p / count) + rand(-0.12, 0.12);
+            const speed = rand(3, 11);
+            particles.push({
+                x:       r.x,
+                y:       r.y,
+                color:   Math.random() < 0.15 ? '#ffffff' : r.color,
+                vx:      Math.cos(angle) * speed,
+                vy:      Math.sin(angle) * speed,
+                life:    rand(70, 130),
+                maxLife: 130,
+                size:    rand(PX * 0.4, PX),
+                shimmer: rand(0, Math.PI * 2),
+            });
+        }
+    }
+
+    // ── Main render loop ──────────────────────────────────────────────────────
+    function draw() {
+        if (!running) return;
+        animId = requestAnimationFrame(draw);
+
+        const now = performance.now();
+
+        // Dark space background — slight trail effect
+        ctx.fillStyle = 'rgba(1, 4, 22, 0.88)';
+        ctx.fillRect(0, 0, W, H);
+
+        // ── Stars ────────────────────────────────────────────────────────────
+        for (const s of stars) {
+            s.br += s.sp;
+            const a  = (Math.sin(s.br) + 1) / 2;
+            const fc = a > 0.72 ? '#ffffff' : a > 0.42 ? '#00d4ff' : '#9966ff';
+            ctx.globalAlpha = a * 0.85;
+            ctx.fillStyle   = fc;
+            const px = Math.floor(s.x / PX) * PX;
+            const py = Math.floor(s.y / PX) * PX;
+            ctx.fillRect(px, py, s.sz * PX, s.sz * PX);
+        }
+        ctx.globalAlpha = 1;
+
+        // ── Auto-launch ───────────────────────────────────────────────────────
+        if (now >= nextLaunch) {
+            spawnRocket();
+            nextLaunch = now + rand(1800, 4500);
+        }
+
+        // ── Rockets ───────────────────────────────────────────────────────────
+        for (let i = rockets.length - 1; i >= 0; i--) {
+            const r = rockets[i];
+            if (r.done) { rockets.splice(i, 1); continue; }
+
+            r.trail.unshift({ x: r.x, y: r.y });
+            if (r.trail.length > TRAIL) r.trail.pop();
+            r.y    -= r.speed;
+            r.speed *= 0.982;
+
+            // Trail
+            for (let t = 0; t < r.trail.length; t++) {
+                const tp = r.trail[t];
+                ctx.globalAlpha = (1 - t / r.trail.length) * 0.65;
+                ctx.fillStyle   = r.color;
+                ctx.fillRect(
+                    Math.floor(tp.x / PX) * PX,
+                    Math.floor(tp.y / PX) * PX,
+                    PX, PX * 1.4,
+                );
+            }
+            ctx.globalAlpha = 1;
+
+            // Head
+            ctx.save();
+            ctx.shadowColor = r.color;
+            ctx.shadowBlur  = 14;
+            ctx.fillStyle   = r.color;
+            ctx.beginPath(); ctx.arc(r.x, r.y, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.beginPath(); ctx.arc(r.x, r.y, 2, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+
+            if (r.y <= r.targetY || r.speed < 2) explodeRocket(r);
+        }
+
+        // ── Particles ─────────────────────────────────────────────────────────
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.vy      += GRAVITY;
+            p.vx      *= FRICTION;
+            p.vy      *= FRICTION;
+            p.x       += p.vx;
+            p.y       += p.vy;
+            p.shimmer += 0.22;
+            p.life    -= 1.6;
+
+            if (p.life <= 0 || p.y > H + 80) { particles.splice(i, 1); continue; }
+
+            const ratio = p.life / p.maxLife;
+            const sh    = (Math.sin(p.shimmer) + 1) / 2;
+            ctx.globalAlpha = ratio;
+            ctx.fillStyle   = sh > 0.75 && Math.random() < 0.15 ? '#ffffff' : p.color;
+            ctx.fillRect(
+                Math.floor(p.x / PX) * PX,
+                Math.floor(p.y / PX) * PX,
+                p.size, p.size,
+            );
+        }
+        ctx.globalAlpha = 1;
+
+        // ── CRT scanlines overlay ─────────────────────────────────────────────
+        ctx.fillStyle = 'rgba(0,0,0,0.018)';
+        for (let y = 0; y < H; y += 2) ctx.fillRect(0, y, W, 1);
+
+        // ── Vignette ──────────────────────────────────────────────────────────
+        const vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.28, W / 2, H / 2, H * 0.85);
+        vg.addColorStop(0, 'rgba(0,0,0,0)');
+        vg.addColorStop(1, 'rgba(0,0,0,0.55)');
+        ctx.fillStyle = vg;
+        ctx.fillRect(0, 0, W, H);
+    }
+
+    // ── Lifecycle: pause when off-screen ─────────────────────────────────────
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+            if (e.isIntersecting) {
+                running    = true;
+                nextLaunch = performance.now() + 400;
+                draw();
+            } else {
+                running = false;
+                if (animId) { cancelAnimationFrame(animId); animId = null; }
+            }
+        });
+    }, { threshold: 0.05 });
+
+    io.observe(section);
+}
+
 // ─── Experience Section — Horizontal Scroll ───────────────────────────────────
 function initExperienceSection() {
     const section  = document.getElementById('experience');
@@ -978,7 +1283,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initTextScramble();
     initClipReveal();
     initParallaxBgText();
-    initVgSquiggles();
+    // initVgSquiggles(); // disabled — background effect preserved but inactive
+    initVgFireworks();
     initVideogameSection();
     initExperienceSection();
 });

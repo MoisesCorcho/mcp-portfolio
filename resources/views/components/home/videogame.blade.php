@@ -1,10 +1,15 @@
 <section id="videogame" class="videogame-section relative overflow-hidden">
 
-  {{-- SVG squiggles interactive background --}}
+  {{-- Fireworks + pixel stars canvas background --}}
+  <canvas id="vg-fireworks-canvas"
+          class="absolute inset-0 w-full h-full"
+          style="z-index:0; pointer-events:none;"></canvas>
+
+  {{-- SVG squiggles interactive background (disabled) --}}
   <svg id="vg-squiggles-stage"
        class="absolute inset-0 w-full h-full"
        xmlns="http://www.w3.org/2000/svg"
-       style="z-index:0; pointer-events:none;"></svg>
+       style="z-index:0; pointer-events:none; display:none;"></svg>
 
   {{-- CRT scanlines overlay --}}
   <div class="vg-scanlines pointer-events-none absolute inset-0" style="z-index:1;"></div>
