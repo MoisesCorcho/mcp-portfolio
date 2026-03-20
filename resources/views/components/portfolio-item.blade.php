@@ -1,7 +1,6 @@
 {{-- Portfolio Card — glassmorphism with hover overlay and cursor glow --}}
 <div
-    x-data="{ categories: {{ json_encode($categories) }} }"
-    :class="selectedTab === 'all' || categories.includes(selectedTab) ? '' : 'hidden'"
+    data-categories="{{ json_encode($categories) }}"
     class="portfolio-card glass rounded-2xl overflow-hidden"
 >
     {{-- Image area --}}
@@ -9,10 +8,7 @@
         <img
             src="{{ ($image) ? url('/storage/' . $image) : url('/img/github.png') }}"
             alt="{{ $title }}"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            style="transition: transform 0.5s ease;"
-            onmouseover="this.style.transform='scale(1.05)'"
-            onmouseout="this.style.transform='scale(1)'"
+            class="w-full h-full object-cover"
         />
         {{-- Overlay on card hover --}}
         <div class="card-overlay"></div>
@@ -34,7 +30,7 @@
 
         {{-- Category badge --}}
         <div class="absolute top-3 left-3 z-10">
-            <span class="px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm"
+            <span class="category-badge px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm"
                   style="font-family:var(--font-display); background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3); color:#fbbf24;">
                 {{ implode(' · ', $categories) ?: 'Sin categoría' }}
             </span>

@@ -332,19 +332,132 @@ function initParallax() {
     });
 }
 
-// ─── Portfolio card hover glow ────────────────────────────────────────────────
+// ─── Portfolio card hover glow + 3D tilt ──────────────────────────────────────
 function initCardHovers() {
     const cards = document.querySelectorAll('.portfolio-card');
     cards.forEach((card) => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
+            // Cursor glow
             const x = ((e.clientX - rect.left) / rect.width) * 100;
             const y = ((e.clientY - rect.top) / rect.height) * 100;
             card.style.setProperty('--mouse-x', `${x}%`);
             card.style.setProperty('--mouse-y', `${y}%`);
+            // 3D tilt
+            const rotateX = ((e.clientY - rect.top) / rect.height - 0.5) * -10;
+            const rotateY = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+            gsap.to(card, { rotateX, rotateY, transformPerspective: 900, duration: 0.35, ease: 'power2.out' });
+        });
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
         });
     });
 }
+
+// ─── Portfolio filter pill (sliding background indicator) ─────────────────────
+function initPortfolioFilterPill() {
+    const pill    = document.getElementById('filter-pill');
+    const wrapper = document.getElementById('filter-tabs-wrapper');
+    if (!pill || !wrapper) return;
+
+    // Wait one tick so flex layout is fully painted
+    requestAnimationFrame(() => {
+        const allTab     = wrapper.querySelector('[data-tab="all"]');
+        if (!allTab) return;
+        const tabRect     = allTab.getBoundingClientRect();
+        const wrapperRect = wrapper.getBoundingClientRect();
+        gsap.set(pill, {
+            x:      tabRect.left - wrapperRect.left,
+            y:      tabRect.top  - wrapperRect.top,
+            width:  tabRect.width,
+            height: tabRect.height,
+        });
+    });
+}
+
+// ─── Portfolio filter with GSAP card animations ───────────────────────────────
+function _addFilterRipple(btn, e) {
+    const ripple = document.createElement('span');
+    ripple.className = 'filter-ripple';
+    const rect = btn.getBoundingClientRect();
+    ripple.style.left = `${e.clientX - rect.left}px`;
+    ripple.style.top  = `${e.clientY - rect.top}px`;
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+}
+
+window.portfolioFilter = function(tab, event) {
+    const section = document.getElementById('portfolio');
+    if (!section) return;
+
+    const alpineData = Alpine.$data(section);
+    if (alpineData.selectedTab === tab) return; // already active
+    alpineData.selectedTab = tab;
+
+    // Move pill
+    const pill    = document.getElementById('filter-pill');
+    const wrapper = document.getElementById('filter-tabs-wrapper');
+    if (pill && wrapper && event) {
+        const btn         = event.currentTarget;
+        const tabRect     = btn.getBoundingClientRect();
+        const wrapperRect = wrapper.getBoundingClientRect();
+        gsap.to(pill, {
+            x:      tabRect.left - wrapperRect.left,
+            width:  tabRect.width,
+            duration: 0.4,
+            ease: 'power3.inOut',
+        });
+        _addFilterRipple(btn, event);
+    }
+
+    // Determine which cards enter / leave
+    const allCards = document.querySelectorAll('[data-categories]');
+    const hiding   = [];
+    const showing  = [];
+
+    allCards.forEach((card) => {
+        const cats      = JSON.parse(card.dataset.categories || '[]');
+        const visible   = !card.classList.contains('hidden');
+        const shouldShow = tab === 'all' || cats.includes(tab);
+        if (visible  && !shouldShow) hiding.push(card);
+        if (!visible &&  shouldShow) showing.push(card);
+    });
+
+    function animateIn(cards) {
+        if (!cards.length) return;
+        cards.forEach((c) => {
+            c.classList.remove('hidden');
+            gsap.set(c, { opacity: 0, scale: 0.85, y: 30 });
+        });
+        gsap.to(cards, {
+            scale: 1, opacity: 1, y: 0,
+            stagger: 0.07, duration: 0.45, ease: 'back.out(1.5)',
+            onComplete() {
+                gsap.set(cards, { clearProps: 'all' });
+                const badges = cards.map((c) => c.querySelector('.category-badge')).filter(Boolean);
+                if (badges.length) {
+                    gsap.from(badges, { scale: 0, duration: 0.3, stagger: 0.05, ease: 'back.out(1.7)', delay: 0.05 });
+                }
+            },
+        });
+    }
+
+    if (hiding.length) {
+        gsap.to(hiding, {
+            scale: 0.85, opacity: 0, y: 20,
+            stagger: 0.04, duration: 0.25,
+            onComplete() {
+                hiding.forEach((c) => {
+                    c.classList.add('hidden');
+                    gsap.set(c, { clearProps: 'all' });
+                });
+                animateIn(showing);
+            },
+        });
+    } else {
+        animateIn(showing);
+    }
+};
 
 // ─── Hero Particle Network (interactive canvas background) ────────────────────
 function initHeroParticles() {
@@ -1569,6 +1682,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMagneticButtons();
     initParallax();
     initCardHovers();
+    initPortfolioFilterPill();
     initTextScramble();
     initClipReveal();
     initParallaxBgText();

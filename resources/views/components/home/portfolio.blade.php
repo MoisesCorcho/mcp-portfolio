@@ -1,17 +1,23 @@
 {{-- ====== Portfolio Section ====== --}}
 <section
     id="portfolio"
-    x-data="{
-        selectedTab: 'all',
-        get activeTabClasses() { return 'filter-tab active'; },
-        get inactiveTabClasses() { return 'filter-tab'; },
-    }"
+    x-data="{ selectedTab: 'all' }"
     class="relative pt-24 lg:pt-32 pb-20 lg:pb-28 overflow-hidden"
     style="background: linear-gradient(180deg, #040d1b 0%, #131e35 50%, #040d1b 100%);"
 >
-    {{-- Decorative background --}}
-    <div style="position:absolute; width:700px; height:700px; background:rgba(245,158,11,0.04); top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; filter:blur(120px); pointer-events:none;"></div>
-    <div class="dot-grid absolute inset-0 opacity-20 pointer-events-none"></div>
+
+    {{-- Floating circles background --}}
+    <ul class="portfolio-circles" aria-hidden="true">
+        <li></li><li></li><li></li><li></li><li></li>
+        <li></li><li></li><li></li><li></li><li></li>
+    </ul>
+
+    {{-- Aurora orbs --}}
+    <div class="portfolio-aurora-orb" style="width:700px;height:700px;background:rgba(245,158,11,0.07);top:5%;left:15%;animation:portfolioOrbA 17s ease-in-out infinite alternate;"></div>
+    <div class="portfolio-aurora-orb" style="width:600px;height:600px;background:rgba(99,102,241,0.06);top:45%;left:55%;animation:portfolioOrbB 21s ease-in-out infinite alternate;"></div>
+    <div class="portfolio-aurora-orb" style="width:500px;height:500px;background:rgba(245,158,11,0.05);top:65%;left:5%;animation:portfolioOrbC 13s ease-in-out infinite alternate;"></div>
+    <div class="portfolio-aurora-orb" style="width:800px;height:800px;background:rgba(79,70,229,0.04);top:-15%;left:45%;animation:portfolioOrbD 25s ease-in-out infinite alternate;"></div>
+    <div class="portfolio-aurora-orb" style="width:450px;height:450px;background:rgba(245,158,11,0.06);top:35%;left:75%;animation:portfolioOrbE 19s ease-in-out infinite alternate;"></div>
 
     <div class="container relative z-10">
 
@@ -31,20 +37,25 @@
         </div>
 
         {{-- Category filter tabs --}}
-        <div class="flex flex-wrap justify-center gap-2 mb-12 reveal-up">
+        <div id="filter-tabs-wrapper" class="relative flex flex-wrap justify-center gap-2 mb-12 reveal-up">
+            {{-- Sliding pill indicator (positioned by GSAP) --}}
+            <div id="filter-pill"></div>
+
             <button
-                @click="selectedTab = 'all'"
-                :class="selectedTab === 'all' ? activeTabClasses : inactiveTabClasses"
+                @click="portfolioFilter('all', $event)"
+                :class="selectedTab === 'all' ? 'filter-tab active' : 'filter-tab'"
                 class="filter-tab"
+                data-tab="all"
             >
                 Todos los proyectos
             </button>
 
             @foreach($tabs as $tab)
                 <button
-                    @click="selectedTab = '{{ $tab }}'"
-                    :class="selectedTab === '{{ $tab }}' ? activeTabClasses : inactiveTabClasses"
+                    @click="portfolioFilter('{{ $tab }}', $event)"
+                    :class="selectedTab === '{{ $tab }}' ? 'filter-tab active' : 'filter-tab'"
                     class="filter-tab"
+                    data-tab="{{ $tab }}"
                 >
                     {{ $tab }}
                 </button>
