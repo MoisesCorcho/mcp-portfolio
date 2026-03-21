@@ -4,7 +4,7 @@
     {{-- Marquee strip --}}
     <div class="marquee-strip overflow-hidden py-3 border-y" style="border-color: rgba(245,158,11,0.15); background: rgba(245,158,11,0.03);">
         <div class="marquee-track flex gap-12 whitespace-nowrap" style="animation: marquee-scroll 25s linear infinite;">
-            @php $items = ['Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'Backend Dev', 'Clean Code', 'API REST', 'Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'Backend Dev', 'Clean Code', 'API REST']; @endphp
+            @php $items = __('home.marquee_items'); @endphp
             @foreach($items as $item)
                 <span class="text-xs font-semibold tracking-[0.2em] uppercase" style="font-family:var(--font-display); color: rgba(245,158,11,0.5);">{{ $item }}</span>
                 <span style="color: rgba(245,158,11,0.25);">·</span>

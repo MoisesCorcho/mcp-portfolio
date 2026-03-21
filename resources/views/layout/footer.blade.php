@@ -22,7 +22,7 @@
 
             {{-- Copyright --}}
             <p class="text-xs text-slate-600" style="font-family:var(--font-display);">
-                © {{ date('Y') }} Moisés Corcho Pérez. Hecho con ❤️
+                {{ __('home.footer_made_with', ['year' => date('Y')]) }}
             </p>
 
         </div>

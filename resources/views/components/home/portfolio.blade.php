@@ -23,15 +23,15 @@
 
         {{-- Section header --}}
         <div class="text-center mb-14 reveal-up">
-            <span class="section-label justify-center" data-scramble data-original="Portafolio">Portafolio</span>
+            <span class="section-label justify-center" data-scramble data-original="{{ __('home.portfolio_label') }}">{{ __('home.portfolio_label') }}</span>
             <h2 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-slate-100 mb-4"
                 style="font-family:var(--font-display); overflow:hidden;"
                 data-clip-reveal>
-                Mis proyectos
-                <span class="gradient-text-static">recientes</span>
+                {{ __('home.portfolio_heading') }}
+                <span class="gradient-text-static">{{ __('home.portfolio_heading_accent') }}</span>
             </h2>
             <p class="text-slate-400 max-w-md mx-auto" style="font-family:var(--font-body); font-size:0.95rem;">
-                La mejor manera de aprender a programar es creando proyectos.
+                {{ __('home.portfolio_subtitle') }}
             </p>
             <span class="section-line mx-auto mt-4" style="width:60px;"></span>
         </div>
@@ -47,7 +47,7 @@
                 class="filter-tab"
                 data-tab="all"
             >
-                Todos los proyectos
+                {{ __('home.portfolio_tab_all') }}
             </button>
 
             @foreach($tabs as $tab)

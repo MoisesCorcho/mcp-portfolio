@@ -22,10 +22,15 @@
                 @endforeach
             </nav>
 
-            {{-- Desktop CTA --}}
+            {{-- Desktop CTA + Lang switcher --}}
             <div class="hidden lg:flex items-center gap-4">
+                <a href="{{ route('lang.switch', app()->getLocale() === 'es' ? 'en' : 'es') }}"
+                   class="lang-switcher"
+                   title="{{ app()->getLocale() === 'es' ? __('home.nav_lang_switch_title_to_en') : __('home.nav_lang_switch_title_to_es') }}">
+                    {{ app()->getLocale() === 'es' ? 'EN' : 'ES' }}
+                </a>
                 <a href="#contact" class="btn-primary text-sm px-5 py-2 magnetic">
-                    Contáctame
+                    {{ __('home.nav_cta') }}
                 </a>
             </div>
 
@@ -65,7 +70,12 @@
                     {{ $item['label'] }}
                 </a>
             @endforeach
-            <a href="#contact" class="btn-primary mt-3 justify-center">Contáctame</a>
+            <a href="{{ route('lang.switch', app()->getLocale() === 'es' ? 'en' : 'es') }}"
+               class="lang-switcher mt-3 justify-center self-start"
+               title="{{ app()->getLocale() === 'es' ? __('home.nav_lang_switch_title_to_en') : __('home.nav_lang_switch_title_to_es') }}">
+                {{ app()->getLocale() === 'es' ? 'EN' : 'ES' }}
+            </a>
+            <a href="#contact" class="btn-primary mt-3 justify-center">{{ __('home.nav_cta') }}</a>
         </nav>
     </div>
 </header>

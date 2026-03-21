@@ -19,12 +19,12 @@
 
     {{-- Top label --}}
     <div class="text-center mb-16">
-      <span class="vg-label">⚔ Proyecto Especial ⚔</span>
+      <span class="vg-label">{{ __('home.vg_label') }}</span>
       <h2 class="vg-title vg-animate-in" data-vg-stagger="0">
         THE DEVELOPER'S<br><span style="color:#00d4ff;">JOURNEY</span>
       </h2>
       <p class="vg-subtitle vg-animate-in" data-vg-stagger="1">
-        Un Action-Platformer 2D — la gamificación de mi carrera
+        {{ __('home.vg_subtitle') }}
       </p>
     </div>
 
@@ -34,33 +34,23 @@
       {{-- LEFT: Story --}}
       <div class="vg-animate-in" data-vg-stagger="2">
 
-        <h3 class="vg-heading mb-5">// El Por Qué</h3>
+        <h3 class="vg-heading mb-5">{{ __('home.vg_why_heading') }}</h3>
 
         <p class="vg-text mb-5">
-          Desde pequeño fui un <span class="vg-highlight">amante de los juegos de pixel art</span>
-          y los juegos retro. Y desde hace mucho tiempo me fascina la programación.
+          {!! __('home.vg_why_p1') !!}
         </p>
 
         <p class="vg-text mb-5">
-          Siempre tuve el sueño de crear mi propio videojuego — no por fama, sino por
-          <span class="vg-highlight">entender</span>: cómo funciona un juego por dentro,
-          cómo se crean los personajes, cómo se mueven, cómo interaccionan entre sí.
-          Y el hecho de que pueda crear algo que otras personas puedan jugar es,
-          para mí, <span class="vg-highlight">maravilloso</span>.
+          {!! __('home.vg_why_p2') !!}
         </p>
 
         {{-- Emotional highlight quote --}}
         <blockquote class="vg-quote vg-animate-in mb-8" data-vg-stagger="3">
-          Este proyecto es el inicio del camino, pero también es una
-          <span class="vg-highlight">meta cumplida</span>.
-          Un sueño hecho realidad de mi yo pequeño.<br><br>
-          Le estoy diciendo a ese pequeño Moisés:
-          <span class="vg-highlight">lo estamos logrando</span>.
-          Y me siento orgulloso de eso.
+          {!! __('home.vg_quote') !!}
         </blockquote>
 
         {{-- Tech stack pixel badges --}}
-        <h3 class="vg-heading mt-10 mb-4">// Stack</h3>
+        <h3 class="vg-heading mt-10 mb-4">{{ __('home.vg_stack_heading') }}</h3>
         <div class="flex flex-wrap gap-3 mb-8">
           @php
             $vgStack = [
@@ -81,19 +71,15 @@
         </div>
 
         {{-- Game description --}}
-        <h3 class="vg-heading mb-4">// Sobre el Juego</h3>
+        <h3 class="vg-heading mb-4">{{ __('home.vg_about_game_heading') }}</h3>
         <p class="vg-text vg-animate-in" data-vg-stagger="4">
-          <span class="vg-highlight">The Developer's Journey</span> no es solo un juego de plataformas en 2D.
-          Es la gamificación de mi currículum y mi carrera profesional. Construido desde cero para correr
-          nativamente en el navegador usando <span class="vg-highlight">Phaser 3</span>, JavaScript y Svelte,
-          este Action-Platformer te invita a explorar mis skills, enfrentar los &#39;bugs&#39; (literalmente)
-          y descubrir cómo mi pasión por resolver problemas de software se traduce en código limpio y creativo.
+          {!! __('home.vg_about_game_text') !!}
         </p>
       </div>
 
       {{-- RIGHT: Real screenshots --}}
       <div class="vg-animate-in" data-vg-stagger="2">
-        <h3 class="vg-heading mb-6">// En Acción</h3>
+        <h3 class="vg-heading mb-6">{{ __('home.vg_action_heading') }}</h3>
 
         {{-- Screenshot gallery in screen frame --}}
         <div class="vg-screen" id="vg-gallery">
@@ -106,9 +92,9 @@
           <div class="vg-screen-body vg-gallery-body">
             @php
               $screenshots = [
-                ['src' => '/img/videogame/videogame_start.png',       'alt' => 'Pantalla de inicio'],
-                ['src' => '/img/videogame/videogame_snow.png',         'alt' => 'Nivel de nieve'],
-                ['src' => '/img/videogame/videogame_certificates.png', 'alt' => 'Pantalla de certificados'],
+                ['src' => '/img/videogame/videogame_start.png',       'alt' => __('home.vg_screenshot_start_alt')],
+                ['src' => '/img/videogame/videogame_snow.png',         'alt' => __('home.vg_screenshot_snow_alt')],
+                ['src' => '/img/videogame/videogame_certificates.png', 'alt' => __('home.vg_screenshot_certificates_alt')],
               ];
             @endphp
             @foreach($screenshots as $i => $shot)
@@ -125,7 +111,7 @@
               <button
                 class="vg-gallery-dot{{ $i === 0 ? ' vg-gallery-dot--active' : '' }}"
                 data-target="{{ $i }}"
-                aria-label="Ver captura {{ $i + 1 }}"
+                aria-label="{{ __('home.vg_gallery_dot_aria', ['number' => $i + 1]) }}"
               ></button>
             @endforeach
           </div>
@@ -133,14 +119,14 @@
 
         {{-- CTA below the gallery --}}
         <div class="text-center vg-animate-in mt-8" data-vg-stagger="6">
-          <p class="vg-text mb-6" style="opacity:0.7;">¿Listo para jugar?</p>
+          <p class="vg-text mb-6" style="opacity:0.7;">{{ __('home.vg_ready_to_play') }}</p>
           <a href="https://portfolio-videogame.vercel.app/"
              target="_blank"
              class="vg-cta-btn"
              rel="noopener noreferrer">
-            ▶ JUGAR AHORA
+            {{ __('home.vg_play_btn') }}
           </a>
-          <p class="vg-tiny-text mt-4">* Requiere teclado para jugar</p>
+          <p class="vg-tiny-text mt-4">{{ __('home.vg_keyboard_note') }}</p>
         </div>
       </div>
 

@@ -37,16 +37,16 @@
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                     </span>
                     <span style="font-family:var(--font-display);" class="text-xs font-semibold tracking-[0.14em] uppercase text-amber-400/90">
-                        Disponible para proyectos
+                        {{ __('home.hero_badge') }}
                     </span>
                 </div>
 
-                {{-- Main title: "Mi nombre es" --}}
+                {{-- Main title --}}
                 <h1
                     class="hero-title font-display font-bold leading-[1.05] text-slate-300 mb-1"
                     style="font-family:var(--font-display); font-size:clamp(2.2rem, 5vw, 3.5rem);"
                 >
-                    Mi nombre es
+                    {{ __('home.hero_greeting') }}
                 </h1>
 
                 {{-- Name with gradient --}}
@@ -63,27 +63,24 @@
 
                 {{-- Subtitle --}}
                 <p class="hero-subtitle text-slate-400 max-w-[480px] leading-relaxed mb-8" style="font-size:1.05rem; font-family:var(--font-body);">
-                    Desarrollador web backend con <strong class="text-slate-200 font-semibold">+4 años de experiencia</strong> construyendo aplicaciones robustas con
-                    <span class="text-amber-400 font-semibold">Laravel</span>,
-                    <span class="text-amber-400 font-semibold">PHP</span> y MySQL.
-                    Apasionado por el código limpio y las arquitecturas escalables.
+                    {!! __('home.hero_subtitle') !!}
                 </p>
 
                 {{-- CTA buttons --}}
                 <div class="hero-cta flex flex-wrap items-center gap-4 mb-10">
                     <a href="#portfolio" class="btn-primary magnetic">
-                        Ver mis proyectos
+                        {{ __('home.hero_cta_primary') }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                         </svg>
                     </a>
-                    <a href="#about" class="btn-outline magnetic">Sobre mí</a>
+                    <a href="#about" class="btn-outline magnetic">{{ __('home.hero_cta_secondary') }}</a>
                 </div>
 
                 {{-- Social icons --}}
                 <div class="hero-social">
                     <p style="font-family:var(--font-display);" class="text-xs font-semibold tracking-[0.12em] uppercase text-slate-500 mb-3">
-                        Redes sociales
+                        {{ __('home.hero_social_label') }}
                     </p>
                     <x-social-icons></x-social-icons>
                 </div>
@@ -103,7 +100,7 @@
                                 box-shadow: 0 0 50px rgba(245,158,11,0.12), 0 20px 60px rgba(0,0,0,0.5);">
                         <img
                             src="{{ url('/img/moises-1.jpg') }}"
-                            alt="Moisés Corcho Pérez"
+                            alt="{{ __('home.hero_photo_alt') }}"
                             class="w-full block object-cover"
                             style="aspect-ratio: 4/5; object-position: top;"
                         />

@@ -19,3 +19,10 @@ Route::get('/', function () {
 });
 
 Route::post('/contact/submit', [\App\Http\Controllers\ContactController::class, 'submit']);
+
+Route::get('/lang/{locale}', function (string $locale) {
+    if (in_array($locale, ['es', 'en'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
