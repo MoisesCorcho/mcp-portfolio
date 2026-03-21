@@ -70,19 +70,6 @@
                     </div>
                 </div>
 
-                {{-- Stat cards overlay --}}
-                <div class="absolute -bottom-6 -right-4 hidden lg:grid grid-cols-2 gap-3 z-10">
-                    <div class="stat-card">
-                        <span class="stat-number count-up" data-target="4">0</span>
-                        <span class="text-xs text-slate-400 font-display uppercase tracking-widest mt-1 block"
-                              style="font-family:var(--font-display);">años exp.</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number count-up" data-target="12">0</span>
-                        <span class="text-xs text-slate-400 font-display uppercase tracking-widest mt-1 block"
-                              style="font-family:var(--font-display);">proyectos</span>
-                    </div>
-                </div>
             </div>
 
             {{-- ── RIGHT: Text Content ── --}}
@@ -90,7 +77,7 @@
 
                 {{-- Quote card --}}
                 <div class="quote-card mb-8">
-                    <p class="text-slate-300 text-base leading-relaxed">
+                    <p id="about-quote-text" class="text-slate-300 text-base leading-relaxed">
                         "Not everything is achievable with hard work, but… it helps a lot."
                     </p>
                 </div>
@@ -103,38 +90,35 @@
                     Cuando no estoy inmerso en el código, probablemente estoy compartiendo mimos con mis gatos o dejándome llevar por la música — escuchándola o tocándola. Estas pasiones me aportan perspectiva y creatividad a la hora de colaborar.
                 </p>
 
-                {{-- Skills tags --}}
+                {{-- Stack técnico — cycling animation --}}
                 <div class="mb-8">
-                    <p class="section-label mb-3">Stack técnico</p>
-                    <div class="flex flex-wrap gap-2">
-                        @php
-                            $skills = [
-                                'PHP', 'Laravel', 'MySQL', 'PostgreSQL',
-                                'Vue.js', 'Alpine.js', 'Docker', 'Git',
-                                'REST APIs', 'Tailwind CSS', 'Linux', 'Filament'
-                            ];
-                        @endphp
-                        @foreach($skills as $skill)
-                            <span class="skill-tag">{{ $skill }}</span>
-                        @endforeach
+                    <p class="section-label mb-5">Stack técnico</p>
+                    <div class="about-tech-cycling">
+                        <div class="about-tech-cycling__row">
+                            <span class="about-tech-cycling__static">Desarrollo con</span>
+                            <span class="about-tech-cycling__brace" aria-hidden="true">[</span>
+                            <div class="about-tech-cycling__window">
+                                <ul class="about-tech-cycling__list">
+                                    <li class="about-tech-cycling__item">PHP</li>
+                                    <li class="about-tech-cycling__item">Laravel</li>
+                                    <li class="about-tech-cycling__item">Vue.js</li>
+                                    <li class="about-tech-cycling__item">Docker</li>
+                                    <li class="about-tech-cycling__item">MySQL</li>
+                                    <li class="about-tech-cycling__item">Git</li>
+                                    <li class="about-tech-cycling__item">Alpine.js</li>
+                                    <li class="about-tech-cycling__item">Tailwind CSS</li>
+                                    <li class="about-tech-cycling__item">REST APIs</li>
+                                    <li class="about-tech-cycling__item">PostgreSQL</li>
+                                    <li class="about-tech-cycling__item">Linux</li>
+                                    <li class="about-tech-cycling__item">Filament</li>
+                                </ul>
+                            </div>
+                            <span class="about-tech-cycling__brace" aria-hidden="true">]</span>
+                        </div>
                     </div>
                 </div>
 
-                {{-- Mobile stats --}}
-                <div class="flex gap-4 mb-8 lg:hidden">
-                    <div class="stat-card flex-1">
-                        <span class="stat-number count-up" data-target="4">0</span>
-                        <span class="text-xs text-slate-400 uppercase tracking-widest block mt-1"
-                              style="font-family:var(--font-display);">años exp.</span>
-                    </div>
-                    <div class="stat-card flex-1">
-                        <span class="stat-number count-up" data-target="12">0</span>
-                        <span class="text-xs text-slate-400 uppercase tracking-widest block mt-1"
-                              style="font-family:var(--font-display);">proyectos</span>
-                    </div>
-                </div>
-
-                <a
+<a
                     href="https://github.com/MoisesCorcho"
                     target="_blank"
                     class="btn-outline inline-flex magnetic"

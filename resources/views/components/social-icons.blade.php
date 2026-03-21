@@ -1,7 +1,7 @@
 <div {{ $attributes->merge(['class' => 'flex items-center gap-3']) }}>
 
     {{-- Instagram --}}
-    <a href="https://www.instagram.com/moises_corchop/" target="_blank"
+    <a href="https://www.instagram.com/mc44038/" target="_blank"
        class="social-icon-link"
        aria-label="Instagram">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20" class="fill-current">

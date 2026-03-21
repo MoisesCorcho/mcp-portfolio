@@ -1603,6 +1603,37 @@ function initExperienceSection() {
     // ── Mobile: flat vertical stack — JS untouched, CSS handles layout ────────
     if (window.innerWidth < 768) return;
 
+    // ── Description auto-scroll when text overflows the card ─────────────────
+    const descTimelines = new Map();
+
+    function startDescScroll(card) {
+        const outer = card.querySelector('.exp-description');
+        const inner = card.querySelector('.exp-description__inner');
+        if (!outer || !inner) return;
+
+        // Recalculate on each call — card size may have changed
+        const overflow = inner.scrollHeight - outer.clientHeight;
+        if (overflow <= 12) return; // fits, no scroll needed
+
+        stopDescScroll(card);
+
+        // Speed: ~28px per second — longer texts scroll slower proportionally capped
+        const duration = Math.min(Math.max(overflow / 28, 2.5), 8);
+
+        const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.4 });
+        tl.to(inner, { y: -overflow, duration, ease: 'power1.inOut', delay: 1.6 })
+          .to(inner, { y: 0,         duration, ease: 'power1.inOut', delay: 1.6 });
+
+        descTimelines.set(card, tl);
+    }
+
+    function stopDescScroll(card) {
+        const existing = descTimelines.get(card);
+        if (existing) { existing.kill(); descTimelines.delete(card); }
+        const inner = card.querySelector('.exp-description__inner');
+        if (inner) gsap.set(inner, { y: 0 });
+    }
+
     const n         = cards.length;
     const angleStep = 360 / n;
 
@@ -1630,6 +1661,9 @@ function initExperienceSection() {
 
     // Scroll budget: 120px per card feels natural, min 1 viewport height
     const scrollBudget = Math.max(window.innerHeight, 120 * n);
+
+    // Track front index across frames to detect changes
+    let currentFrontIdx = 0;
 
     // ── ScrollTrigger: pin outer, drive cylinder rotation ────────────────────
     ScrollTrigger.create({
@@ -1667,14 +1701,42 @@ function initExperienceSection() {
 
             cards.forEach((card, i) => card.classList.toggle('is-front', i === frontIdx));
 
+            // Start/stop description scroll when the front card changes
+            if (frontIdx !== currentFrontIdx) {
+                stopDescScroll(cards[currentFrontIdx]);
+                startDescScroll(cards[frontIdx]);
+                currentFrontIdx = frontIdx;
+            }
+
             if (progress) progress.style.width = `${self.progress * 100}%`;
+        },
+        onToggle(self) {
+            // Section just entered viewport: start scroll for initial front card
+            if (self.isActive) startDescScroll(cards[currentFrontIdx]);
+            else stopDescScroll(cards[currentFrontIdx]);
         },
     });
 }
 
+// ─── About Quote Word Bounce ───────────────────────────────────────────────────
+function initQuoteWave() {
+    const el = document.getElementById('about-quote-text');
+    if (!el) return;
+
+    const JUMP  = 0.5; // seconds each word takes to jump and land
+    const PAUSE = 2;   // seconds of rest at the end before repeating
+
+    const words = el.textContent.trim().split(/\s+/).filter(Boolean);
+    const cycle = +(words.length * JUMP + PAUSE).toFixed(2);
+
+    el.innerHTML = words.map((word, i) =>
+        `<span class="bounce-word" style="animation-delay:${(i * JUMP).toFixed(2)}s; animation-duration:${cycle}s">${word}</span>`
+    ).join(' ');
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-    initNoiseCircles();
+    // initNoiseCircles(); // disabled — about section background
     initHeroParticles();
     initHeroAnimations();
     initScrollAnimations();
@@ -1691,4 +1753,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initVideogameSection();
     initExpStars();
     initExperienceSection();
+    initQuoteWave();
 });

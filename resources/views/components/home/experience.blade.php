@@ -98,7 +98,9 @@ $experience = [
                         <span class="exp-company">{{ $job['company'] }}</span>
                         <span class="exp-date">{{ $job['date'] }}</span>
                     </div>
-                    <p class="exp-description">{{ $job['description'] }}</p>
+                    <div class="exp-description">
+                        <span class="exp-description__inner">{{ $job['description'] }}</span>
+                    </div>
                     <div class="exp-stack">
                         @foreach($job['stack'] as $tech)
                             <span class="exp-tag">{{ $tech }}</span>

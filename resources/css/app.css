@@ -168,6 +168,37 @@ body {
     text-shadow: 0 0 40px rgba(245, 158, 11, 0.4);
 }
 
+/* ── Hero name fill animation ─────────────────────────────────────────────── */
+.hero-name-word {
+    display: block;
+    position: relative;
+    background: linear-gradient(135deg, rgba(245,158,11,0.22) 0%, rgba(251,146,60,0.18) 50%, rgba(245,158,11,0.22) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.hero-name-word::before {
+    content: attr(data-content);
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    max-width: 0;
+    white-space: nowrap;
+    background: linear-gradient(135deg, #f59e0b 0%, #fb923c 50%, #f59e0b 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: hero-name-fill 2.5s linear infinite;
+}
+
+@keyframes hero-name-fill {
+    from { max-width: 0; }
+    to   { max-width: 100%; }
+}
+
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .hero-grain {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
@@ -339,6 +370,125 @@ body {
     height: 1px;
     background: linear-gradient(90deg, var(--amber), transparent);
     transform-origin: left center;
+}
+
+/* ── Stack Técnico — Cycling animation ──────────────────────────────────── */
+
+/* Item height token — change here to resize everything */
+.about-tech-cycling { --item-h: 58px; }
+
+.about-tech-cycling__row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 0.55rem;
+    line-height: var(--item-h);
+}
+
+.about-tech-cycling__static {
+    font-family: var(--font-body), sans-serif;
+    font-size: 1rem;
+    color: #475569;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+    /* nudge down to sit on same baseline as the large text */
+    margin-bottom: 4px;
+}
+
+.about-tech-cycling__brace {
+    font-family: var(--font-display), monospace;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #f59e0b;
+    line-height: var(--item-h);
+    display: block;
+    animation: aboutBraceFlash 3s ease-in-out infinite;
+    will-change: opacity, transform;
+}
+
+/* Clipping window — shows exactly one item */
+.about-tech-cycling__window {
+    height: var(--item-h);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Fade mask top & bottom to soften enter/exit */
+.about-tech-cycling__window::before,
+.about-tech-cycling__window::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 10px;
+    z-index: 2;
+    pointer-events: none;
+}
+.about-tech-cycling__window::before {
+    top: 0;
+    background: linear-gradient(to bottom, #0f172a 10%, transparent);
+}
+.about-tech-cycling__window::after {
+    bottom: 0;
+    background: linear-gradient(to top, #0f172a 10%, transparent);
+}
+
+/* The scrolling list — 6 items */
+.about-tech-cycling__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    animation: aboutTechCycle 18s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+    will-change: transform;
+}
+
+.about-tech-cycling__item {
+    font-family: var(--font-display), sans-serif;
+    font-size: 2.1rem;
+    font-weight: 800;
+    height: var(--item-h);
+    line-height: var(--item-h);
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+    /* amber-to-white gradient text */
+    background: linear-gradient(135deg, #f1f5f9 30%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── Keyframes ── */
+
+/* Brackets breathe in sync with cycling */
+@keyframes aboutBraceFlash {
+    0%, 100% { opacity: 0.35; transform: scaleY(0.92); }
+    15%, 85%  { opacity: 1;    transform: scaleY(1); }
+}
+
+/*
+  12 items — forward only loop.
+  Formula: 12x + 12y = 100  →  x = 6.5 (hold), y = 1.833 (transition)
+  Each step = 100% / 12 = 8.333% of list height
+*/
+@keyframes aboutTechCycle {
+    0%,      6.5%    { transform: translate3d(0,  0,        0); } /* PHP        */
+    8.333%,  14.833% { transform: translate3d(0, -8.333%,   0); } /* Laravel    */
+    16.666%, 23.166% { transform: translate3d(0, -16.666%,  0); } /* Vue.js     */
+    25%,     31.5%   { transform: translate3d(0, -25%,      0); } /* Docker     */
+    33.333%, 39.833% { transform: translate3d(0, -33.333%,  0); } /* MySQL      */
+    41.666%, 48.166% { transform: translate3d(0, -41.666%,  0); } /* Git        */
+    50%,     56.5%   { transform: translate3d(0, -50%,      0); } /* Alpine.js  */
+    58.333%, 64.833% { transform: translate3d(0, -58.333%,  0); } /* Tailwind   */
+    66.666%, 73.166% { transform: translate3d(0, -66.666%,  0); } /* REST APIs  */
+    75%,     81.5%   { transform: translate3d(0, -75%,      0); } /* PostgreSQL */
+    83.333%, 89.833% { transform: translate3d(0, -83.333%,  0); } /* Linux      */
+    91.666%, 100%    { transform: translate3d(0, -91.666%,  0); } /* Filament   */
+}
+
+/* Smaller screens */
+@media (max-width: 640px) {
+    .about-tech-cycling { --item-h: 46px; }
+    .about-tech-cycling__brace { font-size: 2.1rem; }
+    .about-tech-cycling__item  { font-size: 1.6rem; }
 }
 
 /* ── Skill Tags ──────────────────────────────────────────────────────────── */
@@ -637,6 +787,33 @@ body {
     opacity: 0.2;
     font-family: var(--font-display);
     font-style: normal;
+}
+
+/* ── Quote word-bounce animation ─────────────────────────────────────────── */
+/* cycle = 12 words × 0.5s + 2s pause = 8s                                   */
+/* peak  = 0.25s / 8s = 3.12%   |   land = 0.5s / 8s = 6.25%               */
+.bounce-word {
+    display: inline-block;
+    animation: word-bounce linear infinite;
+    text-shadow: 0 1px 0 rgba(245,158,11,0.18),
+                 0 2px 5px rgba(0,0,0,0.35);
+}
+
+@keyframes word-bounce {
+    0%, 6.25%, 100% {
+        transform: translateY(0);
+        text-shadow: 0 1px 0 rgba(245,158,11,0.18),
+                     0 2px 5px rgba(0,0,0,0.35);
+    }
+    3.12% {
+        transform: translateY(-16px);
+        text-shadow: 0 1px 0 rgba(245,158,11,0.55),
+                     0 2px 0 rgba(245,158,11,0.40),
+                     0 3px 0 rgba(245,158,11,0.28),
+                     0 4px 0 rgba(245,158,11,0.18),
+                     0 5px 0 rgba(245,158,11,0.09),
+                     0 20px 22px rgba(0,0,0,0.50);
+    }
 }
 
 /* ── Marquee strip ───────────────────────────────────────────────────────── */
@@ -1265,10 +1442,13 @@ body {
     line-height: 1.7;
     flex: 1;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 7;
-    -webkit-box-orient: vertical;
     margin: 0 0 1rem;
+    position: relative;
+}
+
+.exp-description__inner {
+    display: block;
+    will-change: transform;
 }
 
 /* ── Stack badges ──────────────────────────────────────────────────────── */
@@ -1306,6 +1486,42 @@ body {
     background: #f59e0b;
     box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
     transition: width 0.08s linear;
+}
+
+/* ── Medium-height laptop screens (e.g. 1680×1050, 1440×900) ───────────── */
+@media (min-width: 768px) and (max-height: 1100px) {
+    .exp-track {
+        width: clamp(260px, 26vw, 390px);
+        height: clamp(295px, 35vh, 370px); 
+    }
+
+    .exp-card {
+        padding: 1.5rem 1.5rem 1.25rem;
+    }
+
+    .exp-description {
+        font-size: 0.82rem;
+    }
+}
+
+/* ── Short viewports (≤ 900px tall, e.g. 1280×800, 1366×768) ───────────── */
+@media (min-width: 768px) and (max-height: 900px) {
+    .exp-track {
+        width: clamp(240px, 24vw, 340px);
+        height: clamp(295px, 35vh, 370px);
+    }
+
+    .exp-card {
+        padding: 1.25rem 1.25rem 1rem;
+    }
+
+    .exp-description {
+        font-size: 0.8rem;
+    }
+
+    .exp-role {
+        font-size: clamp(1rem, 1.8vw, 1.2rem);
+    }
 }
 
 /* ── Mobile: flat vertical stack (JS returns early, no 3D) ─────────────── */

@@ -51,10 +51,11 @@
 
                 {{-- Name with gradient --}}
                 <h1
-                    class="hero-name font-display font-extrabold leading-[1.0] mb-5 gradient-text amber-glow-text"
+                    class="hero-name font-display font-extrabold leading-[1.0] mb-5"
                     style="font-family:var(--font-display); font-size:clamp(2.5rem, 6vw, 4rem);"
                 >
-                    Moisés Corcho.
+                    <span class="hero-name-word" data-content="Moisés">Moisés</span>
+                    <span class="hero-name-word" data-content="Corcho.">Corcho.</span>
                 </h1>
 
                 {{-- Amber line accent --}}
@@ -62,7 +63,7 @@
 
                 {{-- Subtitle --}}
                 <p class="hero-subtitle text-slate-400 max-w-[480px] leading-relaxed mb-8" style="font-size:1.05rem; font-family:var(--font-body);">
-                    Desarrollador web backend con <strong class="text-slate-200 font-semibold">4 años de experiencia</strong> construyendo aplicaciones robustas con
+                    Desarrollador web backend con <strong class="text-slate-200 font-semibold">+4 años de experiencia</strong> construyendo aplicaciones robustas con
                     <span class="text-amber-400 font-semibold">Laravel</span>,
                     <span class="text-amber-400 font-semibold">PHP</span> y MySQL.
                     Apasionado por el código limpio y las arquitecturas escalables.
@@ -117,12 +118,6 @@
                           style="border-top:2px solid rgba(245,158,11,0.7); border-left:2px solid rgba(245,158,11,0.7); border-radius:4px 0 0 0;"></span>
                     <span class="absolute -bottom-2 -right-2 w-6 h-6 pointer-events-none"
                           style="border-bottom:2px solid rgba(245,158,11,0.7); border-right:2px solid rgba(245,158,11,0.7); border-radius:0 0 4px 0;"></span>
-
-                    {{-- Years badge (desktop) --}}
-                    <div class="absolute -top-4 -right-5 hidden lg:block glass rounded-xl px-4 py-3 text-center" style="min-width:88px;">
-                        <span class="font-display font-extrabold text-3xl text-amber-400 block" style="font-family:var(--font-display);">4+</span>
-                        <span class="font-display text-xs text-slate-400 uppercase tracking-widest" style="font-family:var(--font-display);">años exp.</span>
-                    </div>
 
                     {{-- Tech badges (desktop) --}}
                     <div class="absolute -bottom-2 -left-5 hidden lg:flex flex-col gap-2">
