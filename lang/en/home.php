@@ -129,6 +129,7 @@ return [
     'vg_action_heading'     => '// In Action',
     'vg_ready_to_play'      => 'Ready to play?',
     'vg_play_btn'           => '▶ PLAY NOW',
+    'vg_github_btn'         => '⌥ VIEW ON GITHUB',
     'vg_keyboard_note'      => '* Keyboard required to play',
     'vg_screenshot_start_alt'        => 'Start screen',
     'vg_screenshot_snow_alt'         => 'Snow level',

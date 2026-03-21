@@ -49,6 +49,11 @@ class CategorySeeder extends Seeder
             ['name' => 'Sass/Less', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['name' => 'Webpack', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['name' => 'Vite', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Phaser 3', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Svelte', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Tiled', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Tailwind CSS', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'TypeScript', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
         ];
 
         // Inserta los datos en la tabla 'categories'

@@ -129,6 +129,7 @@ return [
     'vg_action_heading'     => '// En Acción',
     'vg_ready_to_play'      => '¿Listo para jugar?',
     'vg_play_btn'           => '▶ JUGAR AHORA',
+    'vg_github_btn'         => '⌥ VER EN GITHUB',
     'vg_keyboard_note'      => '* Requiere teclado para jugar',
     'vg_screenshot_start_alt'        => 'Pantalla de inicio',
     'vg_screenshot_snow_alt'         => 'Nivel de nieve',

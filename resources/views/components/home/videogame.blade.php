@@ -120,12 +120,20 @@
         {{-- CTA below the gallery --}}
         <div class="text-center vg-animate-in mt-8" data-vg-stagger="6">
           <p class="vg-text mb-6" style="opacity:0.7;">{{ __('home.vg_ready_to_play') }}</p>
-          <a href="https://portfolio-videogame.vercel.app/"
-             target="_blank"
-             class="vg-cta-btn"
-             rel="noopener noreferrer">
-            {{ __('home.vg_play_btn') }}
-          </a>
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="https://portfolio-videogame.vercel.app/"
+               target="_blank"
+               class="vg-cta-btn"
+               rel="noopener noreferrer">
+              {{ __('home.vg_play_btn') }}
+            </a>
+            <a href="https://github.com/MoisesCorcho/portfolio-videogame"
+               target="_blank"
+               class="vg-cta-btn vg-cta-btn--github"
+               rel="noopener noreferrer">
+              {{ __('home.vg_github_btn') }}
+            </a>
+          </div>
           <p class="vg-tiny-text mt-4">{{ __('home.vg_keyboard_note') }}</p>
         </div>
       </div>
