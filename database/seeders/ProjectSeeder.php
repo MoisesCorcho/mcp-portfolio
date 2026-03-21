@@ -52,6 +52,12 @@ class ProjectSeeder extends Seeder
                 'github' =>  'https://github.com/MoisesCorcho/typingTest'
             ],
             [
+                'category' => ['JavaScript', 'Svelte', 'Phaser 3', 'Tiled'],
+                'title' => "The Developer's Journey — Portfolio Videogame",
+                'image' => null,
+                'github' => 'https://github.com/MoisesCorcho/portfolio-videogame'
+            ],
+            [
                 'category' => ['PHP', 'Laravel'],
                 'title' => 'JsonApi-Package',
                 'image' => null,

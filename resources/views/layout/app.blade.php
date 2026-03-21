@@ -1,22 +1,28 @@
 <!doctype html>
-<html class="dark">
+<html class="dark" lang="{{ app()->getLocale() }}">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-
-  @vite('resources/css/app.css')
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.1/dist/cdn.min.js"></script>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="{{ __('home.meta_description') }}">
+    <title>{{ __('home.page_title') }}</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
 </head>
-<body class="text-gray-800 dark:text-gray-200 ">
-<div class="min-h-screen bg-gray-100 dark:bg-gray-900 pt-24">
+<body class="bg-[#020617] text-slate-200 overflow-x-hidden">
+
+    {{-- Global noise grain overlay for depth/texture --}}
+    <div class="hero-grain fixed inset-0 pointer-events-none z-0 opacity-30"></div>
+
     <x-layout.navbar></x-layout.navbar>
-    {{ $slot }}
+
+    <main>
+        {{ $slot }}
+    </main>
+
     <x-layout.footer></x-layout.footer>
-</div>
-<script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 </html>
