@@ -58,27 +58,27 @@ return [
     'experience_heading_accent' => 'profesional',
 
     'experience_jobs' => [
-        // [
-        //     'role'        => 'PHP Developer',
-        //     'company'     => 'TICWorks',
-        //     'date'        => 'Marzo 2026 – Abril 2026',
-        //     'description' => 'Participé activamente en la modernización y el mantenimiento evolutivo de la plataforma TICWorks, colaborando en la migración técnica del motor de PHP 7.2 hacia PHP 8.2. Implementamos PHPStan para análisis estático preventivo y optimizamos el sistema de logging. Reforcé la seguridad en módulos críticos (Auth, Jobs, Payments) y mejoré la experiencia de postulación con flujos dinámicos.',
-        //     'stack'       => ['PHP 8.2', 'Laravel', 'MySQL', 'PHPStan', 'Docker', 'Git', 'Composer'],
-        // ],
-        // [
-        //     'role'        => 'Full Stack Developer (Laravel & React)',
-        //     'company'     => 'Lia',
-        //     'date'        => 'Febrero 2026 – Marzo 2026',
-        //     'description' => 'Lideré el desarrollo del ecosistema de monetización y la maduración de la UI de Lia (IA). Implementé el flujo de suscripciones con Stripe Checkout y Laravel Cashier v16. Desarrollé un Paywall con interceptores dinámicos y gestión de estado con Zustand, asegurando soporte para Dark Mode e internacionalización bajo Clean Architecture.',
-        //     'stack'       => ['PHP 8.3', 'Laravel 11', 'React', 'Zustand', 'Stripe', 'TypeScript', 'Tailwind', 'TDD'],
-        // ],
-        // [
-        //     'role'        => 'Laravel / Vue Fullstack Developer',
-        //     'company'     => 'Flusso',
-        //     'date'        => 'Febrero 2026 – Marzo 2026',
-        //     'description' => 'Ejecuté el rebranding completo de la Landing Page de Flusso, traduciendo diseños de Figma a una interfaz pixel-perfect de alta fidelidad. Implementé una experiencia 100% responsiva utilizando Tailwind CSS y Vue 3 con Inertia.js y Laravel 12, garantizando una implementación pulida y moderna del punto de entrada principal.',
-        //     'stack'       => ['PHP 8.3', 'Laravel 12', 'Vue 3', 'Inertia.js', 'Tailwind', 'Git'],
-        // ],
+        [
+            'role'        => 'PHP Developer (Colaboración)',
+            'company'     => 'Proyecto Confidencial — App de Gestión B2B',
+            'date'        => 'Marzo 2026 – Abril 2026',
+            'description' => 'Colaboré en la modernización de una plataforma B2B de gestión, participando en la migración del motor de PHP 7.2 a PHP 8.2. Introduje PHPStan para análisis estático preventivo, optimicé el sistema de logging y reforcé la seguridad en módulos críticos de autenticación, gestión de trabajos y pagos. (Proyecto bajo acuerdo de confidencialidad).',
+            'stack'       => ['PHP 8.2', 'Laravel', 'MySQL', 'PHPStan', 'Docker', 'Git', 'Composer'],
+        ],
+        [
+            'role'        => 'Full Stack Developer (Colaboración)',
+            'company'     => 'Proyecto Confidencial — Plataforma SaaS con IA',
+            'date'        => 'Febrero 2026 – Marzo 2026',
+            'description' => 'Lideré el desarrollo del ecosistema de monetización y la arquitectura UI de una plataforma SaaS. Implementé el flujo de suscripciones con Stripe Checkout y Laravel Cashier v16. Desarrollé un Paywall con interceptores dinámicos y gestión de estado con Zustand, bajo principios de Clean Architecture con soporte para Dark Mode e internacionalización. (Proyecto bajo acuerdo de confidencialidad).',
+            'stack'       => ['PHP 8.3', 'Laravel 11', 'React', 'Zustand', 'Stripe', 'TypeScript', 'Tailwind', 'TDD'],
+        ],
+        [
+            'role'        => 'Laravel / Vue Fullstack Developer (Colaboración)',
+            'company'     => 'Proyecto Confidencial — Landing Page Corporativa',
+            'date'        => 'Febrero 2026 – Marzo 2026',
+            'description' => 'Ejecuté el rebranding completo de una Landing Page corporativa, traduciendo diseños de Figma a una interfaz pixel-perfect de alta fidelidad. Implementé una experiencia 100% responsiva con Tailwind CSS y Vue 3 con Inertia.js sobre Laravel 12. (Proyecto bajo acuerdo de confidencialidad).',
+            'stack'       => ['PHP 8.3', 'Laravel 12', 'Vue 3', 'Inertia.js', 'Tailwind', 'Git'],
+        ],
         [
             'role'        => 'Laravel Backend Developer',
             'company'     => 'andrestelocambia',
