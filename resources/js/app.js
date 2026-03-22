@@ -1585,91 +1585,58 @@ function initExpStars() {
     lg.style.setProperty('--exp-shadow-lg', multipleBoxShadow(100));
 }
 
-// ─── Experience Section — 3D Cylindrical Carousel ────────────────────────────
+// ─── Experience Section — Expandable Cards ───────────────────────────────────
 function initExperienceSection() {
-    const section  = document.getElementById('experience');
-    const outer    = section?.querySelector('.exp-carousel-outer');
-    const scene    = section?.querySelector('.exp-scene');
-    const track    = document.getElementById('exp-track');
-    const progress = document.getElementById('exp-progress');
-    if (!section || !outer || !scene || !track) return;
+    const options = document.querySelectorAll('#experience .exp-option');
+    if (!options.length) return;
 
-    const cards  = gsap.utils.toArray('#experience .exp-card');
-    if (!cards.length) return;
+    const timelines = new Map();
 
-    // Pre-resolve inner bodies so onUpdate avoids per-frame querySelector calls
-    const bodies = cards.map(card => card.querySelector('.exp-card__body'));
+    function startScroll(option) {
+        const wrap  = option.querySelector('.exp-desc-wrap');
+        const inner = option.querySelector('.exp-desc-inner');
+        if (!wrap || !inner) return;
 
-    // ── Mobile: flat vertical stack — JS untouched, CSS handles layout ────────
-    if (window.innerWidth < 768) return;
+        // Compensate for the mask-gradient fade zone (bottom 35% of wrap)
+        // so the last line scrolls into the fully-opaque area, not the fade zone
+        const overflow = inner.scrollHeight - wrap.clientHeight * 0.65;
+        if (overflow <= 12) return;
 
-    const n         = cards.length;
-    const angleStep = 360 / n;
+        stopScroll(option);
 
-    const cardW = cards[0].offsetWidth;
-    const cardH = cards[0].offsetHeight;
+        const scrollDuration = Math.min(Math.max(overflow / 18, 3), 24);
+        const returnDuration = Math.max(scrollDuration * 0.35, 1.2);
 
-    // Cylinder radius: cards tangent to surface + extra gap for visual breathing room
-    const CARD_GAP = 60;
-    const radius = Math.round((cardW / 2 + CARD_GAP) / Math.tan(Math.PI / n));
+        const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+        tl.to(inner, { y: -overflow, duration: scrollDuration, ease: 'none',         delay: 1.8 })
+          .to(inner, { y: 0,         duration: returnDuration, ease: 'power2.inOut', delay: 2   });
 
-    // Perspective: ~3× the radius keeps distortion visually balanced
-    scene.style.perspective = `${Math.round(radius * 3)}px`;
+        timelines.set(option, tl);
+    }
 
-    // Match track dimensions exactly to one card (it's the cylinder's axle)
-    track.style.width  = `${cardW}px`;
-    track.style.height = `${cardH}px`;
+    function stopScroll(option) {
+        const tl    = timelines.get(option);
+        const inner = option.querySelector('.exp-desc-inner');
+        if (tl)    { tl.kill(); timelines.delete(option); }
+        if (inner) { gsap.set(inner, { y: 0 }); }
+    }
 
-    // Place every card on the wheel
-    cards.forEach((card, i) => {
-        card.style.transform = `rotateY(${i * angleStep}deg) translateZ(${radius}px)`;
+    options.forEach(option => {
+        option.addEventListener('click', () => {
+            const prev = document.querySelector('#experience .exp-option.active');
+            if (prev && prev !== option) stopScroll(prev);
+
+            options.forEach(o => o.classList.remove('active'));
+            option.classList.add('active');
+
+            // Wait for expand transition (0.5s) + fade-in (0.25s delay + 0.35s) before measuring
+            setTimeout(() => startScroll(option), 700);
+        });
     });
 
-    // Total rotation to visit every card once (card 0 → card n-1)
-    const totalAngle = -(n - 1) * angleStep;
-
-    // Scroll budget: 120px per card feels natural, min 1 viewport height
-    const scrollBudget = Math.max(window.innerHeight, 120 * n);
-
-    // ── ScrollTrigger: pin outer, drive cylinder rotation ────────────────────
-    ScrollTrigger.create({
-        trigger: outer,
-        pin: true,
-        scrub: 1.4,
-        start: 'top top',
-        end: () => `+=${scrollBudget}`,
-        invalidateOnRefresh: true,
-        snap: {
-            snapTo: 1 / (n - 1),
-            duration: { min: 0.3, max: 0.6 },
-            ease: 'power2.inOut',
-            delay: 0.05,
-        },
-        onUpdate(self) {
-            const angle = totalAngle * self.progress;
-
-            track.style.transform = `rotateY(${angle}deg)`;
-
-            let frontIdx = 0;
-            let minAbs   = Infinity;
-
-            cards.forEach((card, i) => {
-                let world = ((i * angleStep + angle) % 360 + 360) % 360;
-                if (world > 180) world -= 360;
-                const abs = Math.abs(world);
-
-                // Smooth opacity via cosine: 1 at front, ~0.06 at back
-                const t = (1 - Math.cos(abs * Math.PI / 180)) / 2;
-                card.style.opacity = Math.max(0.06, 1 - t * 0.94);
-
-                if (abs < minAbs) { minAbs = abs; frontIdx = i; }
-            });
-
-            cards.forEach((card, i) => card.classList.toggle('is-front', i === frontIdx));
-
-            if (progress) progress.style.width = `${self.progress * 100}%`;
-        },
-    });
+    // Kick off scroll for the initially active card after page load settles
+    const initial = document.querySelector('#experience .exp-option.active');
+    if (initial) setTimeout(() => startScroll(initial), 900);
 }
 
 // ─── About Quote Word Bounce ───────────────────────────────────────────────────

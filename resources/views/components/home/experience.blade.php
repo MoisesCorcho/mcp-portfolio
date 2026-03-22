@@ -1,5 +1,12 @@
 @php
 $experience = __('home.experience_jobs');
+$companyLogos = [
+    'DVLOPER'                            => 'dvloper_logo.png',
+    'Imagine Apps'                       => 'imagineappsas_logo.jpeg',
+    'Universidad Cooperativa de Colombia'=> 'ucc_logo.jpeg',
+    'DISTRACOM'                          => 'distracom_logo.jpeg',
+    'andrestelocambia'                   => 'andrestelocambia_logo.jpeg',
+];
 @endphp
 
 {{-- ====== Experience Section ====== --}}
@@ -29,36 +36,49 @@ $experience = __('home.experience_jobs');
         </div>
     </div>
 
-    {{-- Pinned carousel --}}
-    <div class="exp-carousel-outer">
-      <div class="exp-scene">
-        <div class="exp-track" id="exp-track">
-            @foreach($experience as $i => $job)
-            <div class="exp-card glass" data-exp-index="{{ $i }}">
-                <div class="exp-card__body">
-                    <h3 class="exp-role">{{ $job['role'] }}</h3>
-                    <div class="exp-company-row">
-                        <span class="exp-company">{{ $job['company'] }}</span>
-                        <span class="exp-date">{{ $job['date'] }}</span>
-                    </div>
-                    <div class="exp-description">
-                        <span class="exp-description__inner">{!! $job['description'] !!}</span>
-                    </div>
-                    <div class="exp-stack">
-                        @foreach($job['stack'] as $tech)
-                            <span class="exp-tag">{{ $tech }}</span>
-                        @endforeach
-                    </div>
+    {{-- Expandable experience cards --}}
+    <div class="exp-options relative z-10">
+        @foreach($experience as $i => $job)
+        <div class="exp-option {{ $i === 0 ? 'active' : '' }}" data-exp-index="{{ $i }}">
+            <div class="exp-shadow"></div>
+
+            {{-- Full content — visible when expanded --}}
+            <div class="exp-content">
+                <h3 class="exp-role">{{ $job['role'] }}</h3>
+                <div class="exp-company-row">
+                    <span class="exp-company">{{ $job['company'] }}</span>
+                    <span class="exp-date">{{ $job['date'] }}</span>
+                </div>
+                {{-- Scrollable description area --}}
+                <div class="exp-desc-wrap">
+                    <div class="exp-desc-inner">{!! $job['description'] !!}</div>
+                </div>
+                {{-- Stack always pinned at bottom --}}
+                <div class="exp-stack">
+                    @foreach($job['stack'] as $tech)
+                        <span class="exp-tag">{{ $tech }}</span>
+                    @endforeach
                 </div>
             </div>
-            @endforeach
-        </div>
-      </div>
-    </div>
 
-    {{-- Progress bar --}}
-    <div class="exp-progress-bar">
-        <div class="exp-progress-fill" id="exp-progress"></div>
+            {{-- Label — company logo / initial + role + company --}}
+            <div class="exp-label">
+                <div class="exp-icon">
+                    @if(isset($companyLogos[$job['company']]))
+                        <img src="{{ asset('img/company_logos/' . $companyLogos[$job['company']]) }}"
+                             alt="{{ $job['company'] }}"
+                             class="exp-icon__img">
+                    @else
+                        {{ strtoupper(mb_substr($job['company'], 0, 1)) }}
+                    @endif
+                </div>
+                <div class="exp-info">
+                    <div class="exp-info__main">{{ $job['role'] }}</div>
+                    <div class="exp-info__sub">{{ $job['company'] }}</div>
+                </div>
+            </div>
+        </div>
+        @endforeach
     </div>
 
 </section>

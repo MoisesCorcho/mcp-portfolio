@@ -60,9 +60,9 @@ return [
     'experience_jobs' => [
         [
             'role'        => 'Full Stack Developer',
-            'company'     => 'DVELOPER',
+            'company'     => 'DVLOPER',
             'date'        => 'Febrero 2026 – Actualidad',
-            'description' => 'Como desarrollador en DVELOPER, participé en la arquitectura y desarrollo de múltiples productos digitales complejos para distintos clientes (bajo NDA):<br><br>• <strong class="text-slate-200">Plataforma HR Tech B2B (TicWorks):</strong> Participación en migración del core a PHP 8.2, dockerización, centralización de configuraciones sensibles en archivos .env  y optimización de flujos dinámicos de postulación.<br>• <strong class="text-slate-200">SaaS de IA para Instagram (Lia):</strong> Lideré la UI y el ecosistema de monetización usando React, Zustand, Stripe Checkout y Laravel Cashier v16 bajo principios de Clean Architecture.<br>• <strong class="text-slate-200">Exchange Corporativo Europeo (Flusso):</strong> Rebranding responsivo pixel-perfect de su landing page usando Vue 3 e Inertia.js sobre Laravel 12.',
+            'description' => 'Como desarrollador en DVLOPER, participé en la arquitectura y desarrollo de múltiples productos digitales complejos para distintos clientes (bajo NDA):<br><br>• <strong class="text-slate-200">Plataforma HR Tech B2B (TicWorks):</strong> Participación en migración del core a PHP 8.2, dockerización, centralización de configuraciones sensibles en archivos .env  y optimización de flujos dinámicos de postulación.<br>• <strong class="text-slate-200">SaaS de IA para Instagram (Lia):</strong> Lideré la UI y el ecosistema de monetización usando React, Zustand, Stripe Checkout y Laravel Cashier v16 bajo principios de Clean Architecture.<br>• <strong class="text-slate-200">Exchange Corporativo Europeo (Flusso):</strong> Rebranding responsivo pixel-perfect de su landing page usando Vue 3 e Inertia.js sobre Laravel 12.',
             'stack'       => ['PHP 8.2/8.3', 'Laravel', 'React', 'Vue 3', 'Inertia.js', 'Stripe', 'Tailwind', 'Docker'],
         ],
         [

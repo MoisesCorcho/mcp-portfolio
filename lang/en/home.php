@@ -60,9 +60,9 @@ return [
     'experience_jobs' => [
         [
             'role'        => 'Full Stack Developer',
-            'company'     => 'DVELOPER',
+            'company'     => 'DVLOPER',
             'date'        => 'February 2026 – Present',
-            'description' => 'As a developer at DVELOPER, I participated in the architecture and development of multiple complex digital products for various clients (under NDA):<br><br>• <strong class="text-slate-200">B2B HR Tech Platform (TicWorks):</strong> Participated in migrating the core to PHP 8.2, dockerization, centralizing sensitive configurations into .env files, and optimizing dynamic application flows.<br>• <strong class="text-slate-200">AI SaaS for Instagram (Lia):</strong> Led the UI and monetization ecosystem using React, Zustand, Stripe Checkout, and Laravel Cashier v16 under Clean Architecture principles.<br>• <strong class="text-slate-200">European Corporate Exchange (Flusso):</strong> Executed a pixel-perfect, responsive rebranding of its landing page using Vue 3 and Inertia.js on Laravel 12.',
+            'description' => 'As a developer at DVLOPER, I participated in the architecture and development of multiple complex digital products for various clients (under NDA):<br><br>• <strong class="text-slate-200">B2B HR Tech Platform (TicWorks):</strong> Participated in migrating the core to PHP 8.2, dockerization, centralizing sensitive configurations into .env files, and optimizing dynamic application flows.<br>• <strong class="text-slate-200">AI SaaS for Instagram (Lia):</strong> Led the UI and monetization ecosystem using React, Zustand, Stripe Checkout, and Laravel Cashier v16 under Clean Architecture principles.<br>• <strong class="text-slate-200">European Corporate Exchange (Flusso):</strong> Executed a pixel-perfect, responsive rebranding of its landing page using Vue 3 and Inertia.js on Laravel 12.',
             'stack'       => ['PHP 8.2/8.3', 'Laravel', 'React', 'Vue 3', 'Inertia.js', 'Stripe', 'Tailwind', 'Docker'],
         ],
         [
