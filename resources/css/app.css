@@ -1486,7 +1486,6 @@ body {
 
 .exp-description__inner {
     display: block;
-    will-change: transform;
 }
 
 /* ── Stack badges ──────────────────────────────────────────────────────── */

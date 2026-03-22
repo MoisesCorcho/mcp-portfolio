@@ -59,25 +59,11 @@ return [
 
     'experience_jobs' => [
         [
-            'role'        => 'PHP Developer (Collaboration)',
-            'company'     => 'Confidential Project — B2B Management App',
-            'date'        => 'March 2026 – April 2026',
-            'description' => 'Collaborated in the modernization of a B2B management platform, participating in the migration from PHP 7.2 to PHP 8.2. Introduced PHPStan for preventive static analysis, optimized the logging system, and strengthened security in critical authentication, job management, and payment modules. (Project under confidentiality agreement).',
-            'stack'       => ['PHP 8.2', 'Laravel', 'MySQL', 'PHPStan', 'Docker', 'Git', 'Composer'],
-        ],
-        [
-            'role'        => 'Full Stack Developer (Collaboration)',
-            'company'     => 'Confidential Project — AI SaaS Platform',
-            'date'        => 'February 2026 – March 2026',
-            'description' => 'Led the development of the monetization ecosystem and UI architecture for a SaaS platform. Implemented the subscription flow with Stripe Checkout and Laravel Cashier v16. Built a Paywall with dynamic interceptors and state management with Zustand, following Clean Architecture principles with Dark Mode and i18n support. (Project under confidentiality agreement).',
-            'stack'       => ['PHP 8.3', 'Laravel 11', 'React', 'Zustand', 'Stripe', 'TypeScript', 'Tailwind', 'TDD'],
-        ],
-        [
-            'role'        => 'Laravel / Vue Fullstack Developer (Collaboration)',
-            'company'     => 'Confidential Project — Corporate Landing Page',
-            'date'        => 'February 2026 – March 2026',
-            'description' => 'Executed a complete rebranding of a corporate Landing Page, translating Figma designs into a high-fidelity pixel-perfect interface. Implemented a fully responsive experience using Tailwind CSS and Vue 3 with Inertia.js on Laravel 12. (Project under confidentiality agreement).',
-            'stack'       => ['PHP 8.3', 'Laravel 12', 'Vue 3', 'Inertia.js', 'Tailwind', 'Git'],
+            'role'        => 'Full Stack Developer',
+            'company'     => 'DVELOPER',
+            'date'        => 'February 2026 – Present',
+            'description' => 'As a developer at DVELOPER, I participated in the architecture and development of multiple complex digital products for various clients (under NDA):<br><br>• <strong class="text-slate-200">B2B HR Tech Platform (TicWorks):</strong> Participated in migrating the core to PHP 8.2, dockerization, centralizing sensitive configurations into .env files, and optimizing dynamic application flows.<br>• <strong class="text-slate-200">AI SaaS for Instagram (Lia):</strong> Led the UI and monetization ecosystem using React, Zustand, Stripe Checkout, and Laravel Cashier v16 under Clean Architecture principles.<br>• <strong class="text-slate-200">European Corporate Exchange (Flusso):</strong> Executed a pixel-perfect, responsive rebranding of its landing page using Vue 3 and Inertia.js on Laravel 12.',
+            'stack'       => ['PHP 8.2/8.3', 'Laravel', 'React', 'Vue 3', 'Inertia.js', 'Stripe', 'Tailwind', 'Docker'],
         ],
         [
             'role'        => 'Laravel Backend Developer',

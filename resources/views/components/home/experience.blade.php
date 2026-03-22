@@ -42,7 +42,7 @@ $experience = __('home.experience_jobs');
                         <span class="exp-date">{{ $job['date'] }}</span>
                     </div>
                     <div class="exp-description">
-                        <span class="exp-description__inner">{{ $job['description'] }}</span>
+                        <span class="exp-description__inner">{!! $job['description'] !!}</span>
                     </div>
                     <div class="exp-stack">
                         @foreach($job['stack'] as $tech)
