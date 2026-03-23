@@ -26,9 +26,9 @@
   </style>
 
   <div class="container">
-    <p><span class="highlight">Name: </span>{{ $name }}</p>
-    <p><span class="highlight">Email: </span>{{ $email }}</p>
-    <p><span class="highlight">Message: </span>{{ $body }}</p>
+    <p><span class="highlight">Name: </span>{{ $contact->name }}</p>
+    <p><span class="highlight">Email: </span>{{ $contact->email }}</p>
+    <p><span class="highlight">Message: </span>{{ $contact->body }}</p>
   </div>
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\DTOs\ContactData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -14,17 +15,7 @@ class ContactMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(
-        public string $name,
-        public string $email,
-        public string $body
-    )
-    {
-        //
-    }
+    public function __construct(public readonly ContactData $contact) {}
 
     /**
      * Get the message envelope.
