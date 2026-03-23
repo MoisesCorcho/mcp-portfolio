@@ -1447,6 +1447,29 @@ body {
     will-change: transform;
 }
 
+/* ── Vertical company name (collapsed only) ─────────────────────────────── */
+.exp-vertical-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    white-space: nowrap;
+    font-family: var(--font-display), sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245, 158, 11, 0.65);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.exp-option.active .exp-vertical-label {
+    opacity: 0;
+}
+
 /* ── Bottom label: icon + role/company ──────────────────────────────────── */
 .exp-label {
     display: flex;
@@ -1641,5 +1664,10 @@ body {
     .exp-option:not(.active) .exp-label {
         bottom: 12px;
         left: 12px;
+    }
+
+    .exp-vertical-label {
+        transform: translate(-50%, -50%);
+        font-size: 0.7rem;
     }
 }

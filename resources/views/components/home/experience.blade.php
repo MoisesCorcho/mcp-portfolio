@@ -42,6 +42,9 @@ $companyLogos = [
         <div class="exp-option {{ $i === 0 ? 'active' : '' }}" data-exp-index="{{ $i }}">
             <div class="exp-shadow"></div>
 
+            {{-- Vertical company name — visible only when collapsed --}}
+            <div class="exp-vertical-label">{{ $job['company'] }}</div>
+
             {{-- Full content — visible when expanded --}}
             <div class="exp-content">
                 <h3 class="exp-role">{{ $job['role'] }}</h3>
