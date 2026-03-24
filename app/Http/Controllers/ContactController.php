@@ -2,30 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\ContactData;
 use App\Mail\ContactMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
-    public function submit(Request $request) {
-
-
+    public function submit(Request $request)
+    {
         $validated = $request->validate([
-            'name'    => 'required',
-            'email'   => ['email', 'required'],
-            'body'    => 'required'
+            'name'  => 'required',
+            'email' => ['email', 'required'],
+            'body'  => 'required',
         ]);
 
-        //Send Email
+        $contact = ContactData::fromRequest($validated);
+
         Mail::to('mcorchoperez@gmail.com')
-            ->send(new ContactMail(
-                $validated['name'],
-                $validated['email'],
-                $validated['body'])
-            );
+            ->send(new ContactMail($contact));
 
         return ['success' => true];
-
     }
 }
