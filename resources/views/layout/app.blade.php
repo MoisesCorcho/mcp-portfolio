@@ -4,8 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="{{ __('home.meta_description') }}">
-    <title>{{ __('home.page_title') }}</title>
+    <meta name="description" content="{{ __('home.meta_description', ['name' => config('portfolio.owner.name')]) }}">
+    <title>{{ __('home.page_title', ['name' => config('portfolio.owner.name')]) }}</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">

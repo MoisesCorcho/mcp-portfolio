@@ -3,19 +3,20 @@
 return [
 
     // ── Layout ──────────────────────────────────────────────────────────────
-    'meta_description' => 'Moisés Corcho Pérez — Desarrollador Web Backend con 4 años de experiencia en Laravel, PHP y MySQL.',
-    'page_title'        => 'Moisés Corcho — Dev Portfolio',
+    'meta_description' => ':name — Desarrollador Web Backend con 4 años de experiencia en Laravel, PHP y MySQL.',
+    'page_title'        => ':name — Dev Portfolio',
 
     // ── Navbar ───────────────────────────────────────────────────────────────
     'nav_about'   => 'Acerca de mi',
     'nav_projects' => 'Proyectos',
     'nav_contact' => 'Contacto',
+    'nav_experience' => 'Experiencia',
     'nav_cta'     => 'Contáctame',
     'nav_lang_switch_title_to_en' => 'Switch to English',
     'nav_lang_switch_title_to_es' => 'Cambiar a Español',
 
     // ── Footer ───────────────────────────────────────────────────────────────
-    'footer_made_with' => '© :year Moisés Corcho Pérez. Hecho con ❤️',
+    'footer_made_with' => '© :year :name. Hecho con ❤️',
 
     // ── Hero ─────────────────────────────────────────────────────────────────
     'hero_badge'         => 'Disponible para proyectos',
@@ -40,9 +41,9 @@ return [
     'about_stack_label'    => 'Stack técnico',
     'about_stack_prefix'   => 'Desarrollo con',
     'about_github_btn'     => 'Ver mi GitHub',
-    'about_img_piano_alt'  => 'Moisés tocando piano',
-    'about_img_cat_pc_alt' => 'Gata con PC',
-    'about_img_cat_alt'    => 'Gata mascota',
+    'about_img_1_alt'      => 'Image Alt 1',
+    'about_img_2_alt'      => 'Image Alt 2',
+    'about_img_3_alt'      => 'Image Alt 3',
 
     // ── Portfolio ────────────────────────────────────────────────────────────
     'portfolio_label'        => 'Portafolio',

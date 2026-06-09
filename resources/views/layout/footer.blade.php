@@ -11,9 +11,9 @@
             {{-- Brand --}}
             <div class="flex items-center gap-2">
                 <span class="flex items-center justify-center w-7 h-7 rounded-md text-slate-950 font-display font-extrabold text-sm"
-                      style="background:var(--amber); font-family:var(--font-display);">M</span>
+                      style="background:var(--amber); font-family:var(--font-display);">{{ config('portfolio.owner.brand_initial') }}</span>
                 <span class="font-display font-bold text-base text-slate-300" style="font-family:var(--font-display);">
-                    Corcho<span class="text-amber-400">.</span>
+                    {{ config('portfolio.owner.brand_name') }}<span class="text-amber-400">.</span>
                 </span>
             </div>
 
@@ -22,7 +22,7 @@
 
             {{-- Copyright --}}
             <p class="text-xs text-slate-600" style="font-family:var(--font-display);">
-                {{ __('home.footer_made_with', ['year' => date('Y')]) }}
+                {{ __('home.footer_made_with', ['year' => date('Y'), 'name' => config('portfolio.owner.name')]) }}
             </p>
 
         </div>
