@@ -58,27 +58,13 @@ return [
     'experience_heading_accent' => 'experience',
 
     'experience_jobs' => [
-        // [
-        //     'role'        => 'PHP Developer',
-        //     'company'     => 'TICWorks',
-        //     'date'        => 'March 2026 – April 2026',
-        //     'description' => 'Actively participated in the modernization and evolutionary maintenance of the TICWorks platform, collaborating on the technical migration of the PHP engine from 7.2 to 8.2. We implemented PHPStan for preventive static analysis and optimized the logging system. I strengthened security in critical modules (Auth, Jobs, Payments) and improved the application experience with dynamic flows.',
-        //     'stack'       => ['PHP 8.2', 'Laravel', 'MySQL', 'PHPStan', 'Docker', 'Git', 'Composer'],
-        // ],
-        // [
-        //     'role'        => 'Full Stack Developer (Laravel & React)',
-        //     'company'     => 'Lia',
-        //     'date'        => 'February 2026 – March 2026',
-        //     'description' => 'Led the development of the monetization ecosystem and the UI maturation of Lia (AI). Implemented the subscription flow with Stripe Checkout and Laravel Cashier v16. Developed a Paywall with dynamic interceptors and state management with Zustand, ensuring Dark Mode support and internationalization under Clean Architecture.',
-        //     'stack'       => ['PHP 8.3', 'Laravel 11', 'React', 'Zustand', 'Stripe', 'TypeScript', 'Tailwind', 'TDD'],
-        // ],
-        // [
-        //     'role'        => 'Laravel / Vue Fullstack Developer',
-        //     'company'     => 'Flusso',
-        //     'date'        => 'February 2026 – March 2026',
-        //     'description' => 'Executed the complete rebranding of the Flusso Landing Page, translating Figma designs into a high-fidelity pixel-perfect interface. Implemented a 100% responsive experience using Tailwind CSS and Vue 3 with Inertia.js and Laravel 12, ensuring a polished and modern implementation of the main entry point.',
-        //     'stack'       => ['PHP 8.3', 'Laravel 12', 'Vue 3', 'Inertia.js', 'Tailwind', 'Git'],
-        // ],
+        [
+            'role'        => 'Full Stack Developer',
+            'company'     => 'DVLOPER',
+            'date'        => 'February 2026 – Present',
+            'description' => 'As a developer at DVLOPER, I participated in the architecture and development of multiple complex digital products for various clients (under NDA):<br><br>• <strong class="text-slate-200">B2B HR Tech Platform (TicWorks):</strong> Participated in migrating the core to PHP 8.2, dockerization, centralizing sensitive configurations into .env files, and optimizing dynamic application flows.<br>• <strong class="text-slate-200">AI SaaS for Instagram (Lia):</strong> Led the UI and monetization ecosystem using React, Zustand, Stripe Checkout, and Laravel Cashier v16 under Clean Architecture principles.<br>• <strong class="text-slate-200">European Corporate Exchange (Flusso):</strong> Executed a pixel-perfect, responsive rebranding of its landing page using Vue 3 and Inertia.js on Laravel 12.',
+            'stack'       => ['PHP 8.2/8.3', 'Laravel', 'React', 'Vue 3', 'Inertia.js', 'Stripe', 'Tailwind', 'Docker'],
+        ],
         [
             'role'        => 'Laravel Backend Developer',
             'company'     => 'andrestelocambia',
