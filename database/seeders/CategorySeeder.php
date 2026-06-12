@@ -3,66 +3,32 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Array de categorías de tecnologías de desarrollo
         $categories = [
-            ['name' => 'PHP', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Laravel', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Symfony', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'PHPUnit', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Pest', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Livewire', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'JavaScript', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Vue.js', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'React', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Angular', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Node.js', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Express.js', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'SQL', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'MySQL', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'PostgreSQL', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'MongoDB', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Git', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Docker', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Kubernetes', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'APIs RESTful', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'GraphQL', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Frontend Development', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Backend Development', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'DevOps', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Control de Versiones', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Bases de Datos', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Testing Automatizado', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'CSS', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'HTML', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Sass/Less', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Webpack', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Vite', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Phaser 3', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Svelte', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Tiled', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Tailwind CSS', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'TypeScript', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'C#', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Java', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Python', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Unreal Engine', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Unity', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Azure DevOps', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Azure Portal', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['name' => 'Terraform', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            'PHP', 'Laravel', 'Symfony', 'PHPUnit', 'Pest',
+            'Livewire', 'JavaScript', 'Vue.js', 'React', 'Angular',
+            'Node.js', 'Express.js', 'SQL', 'MySQL', 'PostgreSQL',
+            'MongoDB', 'Git', 'Docker', 'Kubernetes', 'APIs RESTful',
+            'GraphQL', 'Frontend Development', 'Backend Development',
+            'DevOps', 'Control de Versiones', 'Bases de Datos',
+            'Testing Automatizado', 'CSS', 'HTML', 'Sass/Less',
+            'Webpack', 'Vite', 'Phaser 3', 'Svelte', 'Tiled',
+            'Tailwind CSS', 'TypeScript', 'C#', 'Java', 'Python',
+            'Unreal Engine', 'Unity', 'Azure DevOps', 'Azure Portal',
+            'Terraform',
         ];
 
-        // Inserta los datos en la tabla 'categories'
-        DB::table('categories')->insert($categories);
+        foreach ($categories as $name) {
+            DB::table('categories')->insertOrIgnore([
+                'name' => $name,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

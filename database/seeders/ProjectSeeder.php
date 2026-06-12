@@ -8,9 +8,6 @@ use Illuminate\Database\Seeder;
 
 class ProjectSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $projectsData = [
@@ -66,11 +63,14 @@ class ProjectSeeder extends Seeder
 
         foreach ($projectsData as $data) {
 
-            $project = Project::create([
-                'title' => $data['title'],
-                'image' => null,
-                'github' => $data['github'] ?? null,
-            ]);
+            // Busca por title — si ya existe no lo duplica
+            $project = Project::firstOrCreate(
+                ['title' => $data['title']],
+                [
+                    'image' => $data['image'] ?? null,
+                    'github' => $data['github'] ?? null,
+                ]
+            );
 
             if (isset($data['category']) && is_array($data['category'])) {
                 $categoryIds = [];
@@ -78,7 +78,8 @@ class ProjectSeeder extends Seeder
                     $category = Category::firstOrCreate(['name' => $categoryName]);
                     $categoryIds[] = $category->id;
                 }
-                $project->categories()->attach($categoryIds);
+                // syncWithoutDetaching en lugar de attach para no duplicar relaciones
+                $project->categories()->syncWithoutDetaching($categoryIds);
             }
         }
     }
