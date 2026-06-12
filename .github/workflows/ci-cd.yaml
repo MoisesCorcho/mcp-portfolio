@@ -2,16 +2,12 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main        # Runs validation jobs only (no deployment)
-      - production  # Runs validation and deployment jobs
+    branches: [main, production]
 
   pull_request:
-    branches:
-      - main
-      - production
+    types: [opened, synchronize, reopened, closed]
+    branches: [main, production]
 
-  # Run only on pushes to production branch or manually
   workflow_dispatch:
     inputs:
       deploy:
@@ -19,9 +15,11 @@ on:
         required: true
         default: "true"
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
 
-  # Job: Code style validation using Laravel Pint
   lint:
     name: Code Style (Pint)
     runs-on: ubuntu-latest
@@ -36,18 +34,16 @@ jobs:
           php-version: '8.2'
 
       - name: Install Composer dependencies
-        # Required to run Pint and other PHP tooling
-        run: composer install --no-interaction --prefer-dist
+        # --no-scripts Prevents filament:upgrade from running without a .env available
+        run: composer install --no-interaction --prefer-dist --no-scripts
 
       - name: Run Laravel Pint
-        # Fails the job if code style violations are detected
         run: ./vendor/bin/pint --test
 
-  # Job: Run automated tests
   test:
     name: Tests (PHPUnit)
     runs-on: ubuntu-latest
-    needs: lint   # Ensures tests run only if lint passes
+    needs: lint
 
     steps:
       - name: Checkout repository
@@ -57,28 +53,26 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, pdo, pdo_sqlite  # SQLite used for in-memory testing
+          extensions: mbstring, pdo, pdo_sqlite
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: composer install --no-interaction --prefer-dist --no-scripts
 
       - name: Prepare Laravel application
-        # Creates environment configuration and application key
-        run: |
-          cp .env.testing .env
-          php artisan key:generate
+        run: cp .env.testing .env
 
       - name: Execute test suite
         # Runs tests using the testing environment configuration
         run: php artisan test --env=testing
 
-  # Job: Deploy application to VPS
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
     needs: [lint, test]
-    # Deploys on production branch pushes or manual trigger with deploy=true
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/production')
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/production') ||
+      (github.event_name == 'workflow_dispatch' && github.ref_name == 'production') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'production')
 
     steps:
       - name: Checkout repository
@@ -90,13 +84,12 @@ jobs:
           php-version: '8.2'
 
       - name: Install Composer dependencies for production
-        # Installs only production dependencies with optimized autoload
-        run: composer install --no-dev --optimize-autoloader --no-interaction
+        run: composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
       - name: Set up Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Build frontend assets
@@ -106,7 +99,7 @@ jobs:
           npm run build
 
       - name: Upload compiled assets to VPS
-        # Transfers built assets to the server to avoid running Node.js in production
+        # Uploads compiled assets to the VPS
         uses: burnett01/rsync-deployments@7.0.1
         with:
           switches: -avz --delete
@@ -130,19 +123,13 @@ jobs:
             cd /home/moisescorchodev/htdocs/www.moisescorchodev.tech
 
             # Update application code
-            git pull origin production
+            git fetch origin
+            git reset --hard origin/production
 
-            # Install PHP dependencies in production mode
-            composer install --no-dev --optimize-autoloader --no-interaction
+            # Install PHP dependencies
+            composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
-            # Run Laravel maintenance tasks
             php artisan migrate --force --seed
-
-            php artisan cache:clear
-
-            php artisan config:clear
-            php artisan route:clear
-            php artisan view:clear
 
             php artisan config:cache
             php artisan route:cache
