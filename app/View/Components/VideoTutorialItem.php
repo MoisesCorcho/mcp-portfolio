@@ -15,8 +15,7 @@ class VideoTutorialItem extends Component
         public string $videoId,
         public string $title,
         public string $description
-    )
-    {}
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

@@ -15,7 +15,7 @@ class ButtonLink extends Component
         public string $href,
         public string $variant = 'primary',
         public string $target = '_self'
-    ){}
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

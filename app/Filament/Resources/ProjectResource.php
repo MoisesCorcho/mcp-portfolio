@@ -3,22 +3,19 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProjectResource\Pages;
-use App\Filament\Resources\ProjectResource\RelationManagers;
-use App\Models\Category;
 use App\Models\Project;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use LucasGiovanny\FilamentMultiselectTwoSides\Forms\Components\Fields\MultiselectTwoSides;
 
 class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
+
     protected static ?int $navigationSort = 1;
+
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
     public static function form(Form $form): Form
