@@ -77,9 +77,8 @@ jobs:
     name: Deploy to VPS
     runs-on: ubuntu-latest
     needs: [lint, test]
-    if: |
-      github.ref == 'refs/heads/production' ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true')  # Runs only for pushes to production branch or manually with confirmation
+    # Deploys on production branch pushes or manual trigger with deploy=true
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/production')
 
     steps:
       - name: Checkout repository
