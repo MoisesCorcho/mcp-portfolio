@@ -9,8 +9,8 @@
 
             {{-- Brand --}}
             <a href="/" class="flex items-center gap-2 group">
-                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500 text-slate-950 font-display font-extrabold text-sm">M</span>
-                <span class="font-display font-bold text-lg text-slate-100 group-hover:text-amber-400 transition-colors duration-200">Corcho<span class="text-amber-400">.</span></span>
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500 text-slate-950 font-display font-extrabold text-sm">{{ config('portfolio.owner.brand_initial') }}</span>
+                <span class="font-display font-bold text-lg text-slate-100 group-hover:text-amber-400 transition-colors duration-200">{{ config('portfolio.owner.brand_name') }}<span class="text-amber-400">.</span></span>
             </a>
 
             {{-- Desktop nav --}}
