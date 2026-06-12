@@ -65,7 +65,7 @@ jobs:
       - name: Prepare Laravel application
         # Creates environment configuration and application key
         run: |
-          cp .env.example .env
+          cp .env.testing .env
           php artisan key:generate
 
       - name: Execute test suite
@@ -136,7 +136,14 @@ jobs:
             composer install --no-dev --optimize-autoloader --no-interaction
 
             # Run Laravel maintenance tasks
-            php artisan migrate --force
+            php artisan migrate --force --seed
+
+            php artisan cache:clear
+
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
