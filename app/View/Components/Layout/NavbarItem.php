@@ -13,8 +13,7 @@ class NavbarItem extends Component
      */
     public function __construct(
         public string $href
-    )
-    {}
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

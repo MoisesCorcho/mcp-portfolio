@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CategorySeeder extends Seeder
 {
@@ -54,6 +52,14 @@ class CategorySeeder extends Seeder
             ['name' => 'Tiled', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['name' => 'Tailwind CSS', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['name' => 'TypeScript', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'C#', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Java', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Python', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Unreal Engine', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Unity', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Azure DevOps', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Azure Portal', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['name' => 'Terraform', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
         ];
 
         // Inserta los datos en la tabla 'categories'

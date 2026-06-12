@@ -13,8 +13,7 @@ class Button extends Component
      */
     public function __construct(
         public string $variant = 'primary'
-    )
-    {}
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

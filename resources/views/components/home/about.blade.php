@@ -44,7 +44,7 @@
                              style="border:1px solid rgba(255,255,255,0.06);">
                             <img
                                 src="{{ url('/img/MoisesPiano.jpeg') }}"
-                                alt="{{ __('home.about_img_piano_alt') }}"
+                                alt="{{ __('home.about_img_1_alt') }}"
                                 class="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
                             />
                         </div>
@@ -52,7 +52,7 @@
                              style="border:1px solid rgba(255,255,255,0.06);">
                             <img
                                 src="{{ url('/img/GataMascotaPc.jpeg') }}"
-                                alt="{{ __('home.about_img_cat_pc_alt') }}"
+                                alt="{{ __('home.about_img_2_alt') }}"
                                 class="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
                             />
                         </div>
@@ -63,7 +63,7 @@
                              style="border:1px solid rgba(245,158,11,0.2); height:100%;">
                             <img
                                 src="{{ url('/img/GataMascota.jpeg') }}"
-                                alt="{{ __('home.about_img_cat_alt') }}"
+                                alt="{{ __('home.about_img_3_alt') }}"
                                 class="w-full h-full object-cover min-h-[250px] transition-transform duration-500 hover:scale-105"
                             />
                         </div>

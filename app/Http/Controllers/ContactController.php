@@ -12,9 +12,9 @@ class ContactController extends Controller
     public function submit(Request $request)
     {
         $validated = $request->validate([
-            'name'  => 'required',
+            'name' => 'required',
             'email' => ['email', 'required'],
-            'body'  => 'required',
+            'body' => 'required',
         ]);
 
         $contact = ContactData::fromRequest($validated);

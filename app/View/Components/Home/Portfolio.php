@@ -2,16 +2,17 @@
 
 namespace App\View\Components\Home;
 
-use Closure;
 use App\Models\Project;
-use Illuminate\Support\Arr;
-use Illuminate\View\Component;
-use Illuminate\Support\Collection;
+use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\View\Component;
 
 class Portfolio extends Component
 {
     public array|Collection $items = [];
+
     public array $tabs = [];
 
     /**

@@ -14,7 +14,7 @@ class EditCategory extends EditRecord
     {
         return [
             Actions\DeleteAction::make()
-                ->modalDescription('Are you sure you\'d like to delete this post? This action will affect this number of projects: ' . $this->record->projects->count()),
+                ->modalDescription('Are you sure you\'d like to delete this post? This action will affect this number of projects: '.$this->record->projects->count()),
         ];
     }
 }

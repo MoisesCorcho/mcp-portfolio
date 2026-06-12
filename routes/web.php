@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,16 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::get('/', function () {
     return view('home');
 });
 
-Route::post('/contact/submit', [\App\Http\Controllers\ContactController::class, 'submit']);
+Route::post('/contact/submit', [ContactController::class, 'submit']);
 
 Route::get('/lang/{locale}', function (string $locale) {
     if (in_array($locale, ['es', 'en'])) {
         session(['locale' => $locale]);
     }
+
     return redirect()->back();
 })->name('lang.switch');
