@@ -45,27 +45,35 @@
 
     {{-- Continuous Vertical Spine Timeline --}}
     <div class="p-6 sm:p-10 lg:px-14 lg:py-10 bg-chamber/20 relative">
-        {{-- Vertical Steel Rail --}}
-        <div class="absolute top-8 bottom-8 left-3 sm:left-4 w-px bg-zinc-800" aria-hidden="true"></div>
 
-        <div class="space-y-6 sm:space-y-8 pl-9 sm:pl-10 relative">
+        <div class="space-y-6 sm:space-y-8 pl-8 sm:pl-10 md:pl-12 relative">
+            {{-- Continuous Vertical Steel Spine Rail (piercing straight through all nodes) --}}
+            <div class="absolute top-6 bottom-6 left-0 w-px bg-zinc-800" aria-hidden="true"></div>
+
             @foreach($jobs as $index => $job)
                 @php
                     $logo = $companyLogos[$job['company']] ?? null;
                 @endphp
 
                 <div class="relative group">
-                    {{-- CAD Square Node directly centered on the vertical steel rail --}}
+                    {{-- Horizontal Bus Trace connecting vertical rail & node directly to the experience card --}}
+                    <div
+                        class="absolute top-[40px] sm:top-[46px] -left-8 sm:-left-10 md:-left-12 w-8 sm:w-10 md:w-12 h-px transition-colors duration-200 z-0"
+                        :class="expandedJobs.includes({{ $index }}) ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'bg-zinc-800 group-hover:bg-zinc-700'"
+                        aria-hidden="true"
+                    ></div>
+
+                    {{-- CAD Square Node directly centered on the vertical steel rail and horizontal bus line --}}
                     <span
-                        class="absolute top-6 -left-[30px] w-3 h-3 border border-black z-10 transition-colors duration-200"
-                        :class="expandedJobs.includes({{ $index }}) ? 'bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.6)]' : 'bg-zinc-800 group-hover:bg-amber-400'"
+                        class="absolute top-[34px] sm:top-[40px] -left-8 sm:-left-10 md:-left-12 -translate-x-1/2 w-3 h-3 border border-black z-10 transition-all duration-200"
+                        :class="expandedJobs.includes({{ $index }}) ? 'bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.6)] scale-110' : 'bg-zinc-800 group-hover:bg-amber-400'"
                         aria-hidden="true"
                     ></span>
 
                     {{-- Job Interactive Module Box --}}
                     <div
                         class="border border-zinc-800/90 bg-card/60 hover:bg-card hover:border-zinc-700 transition-all duration-200 overflow-hidden"
-                        :class="expandedJobs.includes({{ $index }}) ? 'border-zinc-700 bg-card shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : ''"
+                        :class="expandedJobs.includes({{ $index }}) ? 'border-zinc-700 border-l-2 border-l-amber-500 bg-card shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : ''"
                     >
                         {{-- Clickable Header Bar --}}
                         <div
@@ -141,9 +149,13 @@
                             </div>
 
                             @if(!empty($job['stack']))
-                                <div class="pt-4 border-t border-zinc-800/60 flex flex-wrap gap-1.5">
+                                <div class="pt-4 border-t border-zinc-800/60 flex flex-wrap items-center gap-1.5">
+                                    <span class="text-[10px] font-roboto-mono uppercase text-amber-500/90 font-semibold tracking-wider flex items-center gap-1 mr-1 select-none">
+                                        <span class="w-1.5 h-1.5 bg-amber-500"></span>
+                                        <span>STACK:</span>
+                                    </span>
                                     @foreach($job['stack'] as $tech)
-                                        <span class="px-2 py-0.5 border border-zinc-800/80 bg-zinc-900/80 text-[10px] sm:text-[11px] font-roboto-mono text-zinc-400">
+                                        <span class="px-2 py-0.5 border border-zinc-800/80 bg-zinc-900/80 text-[10px] sm:text-[11px] font-roboto-mono text-zinc-300 hover:border-amber-500/50 hover:text-amber-400 transition-colors">
                                             {{ $tech }}
                                         </span>
                                     @endforeach
