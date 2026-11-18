@@ -1688,4 +1688,19 @@ body {
         transition-property: color, background-color, border-color, opacity;
         transform: none !important;
     }
+
+    .group:hover .iso-flow {
+        animation: none !important;
+    }
+}
+
+/* ── Isometric CAD Schematics (Services V2) ─────────────────────────────── */
+@keyframes iso-dash {
+    to {
+        stroke-dashoffset: -9;
+    }
+}
+
+.group:hover .iso-flow {
+    animation: iso-dash 0.9s linear infinite;
 }
