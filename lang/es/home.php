@@ -158,6 +158,8 @@ return [
     'contact_message_placeholder' => 'Cuéntame sobre tu proyecto o idea...',
     'contact_submit_btn' => 'Enviar mensaje',
     'contact_sending' => 'Enviando…',
+    'contact_copy' => 'Copiar',
+    'contact_copied' => 'Copiado',
     'contact_success' => 'Gracias por tu mensaje. Te responderé lo antes posible.',
 
     // ── Services ─────────────────────────────────────────────────────────────
@@ -190,6 +192,9 @@ return [
     'credentials_heading_accent' => 'educación y certificados',
     'credentials_subtitle' => 'Historial profesional de impacto, formación universitaria en ingeniería y certificaciones internacionales de industria.',
     'credentials_tab_experience' => 'Experiencia Laboral',
+    'exp_expand_all' => 'Expandir todo',
+    'exp_collapse_all' => 'Colapsar todo',
+    'exp_current_badge' => 'Rol Actual',
     'credentials_tab_education' => 'Educación Formal',
     'credentials_tab_certs' => 'Certificaciones Oficiales',
     'edu_degree_systems' => 'Ingeniero de Sistemas',

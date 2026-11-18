@@ -18,13 +18,13 @@
                 {{ __('home.hero_greeting') }}
             </p>
 
-            {{-- Name with Macro Heavy Typography & Gradient --}}
+            {{-- Name with Macro Heavy Typography in Solid High-Contrast --}}
             <h1
                 class="hero-name font-oxanium font-extrabold leading-[0.98] mb-5 tracking-tight text-white uppercase"
                 style="font-size: clamp(2.6rem, 5.5vw, 4.2rem);"
             >
                 <span>Moisés</span>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 inline-block py-1 box-decoration-clone">Corcho.</span>
+                <span class="text-amber-500">Corcho.</span>
             </h1>
 
             {{-- Amber Accent Ruler --}}

@@ -121,6 +121,14 @@ return [
         ],
     ],
 
+    'company_logos' => [
+        'DVLOPER' => '/img/company_logos/dvloper_logo.png',
+        'Imagine Apps' => '/img/company_logos/imagineappsas_logo.jpeg',
+        'Universidad Cooperativa de Colombia' => '/img/company_logos/ucc_logo.jpeg',
+        'DISTRACOM' => '/img/company_logos/distracom_logo.jpeg',
+        'andrestelocambia' => '/img/company_logos/andrestelocambia_logo.jpeg',
+    ],
+
     'education' => [
         [
             'degree_key' => 'home.edu_degree_systems',

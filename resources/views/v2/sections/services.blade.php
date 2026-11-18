@@ -6,9 +6,9 @@
             {{ __('home.services_label') }}
         </p>
 
-        <h2 class="font-oxanium font-extrabold text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight sm:leading-tight lg:leading-[1.15]">
+        <h2 class="font-oxanium font-extrabold text-2xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight sm:leading-tight lg:leading-[1.15]">
             {{ __('home.services_heading') }}
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 inline-block py-1 sm:py-1.5 box-decoration-clone">
+            <span class="text-amber-500">
                 {{ __('home.services_heading_accent') }}
             </span>
         </h2>

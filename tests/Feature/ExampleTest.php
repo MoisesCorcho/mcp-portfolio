@@ -34,6 +34,7 @@ class ExampleTest extends TestCase
         $response->assertDontSee('SPEC: SYSTEMS_ENGINEER');
         $response->assertDontSee('EXPERIMENTO');
         $response->assertDontSee('VERTICAL SLICE POC');
+        $response->assertDontSee('Track Record');
         $response->assertSee('InfoReal');
         $response->assertSee('Amatu Café', false);
         $response->assertSee('Keep Coding and Nobody Is Fired');

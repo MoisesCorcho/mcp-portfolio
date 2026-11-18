@@ -8,9 +8,9 @@
         id="v2-chassis"
         class="relative bg-canvas text-slate-200 font-roboto-mono overflow-hidden"
     >
-        {{-- Continuous background coordinate grid --}}
+        {{-- Continuous background coordinate grid (Tactical CAD blueprint plane) --}}
         <div
-            class="absolute inset-0 pointer-events-none opacity-30"
+            class="absolute inset-0 pointer-events-none opacity-20"
             style="background-image: linear-gradient(to right, rgba(245, 158, 11, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(245, 158, 11, 0.05) 1px, transparent 1px); background-size: 56px 56px;"
         ></div>
 

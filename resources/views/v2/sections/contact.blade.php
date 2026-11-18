@@ -6,9 +6,9 @@
             {{ __('home.contact_label') }}
         </p>
 
-        <h2 class="font-oxanium font-extrabold text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight sm:leading-tight lg:leading-[1.15]">
+        <h2 class="font-oxanium font-extrabold text-2xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight sm:leading-tight lg:leading-[1.15]">
             {{ __('home.contact_heading') }}
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 inline-block py-1 sm:py-1.5 box-decoration-clone">
+            <span class="text-amber-500">
                 {{ __('home.contact_heading_accent') }}
             </span>
         </h2>
@@ -44,25 +44,42 @@
 
                 {{-- Direct Channels List in Orthogonal CAD Cells --}}
                 <div class="space-y-4">
-                    {{-- Email --}}
-                    <a
-                        href="mailto:{{ config('portfolio.owner.email') }}"
-                        class="p-4 border border-zinc-800 bg-card hover:border-amber-500/80 transition-colors flex items-center gap-4 group"
+                    {{-- Email with Direct Link and Quick-Copy Action --}}
+                    <div
+                        x-data="{ copied: false }"
+                        class="p-4 border border-zinc-800 bg-card hover:border-amber-500/80 transition-colors flex items-center justify-between gap-3 group"
                     >
-                        <div class="w-10 h-10 border border-zinc-700 bg-zinc-900 flex items-center justify-center text-amber-400 group-hover:border-amber-500 transition-colors flex-shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <div class="overflow-hidden">
-                            <span class="block text-[10px] font-roboto-mono uppercase text-zinc-500 tracking-wider">
-                                {{ __('home.contact_email_label') }}
+                        <a
+                            href="mailto:{{ config('portfolio.owner.email') }}"
+                            class="flex items-center gap-4 overflow-hidden flex-1"
+                        >
+                            <div class="w-10 h-10 border border-zinc-700 bg-zinc-900 flex items-center justify-center text-amber-400 group-hover:border-amber-500 transition-colors flex-shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div class="overflow-hidden">
+                                <span class="block text-[10px] font-roboto-mono uppercase text-zinc-500 tracking-wider">
+                                    {{ __('home.contact_email_label') }}
+                                </span>
+                                <span class="block text-xs sm:text-sm font-roboto-mono text-zinc-200 group-hover:text-amber-400 transition-colors truncate">
+                                    {{ config('portfolio.owner.email') }}
+                                </span>
+                            </div>
+                        </a>
+
+                        <button
+                            type="button"
+                            @click="navigator.clipboard.writeText('{{ config('portfolio.owner.email') }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                            class="px-2.5 py-1.5 border border-zinc-800 bg-zinc-900/90 hover:border-amber-500 hover:text-amber-400 text-zinc-400 text-[10px] font-roboto-mono uppercase tracking-wider transition-all flex items-center gap-1.5 flex-shrink-0"
+                            :title="copied ? '{{ __('home.contact_copied') }}' : '{{ __('home.contact_copy') }}'"
+                        >
+                            <span x-show="!copied">{{ __('home.contact_copy') }}</span>
+                            <span x-show="copied" style="display: none;" class="text-amber-400 font-bold flex items-center gap-1">
+                                <span class="text-amber-500">✓</span> {{ __('home.contact_copied') }}
                             </span>
-                            <span class="block text-xs sm:text-sm font-roboto-mono text-zinc-200 group-hover:text-amber-400 transition-colors truncate">
-                                {{ config('portfolio.owner.email') }}
-                            </span>
-                        </div>
-                    </a>
+                        </button>
+                    </div>
 
                     {{-- Location --}}
                     <div class="p-4 border border-zinc-800 bg-card flex items-center gap-4">

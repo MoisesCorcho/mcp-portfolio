@@ -158,6 +158,8 @@ return [
     'contact_message_placeholder' => 'Tell me about your project or idea...',
     'contact_submit_btn' => 'Send message',
     'contact_sending' => 'Sending…',
+    'contact_copy' => 'Copy',
+    'contact_copied' => 'Copied',
     'contact_success' => 'Thank you for your message. I\'ll get back to you as soon as possible.',
 
     // ── Services ─────────────────────────────────────────────────────────────
@@ -190,6 +192,9 @@ return [
     'credentials_heading_accent' => 'education & certificates',
     'credentials_subtitle' => 'Proven engineering track record, formal university degree, and industry certifications.',
     'credentials_tab_experience' => 'Work Experience',
+    'exp_expand_all' => 'Expand all',
+    'exp_collapse_all' => 'Collapse all',
+    'exp_current_badge' => 'Current Role',
     'credentials_tab_education' => 'Formal Education',
     'credentials_tab_certs' => 'Official Certifications',
     'edu_degree_systems' => 'Systems Engineer',

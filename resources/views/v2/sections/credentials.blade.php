@@ -6,9 +6,9 @@
             {{ __('home.credentials_label') }}
         </p>
 
-        <h2 class="font-oxanium font-extrabold text-3xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight sm:leading-tight lg:leading-[1.15]">
+        <h2 class="font-oxanium font-extrabold text-2xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight sm:leading-tight lg:leading-[1.15]">
             {{ __('home.credentials_heading') }}
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 inline-block py-1 sm:py-1.5 box-decoration-clone">
+            <span class="text-amber-500">
                 {{ __('home.credentials_heading_accent') }}
             </span>
         </h2>
@@ -24,52 +24,161 @@
         </p>
     </div>
 
-    {{-- ── 2. Work Experience (Chronological Architectural Log) ── --}}
-    <div class="border-b border-zinc-800">
+    {{-- ── 2. Work Experience (Interactive Spine Timeline Chamber) ── --}}
+    @php
+        $jobs = __('home.experience_jobs');
+        $allJobIndexes = range(0, count($jobs) - 1);
+        $companyLogos = config('portfolio.company_logos', []);
+    @endphp
+    <div
+        class="border-b border-zinc-800"
+        x-data="{
+            expandedJobs: [0],
+            toggleJob(idx) {
+                if (this.expandedJobs.includes(idx)) {
+                    this.expandedJobs = this.expandedJobs.filter(i => i !== idx);
+                } else {
+                    this.expandedJobs.push(idx);
+                }
+            },
+            toggleAll() {
+                if (this.expandedJobs.length > 0) {
+                    this.expandedJobs = [];
+                } else {
+                    this.expandedJobs = @js($allJobIndexes);
+                }
+            }
+        }"
+    >
+        {{-- Section Subheader Strip (Clean, without redundant Track Record text) --}}
         <div class="px-6 py-4 sm:px-10 lg:px-14 bg-zinc-950/80 border-b border-zinc-800/80 flex items-center justify-between">
             <h3 class="font-oxanium font-bold text-sm sm:text-base text-zinc-300 uppercase tracking-wider flex items-center gap-2">
                 <span class="w-2 h-2 bg-amber-500"></span>
                 <span>{{ __('home.credentials_tab_experience') }}</span>
             </h3>
-            <span class="font-roboto-mono text-[11px] text-zinc-500 uppercase tracking-widest hidden sm:inline">
-                Track Record
-            </span>
+
+            {{-- Quick Expand/Collapse All Button --}}
+            <button
+                type="button"
+                @click="toggleAll()"
+                class="font-roboto-mono text-xs text-zinc-400 hover:text-amber-400 uppercase tracking-wider transition-colors flex items-center gap-1.5 focus:outline-none"
+            >
+                <span x-text="expandedJobs.length > 0 ? '{{ __('home.exp_collapse_all') }}' : '{{ __('home.exp_expand_all') }}'"></span>
+                <span class="text-amber-500 text-[10px]" x-text="expandedJobs.length > 0 ? '▲' : '▼'"></span>
+            </button>
         </div>
 
-        <div class="divide-y divide-zinc-800 relative">
-            @foreach(__('home.experience_jobs') as $index => $job)
-                <div class="p-6 sm:p-8 lg:px-14 lg:py-8 bg-chamber/20 hover:bg-zinc-950/40 transition-colors">
-                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2 mb-3">
-                        <div class="flex flex-wrap items-center gap-2.5">
-                            <span class="font-oxanium font-bold text-lg sm:text-xl text-white uppercase tracking-tight">
-                                {{ $job['role'] }}
-                            </span>
-                            <span class="text-amber-500 font-mono">/</span>
-                            <span class="font-roboto-mono text-sm font-semibold text-amber-400">
-                                {{ $job['company'] }}
-                            </span>
+        {{-- Continuous Vertical Spine Timeline --}}
+        <div class="p-6 sm:p-10 lg:px-14 lg:py-10 bg-chamber/20 relative">
+            {{-- Vertical Steel Rail --}}
+            <div class="absolute top-8 bottom-8 left-3 sm:left-4 w-px bg-zinc-800" aria-hidden="true"></div>
+
+            <div class="space-y-6 sm:space-y-8 pl-9 sm:pl-10 relative">
+                @foreach($jobs as $index => $job)
+                    @php
+                        $logo = $companyLogos[$job['company']] ?? null;
+                    @endphp
+
+                    <div class="relative group">
+                        {{-- CAD Square Node directly centered on the vertical steel rail --}}
+                        <span
+                            class="absolute top-6 -left-[30px] w-3 h-3 border border-black z-10 transition-colors duration-200"
+                            :class="expandedJobs.includes({{ $index }}) ? 'bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.6)]' : 'bg-zinc-800 group-hover:bg-amber-400'"
+                            aria-hidden="true"
+                        ></span>
+
+                        {{-- Job Interactive Module Box --}}
+                        <div
+                            class="border border-zinc-800/90 bg-card/60 hover:bg-card hover:border-zinc-700 transition-all duration-200 overflow-hidden"
+                            :class="expandedJobs.includes({{ $index }}) ? 'border-zinc-700 bg-card shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : ''"
+                        >
+                            {{-- Clickable Header Bar --}}
+                            <div
+                                @click="toggleJob({{ $index }})"
+                                class="p-5 sm:p-6 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 select-none"
+                                role="button"
+                                :aria-expanded="expandedJobs.includes({{ $index }}) ? 'true' : 'false'"
+                            >
+                                <div class="flex items-center gap-3.5 sm:gap-4">
+                                    {{-- Company Logo CAD Frame --}}
+                                    <div class="w-10 h-10 sm:w-11 sm:h-11 border border-zinc-700/80 bg-zinc-900 p-1 flex items-center justify-center flex-shrink-0 shadow-sm">
+                                        @if($logo)
+                                            <img
+                                                src="{{ asset($logo) }}"
+                                                alt="{{ $job['company'] }}"
+                                                class="w-full h-full object-contain"
+                                                loading="lazy"
+                                                width="40"
+                                                height="40"
+                                            />
+                                        @else
+                                            <span class="font-oxanium font-extrabold text-base text-amber-400">
+                                                {{ strtoupper(substr($job['company'], 0, 1)) }}
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <div>
+                                        {{-- Role Title in Oxanium --}}
+                                        <h4 class="font-oxanium font-bold text-base sm:text-xl text-white uppercase tracking-tight group-hover:text-amber-400 transition-colors">
+                                            {{ $job['role'] }}
+                                        </h4>
+
+                                        {{-- Company Name in Structured Badge --}}
+                                        <div class="flex flex-wrap items-center gap-2 mt-1">
+                                            <span class="font-roboto-mono text-xs sm:text-sm font-semibold text-amber-400">
+                                                {{ $job['company'] }}
+                                            </span>
+                                            @if($index === 0)
+                                                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-amber-500/10 border border-amber-500/30 text-[9px] font-roboto-mono text-amber-400 uppercase tracking-wider font-semibold">
+                                                    <span class="w-1.5 h-1.5 bg-amber-400 animate-pulse"></span>
+                                                    {{ __('home.exp_current_badge') }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Date Chip & Expand Indicator --}}
+                                <div class="flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-zinc-800/60">
+                                    <span class="font-roboto-mono text-xs text-zinc-400 bg-zinc-900/90 px-3 py-1 border border-zinc-800">
+                                        {{ $job['date'] }}
+                                    </span>
+
+                                    <span class="w-8 h-8 border border-zinc-800 bg-zinc-900 flex items-center justify-center text-zinc-400 group-hover:border-amber-500 group-hover:text-amber-400 text-xs font-mono transition-colors">
+                                        <span x-show="!expandedJobs.includes({{ $index }})">+</span>
+                                        <span x-show="expandedJobs.includes({{ $index }})" style="display: none;">−</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            {{-- Collapsible Technical Chamber --}}
+                            <div
+                                x-show="expandedJobs.includes({{ $index }})"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 -translate-y-2"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                class="px-5 pb-6 sm:px-6 sm:pb-6 pt-1 border-t border-zinc-800/80"
+                                style="display: none;"
+                            >
+                                <div class="font-roboto-mono text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl py-3 space-y-2">
+                                    {!! $job['description'] !!}
+                                </div>
+
+                                @if(!empty($job['stack']))
+                                    <div class="pt-4 border-t border-zinc-800/60 flex flex-wrap gap-1.5">
+                                        @foreach($job['stack'] as $tech)
+                                            <span class="px-2 py-0.5 border border-zinc-800/80 bg-zinc-900/80 text-[10px] sm:text-[11px] font-roboto-mono text-zinc-400">
+                                                {{ $tech }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-
-                        <span class="font-roboto-mono text-xs text-zinc-400 bg-card px-3 py-1 border border-zinc-800 inline-block self-start lg:self-auto">
-                            {{ $job['date'] }}
-                        </span>
                     </div>
-
-                    <div class="font-roboto-mono text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl mb-4">
-                        {!! $job['description'] !!}
-                    </div>
-
-                    @if(!empty($job['stack']))
-                        <div class="flex flex-wrap gap-1.5 pt-2">
-                            @foreach($job['stack'] as $tech)
-                                <span class="px-2 py-0.5 border border-zinc-800/80 bg-card text-[11px] font-roboto-mono text-zinc-400">
-                                    {{ $tech }}
-                                </span>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     </div>
 
