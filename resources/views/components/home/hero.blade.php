@@ -30,17 +30,6 @@
             {{-- ── LEFT: Text Content ── --}}
             <div class="flex flex-col">
 
-                {{-- Availability badge --}}
-                <div class="hero-badge inline-flex items-center gap-2 mb-6 self-start px-4 py-1.5 rounded-full glass">
-                    <span class="flex h-2 w-2 relative">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-                    </span>
-                    <span style="font-family:var(--font-display);" class="text-xs font-semibold tracking-[0.14em] uppercase text-amber-400/90">
-                        {{ __('home.hero_badge') }}
-                    </span>
-                </div>
-
                 {{-- Greeting --}}
                 <p
                     class="hero-title font-display font-bold leading-[1.05] text-slate-300 mb-1"
