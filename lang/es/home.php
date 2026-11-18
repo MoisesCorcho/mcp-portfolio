@@ -21,14 +21,14 @@ return [
     // ── Hero ─────────────────────────────────────────────────────────────────
     'hero_badge' => 'Disponible para proyectos',
     'hero_greeting' => 'Mi nombre es',
-    'hero_subtitle' => 'Desarrollador web backend con <strong class="text-slate-200 font-semibold">+4 años de experiencia</strong> construyendo aplicaciones robustas con <span class="text-amber-400 font-semibold">Laravel</span>, <span class="text-amber-400 font-semibold">PHP</span> y MySQL. Apasionado por el código limpio y las arquitecturas escalables.',
+    'hero_subtitle' => 'Desarrollador Full-Stack & AI Developer con <strong class="text-slate-200 font-semibold">+4 años de experiencia</strong> construyendo aplicaciones robustas con <span class="text-amber-400 font-semibold">Laravel</span>, <span class="text-amber-400 font-semibold">PHP</span> y el <span class="text-amber-400 font-semibold">Stack TALL</span>, bajo procesos asistidos por IA (SDD).',
     'hero_cta_primary' => 'Ver mis proyectos',
     'hero_cta_secondary' => 'Sobre mí',
     'hero_social_label' => 'Redes sociales',
     'hero_photo_alt' => 'Moisés Corcho Pérez',
 
     // ── Marquee ──────────────────────────────────────────────────────────────
-    'marquee_items' => ['Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'Backend Dev', 'Clean Code', 'API REST', 'Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'Backend Dev', 'Clean Code', 'API REST'],
+    'marquee_items' => ['Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'Stack TALL', 'SDD', 'MCPs', 'Clean Code', 'API REST', 'Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'Stack TALL', 'SDD', 'MCPs', 'Clean Code', 'API REST'],
 
     // ── About ────────────────────────────────────────────────────────────────
     'about_parallax_bg' => 'SOBRE MÍ',
@@ -60,9 +60,16 @@ return [
 
     'experience_jobs' => [
         [
+            'role' => 'Tech Lead & Mentor de Desarrollo',
+            'company' => 'Novol Studio',
+            'date' => 'Julio 2026 – Actualidad',
+            'description' => 'Liderazgo técnico del equipo de desarrollo, mentorías en arquitectura de software, patrones de diseño y flujos colaborativos (GitFlow).<br><br>• <strong class="text-slate-200">DevOps & CI/CD:</strong> Despliegues automatizados a producción con GitHub Actions, staging/producción y contenedorización con Docker.<br>• <strong class="text-slate-200">Flujos avanzados con IA:</strong> Capacitación en ingeniería de prompts, agentes CLI, Model Context Protocols (MCPs) y herramientas como Engram y Gentle AI (SDD).<br>• <strong class="text-slate-200">Documentación técnica:</strong> Elaboración de especificaciones técnicas, guías de arquitectura y manuales de estandarización.',
+            'stack' => ['PHP', 'Laravel', 'JavaScript', 'MySQL', 'Docker', 'GitHub Actions', 'Git', 'Agentes CLI / MCPs'],
+        ],
+        [
             'role' => 'Full Stack Developer',
             'company' => 'DVLOPER',
-            'date' => 'Febrero 2026 – Actualidad',
+            'date' => 'Febrero 2026 – Julio 2026',
             'description' => 'Como desarrollador en DVLOPER, participé en la arquitectura y desarrollo de múltiples productos digitales complejos para distintos clientes (bajo NDA):<br><br>• <strong class="text-slate-200">Plataforma HR Tech B2B (TicWorks):</strong> Participación en migración del core a PHP 8.2, dockerización, centralización de configuraciones sensibles en archivos .env  y optimización de flujos dinámicos de postulación.<br>• <strong class="text-slate-200">SaaS de IA para Instagram (Lia):</strong> Lideré la UI y el ecosistema de monetización usando React, Zustand, Stripe Checkout y Laravel Cashier v16 bajo principios de Clean Architecture.<br>• <strong class="text-slate-200">Exchange Corporativo Europeo (Flusso):</strong> Rebranding responsivo pixel-perfect de su landing page usando Vue 3 e Inertia.js sobre Laravel 12.',
             'stack' => ['PHP 8.2/8.3', 'Laravel', 'React', 'Vue 3', 'Inertia.js', 'Stripe', 'Tailwind', 'Docker'],
         ],
