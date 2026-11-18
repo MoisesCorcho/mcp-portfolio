@@ -26,16 +26,26 @@
             {{-- Chamber 3: About --}}
             @include('v2.sections.about')
 
+            {{-- Chamber 4: Services & Capabilities --}}
+            @include('v2.sections.services')
+
+            {{-- Chamber 5: Projects Showroom --}}
+            @include('v2.sections.projects')
+
+            {{-- Chamber 6: Credentials & Trajectory --}}
+            @include('v2.sections.credentials')
+
+            {{-- Chamber 7: Contact --}}
+            @include('v2.sections.contact')
+
+            {{-- Chamber 8: Cyber-Industrial Footer Beam --}}
+            @include('v2.sections.footer')
+
             {{-- Master Bottom Anchor Pins --}}
-            <span class="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-amber-500 z-20 border border-black" aria-hidden="true"></span>
-            <span class="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-amber-500 z-20 border border-black" aria-hidden="true"></span>
+            <span class="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+            <span class="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
 
         </div>
     </div>
-
-    {{-- Remaining V1 sections mounted until V2 chambers are built --}}
-    <x-home.portfolio></x-home.portfolio>
-    <x-home.experience></x-home.experience>
-    <x-home.contact></x-home.contact>
 
 </x-app-layout>

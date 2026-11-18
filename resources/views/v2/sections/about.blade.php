@@ -173,10 +173,6 @@
                     <span>{{ __('home.about_github_btn') }}</span>
                 </a>
             </div>
-                    </svg>
-                    <span>{{ __('home.about_github_btn') }}</span>
-                </a>
-            </div>
 
         </div>
 

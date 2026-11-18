@@ -1,7 +1,7 @@
 {{-- ====== Portfolio V2: Cyber-Industrial Navbar ====== --}}
 <header
     x-data="{ navOpen: false }"
-    class="sticky top-0 z-50 w-full border-b border-zinc-800 bg-chamber/90 backdrop-blur-md"
+    class="sticky top-0 z-50 w-full border-b border-zinc-800 bg-chamber/90 backdrop-blur-md overflow-x-clip"
 >
     {{-- Continuous 1280px Grid Rail Spine --}}
     <div class="max-w-7xl mx-auto border-x border-zinc-800 relative px-4 sm:px-8 lg:px-12 flex items-center justify-between h-16 sm:h-20">
@@ -32,6 +32,12 @@
                 class="px-3.5 py-2 text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-zinc-800 transition-all duration-200"
             >
                 {{ __('home.nav_about') }}
+            </a>
+            <a
+                href="{{ request()->routeIs('v2.home') ? '#services' : '/v2#services' }}"
+                class="px-3.5 py-2 text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-zinc-800 transition-all duration-200"
+            >
+                {{ __('home.nav_services') }}
             </a>
             <a
                 href="{{ request()->routeIs('v2.home') ? '#portfolio' : '/v2#portfolio' }}"
@@ -125,6 +131,13 @@
                 class="py-3 px-4 border border-zinc-800 bg-zinc-950/60 text-zinc-200 hover:text-amber-400 hover:border-amber-500 transition-colors"
             >
                 {{ __('home.nav_about') }}
+            </a>
+            <a
+                @click="navOpen = false"
+                href="{{ request()->routeIs('v2.home') ? '#services' : '/v2#services' }}"
+                class="py-3 px-4 border border-zinc-800 bg-zinc-950/60 text-zinc-200 hover:text-amber-400 hover:border-amber-500 transition-colors"
+            >
+                {{ __('home.nav_services') }}
             </a>
             <a
                 @click="navOpen = false"

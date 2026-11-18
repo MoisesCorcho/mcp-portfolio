@@ -28,7 +28,9 @@
         {{ $slot }}
     </main>
 
-    <x-layout.footer></x-layout.footer>
+    @if(!request()->is('v2*'))
+        <x-layout.footer></x-layout.footer>
+    @endif
 
 </body>
 </html>
