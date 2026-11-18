@@ -32,7 +32,7 @@
         <span class="hidden lg:block absolute -bottom-1.5 left-1/2 -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
 
         @foreach(config('portfolio.projects', []) as $index => $project)
-            <div class="p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-chamber/30 hover:bg-zinc-950/60 transition-colors duration-200 group relative {{ $index % 2 === 0 ? 'lg:border-r border-zinc-800' : '' }} {{ $index >= 2 ? 'border-t border-zinc-800' : '' }}">
+            <div class="p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-chamber/30 hover:bg-zinc-950/60 transition-colors duration-200 group relative {{ $index % 2 === 0 ? 'lg:border-r border-zinc-800' : '' }} {{ $index >= 2 ? 'lg:border-t border-zinc-800' : '' }}">
 
                 {{-- Corner Reticle Marks for Special / Featured Projects --}}
                 @if(!empty($project['badge']))

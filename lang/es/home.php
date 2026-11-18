@@ -177,11 +177,17 @@ return [
     'service_ai_desc' => 'Integración de modelos LLM, servidores MCP (Model Context Protocol), herramientas CLI autónomas y metodologías Spec-Driven Development (SDD) para flujos de trabajo asistidos por IA.',
 
     // ── V2 Projects ──────────────────────────────────────────────────────────
+    'project_anime_recommender_desc' => 'Motor de recomendación semántica y búsqueda híbrida sobre más de 20.000 títulos con embeddings densos (OpenAI text-embedding-3-small), PostgreSQL 18 con pgvector, índices HNSW para consultas de distancia coseno en sub-milisegundos y cálculo dinámico de vectores de perfil de usuario.',
+    'project_interval_timer_desc' => 'Aplicación móvil cross-platform para entrenamiento de intervalos (HIIT/Tabata) con Riverpod, ORM reactivo Drift (SQLite), soporte para Dynamic Island en iOS y notificaciones MediaStyle en Android, audio-guía Text-to-Speech y monetización híbrida con RevenueCat y AdMob.',
+    'project_flight_prices_desc' => 'Aplicación Web Progresiva (PWA) para monitoreo de tarifas aéreas en tiempo real mediante scraping con SerpApi, detección de caídas de precio y alertas nativas Web Push (Firebase Cloud Messaging con VAPID) con arquitectura reactiva en Livewire 4, Flux UI y Tailwind 4.',
+    'project_carfleet_desc' => 'Plataforma SaaS para gestión y auditoría operativa de flotas corporativas. Diseñada con Clean Architecture y Actions de dominio (Trips, Drivers, Fuel, Invoices), control de acceso granular con Filament Shield, captura de firmas digitales táctiles y trazabilidad fotográfica de viajes.',
+    'project_ecommerce_desc' => 'Motor de e-commerce transaccional con panel administrativo en Filament v5, arquitectura multi-idioma (Spatie Translatable), gestión de roles y pasarelas de pago duales (Stripe & Bold LatAm) con procesamiento asíncrono de webhooks idempotentes y protección anti-fraude.',
     'project_inforeal_desc' => 'Plataforma editorial y portal de noticias con panel administrativo avanzado (Filament v3), gestión de contenidos, roles, categorías y frontend interactivo de alto rendimiento con Livewire 3 y Laravel 12.',
     'project_amatu_desc' => 'E-commerce y experiencia digital boutique para café colombiano de especialidad, desarrollado con Next.js 16 (App Router), React 19, TypeScript y Tailwind CSS 4 sobre Vercel.',
     'project_hackathon_desc' => 'Simulador cooperativo asimétrico de debugging en producción con IA generativa (AWS Bedrock / Claude Haiku 4.5), Next.js 16, TypeScript, ElastiCache Valkey y suite de 410 tests con TDD estricto.',
     'project_sparkmvc_desc' => 'Framework PHP MVC modular ligero construido desde cero con routing desacoplado, inyección de dependencias, soporte de middleware y arquitectura limpia.',
     'project_videogame_desc' => 'Action-Platformer 2D en pixel art construido con Phaser 3, Svelte y Tiled. Gamificación interactiva de carrera profesional.',
+    'project_pdf_compiler_desc' => 'Pipeline de automatización headless con Node.js y Playwright Chromium para exportar sitios web a documentos PDF vectoriales continuos de alta fidelidad, con escaneo pixel-a-pixel en canvas para auto-recorte de márgenes en blanco y preservación de hipervínculos activos.',
     'project_view_live' => 'Ver en producción',
     'project_view_game' => 'Abrir experiencia de juego',
     'project_view_github' => 'Ver código fuente',

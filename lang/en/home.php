@@ -177,11 +177,17 @@ return [
     'service_ai_desc' => 'LLM integrations, Model Context Protocol (MCP) servers, autonomous CLI tooling, and Spec-Driven Development (SDD) workflows.',
 
     // ── V2 Projects ──────────────────────────────────────────────────────────
+    'project_anime_recommender_desc' => 'Semantic recommendation and hybrid search engine over 20,000+ anime titles using dense embeddings (OpenAI text-embedding-3-small), PostgreSQL 18 with pgvector, HNSW indexing for sub-millisecond cosine distance queries, and real-time dynamic user preference vector calculation.',
+    'project_interval_timer_desc' => 'Cross-platform mobile interval training app (HIIT/Tabata) built with Riverpod, Drift (SQLite) reactive ORM, iOS Dynamic Island & Android MediaStyle background execution, Text-to-Speech audio coaching, and hybrid monetization with RevenueCat and AdMob.',
+    'project_flight_prices_desc' => 'Real-time flight price intelligence Progressive Web App (PWA) with SerpApi scraping, automated drop detection, and native Web Push alerts (Firebase Cloud Messaging with VAPID) built with Livewire 4, Flux UI, and Tailwind CSS 4.',
+    'project_carfleet_desc' => 'Enterprise SaaS platform for commercial fleet management and operational auditing. Built with Clean Architecture domain Actions (Trips, Drivers, Fuel, Invoices), Filament Shield granular RBAC, digital touch signature capture, and photo journey evidence.',
+    'project_ecommerce_desc' => 'Transactional e-commerce engine with Filament v5 backoffice, multilingual architecture (Spatie Translatable), role management, and dual payment gateways (Stripe & Bold LatAm) with idempotent webhook processing and anti-fraud rate-limiting.',
     'project_inforeal_desc' => 'Modern news media platform and enterprise CMS powered by Laravel 12, Filament v3, Livewire 3, and Tailwind CSS 4 with role-based access control and scheduled publishing.',
     'project_amatu_desc' => 'Boutique specialty coffee e-commerce experience crafted with Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS 4 deployed on Vercel.',
     'project_hackathon_desc' => 'Asymmetrical cooperative production debugging simulator powered by generative AI (AWS Bedrock / Claude Haiku 4.5), Next.js 16, TypeScript, ElastiCache Valkey, and 410 TDD tests.',
     'project_sparkmvc_desc' => 'Lightweight modular PHP MVC framework built from scratch with decoupled routing, dependency injection, and middleware support.',
     'project_videogame_desc' => 'Interactive 2D pixel-art action-platformer built with Phaser 3, Svelte, and Tiled. Gamified professional portfolio experience.',
+    'project_pdf_compiler_desc' => 'Headless automation pipeline built with Node.js and Playwright Chromium to export websites into continuous high-fidelity vector PDFs, featuring in-memory canvas pixel scanning for whitespace auto-cropping and active hyperlink preservation.',
     'project_view_live' => 'Live Demo',
     'project_view_game' => 'Launch Game Experience',
     'project_view_github' => 'Source Code',
