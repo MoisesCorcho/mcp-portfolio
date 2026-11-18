@@ -51,6 +51,9 @@ return [
     'portfolio_heading_accent' => 'recientes',
     'portfolio_subtitle' => 'La mejor manera de aprender a programar es creando proyectos.',
     'portfolio_tab_all' => 'Todos los proyectos',
+    'portfolio_view_github' => 'Ver en GitHub',
+    'portfolio_view_details' => 'Ver detalles',
+    'portfolio_uncategorized' => 'Sin categoría',
 
     // ── Experience ───────────────────────────────────────────────────────────
     'experience_parallax_bg' => 'EXPERIENCIA',

@@ -30,6 +30,10 @@ function initHeroAnimations() {
     const heroSection = document.querySelector('#hero-section');
     if (!heroSection) return;
 
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
+
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
     // Navbar entrance
@@ -607,9 +611,17 @@ function initHeroParticles() {
         }
     }
 
-    // ── Main loop ─────────────────────────────────────────────────────────────
+    // ── Main loop & visibility throttling ──────────────────────────────────────
+    let isVisible = true;
+    let animId = null;
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
     function loop() {
-        requestAnimationFrame(loop);
+        if (!isVisible || reducedMotionQuery.matches) {
+            animId = null;
+            return;
+        }
+        animId = requestAnimationFrame(loop);
         ctx.clearRect(0, 0, W, H);
 
         // Ripples
@@ -629,7 +641,24 @@ function initHeroParticles() {
         particles.forEach((p) => { p.update(); p.draw(); });
     }
 
-    loop();
+    if ('IntersectionObserver' in window && heroSection) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                isVisible = entry.isIntersecting;
+                if (isVisible && !reducedMotionQuery.matches) {
+                    if (!animId) animId = requestAnimationFrame(loop);
+                } else if (animId) {
+                    cancelAnimationFrame(animId);
+                    animId = null;
+                }
+            });
+        }, { threshold: 0.05 });
+        observer.observe(heroSection);
+    }
+
+    if (!reducedMotionQuery.matches) {
+        loop();
+    }
 }
 
 // ─── Noise Circles (SimplexNoise + GSAP scrub) ───────────────────────────────
@@ -1630,15 +1659,27 @@ function initExperienceSection() {
     }
 
     options.forEach(option => {
-        option.addEventListener('click', () => {
+        function activate() {
             const prev = document.querySelector('#experience .exp-option.active');
             if (prev && prev !== option) stopScroll(prev);
 
-            options.forEach(o => o.classList.remove('active'));
+            options.forEach(o => {
+                o.classList.remove('active');
+                o.setAttribute('aria-expanded', 'false');
+            });
             option.classList.add('active');
+            option.setAttribute('aria-expanded', 'true');
 
             // Wait for expand transition (0.5s) + fade-in (0.25s delay + 0.35s) before measuring
             setTimeout(() => startScroll(option), 700);
+        }
+
+        option.addEventListener('click', activate);
+        option.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                activate();
+            }
         });
     });
 
@@ -1651,6 +1692,10 @@ function initExperienceSection() {
 function initQuoteWave() {
     const el = document.getElementById('about-quote-text');
     if (!el) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
 
     const JUMP  = 0.5; // seconds each word takes to jump and land
     const PAUSE = 2;   // seconds of rest at the end before repeating

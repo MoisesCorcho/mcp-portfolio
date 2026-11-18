@@ -38,7 +38,9 @@
             <button
                 @click="navbarOpen = !navbarOpen"
                 :class="navbarOpen && 'navbarTogglerActive'"
-                class="relative lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-[6px] focus:outline-none z-50"
+                :aria-expanded="navbarOpen ? 'true' : 'false'"
+                aria-controls="mobile-nav"
+                class="relative lg:hidden w-11 h-11 flex flex-col items-center justify-center gap-[6px] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-lg z-50"
                 aria-label="Toggle menu"
             >
                 <span class="relative w-6 h-[2px] bg-slate-300 transition-all duration-300 block"></span>
@@ -50,6 +52,7 @@
 
     {{-- Mobile menu --}}
     <div
+        id="mobile-nav"
         x-show="navbarOpen"
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 -translate-y-2"

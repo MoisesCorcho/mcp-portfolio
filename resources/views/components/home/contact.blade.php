@@ -140,56 +140,70 @@
 
                         {{-- Name field --}}
                         <div class="mb-5">
-                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2"
+                            <label for="contact-name"
+                                   class="block text-xs font-semibold text-slate-300 uppercase tracking-widest mb-2"
                                    style="font-family:var(--font-display);">
                                 {{ __('home.contact_name_label') }}
                             </label>
                             <input
+                                id="contact-name"
                                 type="text"
                                 name="name"
+                                autocomplete="name"
                                 placeholder="{{ __('home.contact_name_placeholder') }}"
                                 x-model="formData.name"
+                                :aria-invalid="errors.name ? 'true' : 'false'"
+                                :aria-describedby="errors.name ? 'contact-name-error' : null"
                                 :class="errors.name ? 'form-field error' : 'form-field'"
                             />
                             <template x-if="errors.name">
-                                <p x-text="errors.name[0]" class="mt-1.5 text-xs text-red-400"></p>
+                                <p id="contact-name-error" x-text="errors.name[0]" class="mt-1.5 text-xs text-red-400"></p>
                             </template>
                         </div>
 
                         {{-- Email field --}}
                         <div class="mb-5">
-                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2"
+                            <label for="contact-email"
+                                   class="block text-xs font-semibold text-slate-300 uppercase tracking-widest mb-2"
                                    style="font-family:var(--font-display);">
                                 {{ __('home.contact_email_field_label') }}
                             </label>
                             <input
+                                id="contact-email"
                                 type="email"
                                 name="email"
+                                autocomplete="email"
                                 placeholder="{{ __('home.contact_email_placeholder') }}"
                                 x-model="formData.email"
+                                :aria-invalid="errors.email ? 'true' : 'false'"
+                                :aria-describedby="errors.email ? 'contact-email-error' : null"
                                 :class="errors.email ? 'form-field error' : 'form-field'"
                             />
                             <template x-if="errors.email">
-                                <p x-text="errors.email[0]" class="mt-1.5 text-xs text-red-400"></p>
+                                <p id="contact-email-error" x-text="errors.email[0]" class="mt-1.5 text-xs text-red-400"></p>
                             </template>
                         </div>
 
                         {{-- Message field --}}
                         <div class="mb-7">
-                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2"
+                            <label for="contact-message"
+                                   class="block text-xs font-semibold text-slate-300 uppercase tracking-widest mb-2"
                                    style="font-family:var(--font-display);">
                                 {{ __('home.contact_message_label') }}
                             </label>
                             <textarea
+                                id="contact-message"
                                 name="body"
                                 rows="5"
                                 placeholder="{{ __('home.contact_message_placeholder') }}"
                                 x-model="formData.body"
+                                :aria-invalid="errors.body ? 'true' : 'false'"
+                                :aria-describedby="errors.body ? 'contact-body-error' : null"
                                 :class="errors.body ? 'form-field error' : 'form-field'"
                                 style="resize:none;"
                             ></textarea>
                             <template x-if="errors.body">
-                                <p x-text="errors.body[0]" class="mt-1.5 text-xs text-red-400"></p>
+                                <p id="contact-body-error" x-text="errors.body[0]" class="mt-1.5 text-xs text-red-400"></p>
                             </template>
                         </div>
 

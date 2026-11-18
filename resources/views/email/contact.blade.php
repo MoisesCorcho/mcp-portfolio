@@ -1,7 +1,7 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
       background-color: #f4f4f4;
       padding: 20px;
     }

@@ -12,12 +12,12 @@
         <li></li><li></li><li></li><li></li><li></li>
     </ul>
 
-    {{-- Aurora orbs --}}
-    <div class="portfolio-aurora-orb" style="width:700px;height:700px;background:rgba(245,158,11,0.07);top:5%;left:15%;animation:portfolioOrbA 17s ease-in-out infinite alternate;"></div>
-    <div class="portfolio-aurora-orb" style="width:600px;height:600px;background:rgba(99,102,241,0.06);top:45%;left:55%;animation:portfolioOrbB 21s ease-in-out infinite alternate;"></div>
-    <div class="portfolio-aurora-orb" style="width:500px;height:500px;background:rgba(245,158,11,0.05);top:65%;left:5%;animation:portfolioOrbC 13s ease-in-out infinite alternate;"></div>
-    <div class="portfolio-aurora-orb" style="width:800px;height:800px;background:rgba(79,70,229,0.04);top:-15%;left:45%;animation:portfolioOrbD 25s ease-in-out infinite alternate;"></div>
-    <div class="portfolio-aurora-orb" style="width:450px;height:450px;background:rgba(245,158,11,0.06);top:35%;left:75%;animation:portfolioOrbE 19s ease-in-out infinite alternate;"></div>
+    {{-- Aurora orbs (soft radial gradients without expensive blur rasterization) --}}
+    <div class="portfolio-aurora-orb" style="width:700px;height:700px;background:radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%);top:5%;left:15%;animation:portfolioOrbA 17s ease-in-out infinite alternate;"></div>
+    <div class="portfolio-aurora-orb" style="width:600px;height:600px;background:radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 70%);top:45%;left:55%;animation:portfolioOrbB 21s ease-in-out infinite alternate;"></div>
+    <div class="portfolio-aurora-orb" style="width:500px;height:500px;background:radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%);top:65%;left:5%;animation:portfolioOrbC 13s ease-in-out infinite alternate;"></div>
+    <div class="portfolio-aurora-orb" style="width:800px;height:800px;background:radial-gradient(circle, rgba(79,70,229,0.05) 0%, transparent 70%);top:-15%;left:45%;animation:portfolioOrbD 25s ease-in-out infinite alternate;"></div>
+    <div class="portfolio-aurora-orb" style="width:450px;height:450px;background:radial-gradient(circle, rgba(245,158,11,0.07) 0%, transparent 70%);top:35%;left:75%;animation:portfolioOrbE 19s ease-in-out infinite alternate;"></div>
 
     <div class="container relative z-10">
 

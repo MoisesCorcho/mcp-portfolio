@@ -41,13 +41,13 @@
                     </span>
                 </div>
 
-                {{-- Main title --}}
-                <h1
+                {{-- Greeting --}}
+                <p
                     class="hero-title font-display font-bold leading-[1.05] text-slate-300 mb-1"
                     style="font-family:var(--font-display); font-size:clamp(2.2rem, 5vw, 3.5rem);"
                 >
                     {{ __('home.hero_greeting') }}
-                </h1>
+                </p>
 
                 {{-- Name with gradient --}}
                 <h1
@@ -109,12 +109,6 @@
                                     background: linear-gradient(to top, rgba(2,6,23,0.6), transparent);
                                     pointer-events:none;"></div>
                     </div>
-
-                    {{-- Amber corner brackets --}}
-                    <span class="absolute -top-2 -left-2 w-6 h-6 pointer-events-none"
-                          style="border-top:2px solid rgba(245,158,11,0.7); border-left:2px solid rgba(245,158,11,0.7); border-radius:4px 0 0 0;"></span>
-                    <span class="absolute -bottom-2 -right-2 w-6 h-6 pointer-events-none"
-                          style="border-bottom:2px solid rgba(245,158,11,0.7); border-right:2px solid rgba(245,158,11,0.7); border-radius:0 0 4px 0;"></span>
 
                     {{-- Tech badges (desktop) --}}
                     <div class="absolute -bottom-2 -left-5 hidden lg:flex flex-col gap-2">

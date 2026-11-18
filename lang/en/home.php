@@ -51,6 +51,9 @@ return [
     'portfolio_heading_accent' => 'recent',
     'portfolio_subtitle' => 'The best way to learn programming is by building projects.',
     'portfolio_tab_all' => 'All projects',
+    'portfolio_view_github' => 'View on GitHub',
+    'portfolio_view_details' => 'View details',
+    'portfolio_uncategorized' => 'Uncategorized',
 
     // ── Experience ───────────────────────────────────────────────────────────
     'experience_parallax_bg' => 'EXPERIENCE',
