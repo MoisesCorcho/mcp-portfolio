@@ -18,6 +18,14 @@ Route::get('/', function () {
     return view('home');
 });
 
+Route::get('/v2', function () {
+    return view('v2.index');
+})->name('v2.home');
+
+Route::get('/v2/videogame', function () {
+    return view('v2.videogame');
+})->name('v2.videogame');
+
 Route::post('/contact/submit', [ContactController::class, 'submit']);
 
 Route::get('/lang/{locale}', function (string $locale) {

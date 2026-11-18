@@ -10,10 +10,13 @@ return [
     'nav_about' => 'Acerca de mi',
     'nav_projects' => 'Proyectos',
     'nav_contact' => 'Contacto',
+    'nav_videogame' => 'Videojuego',
     'nav_experience' => 'Experiencia',
     'nav_cta' => 'Contáctame',
     'nav_lang_switch_title_to_en' => 'Switch to English',
     'nav_lang_switch_title_to_es' => 'Cambiar a Español',
+    'back_to_v2' => 'Volver al Portfolio V2',
+    'hero_badge_role' => 'Full-Stack Architect',
 
     // ── Footer ───────────────────────────────────────────────────────────────
     'footer_made_with' => '© :year :name. Hecho con ❤️',

@@ -14,4 +14,15 @@ return [
         'github' => 'https://github.com/MoisesCorcho',
     ],
 
+    'skills' => [
+        'cycling' => [
+            'PHP', 'Laravel', 'Vue.js', 'Docker', 'MySQL', 'Git',
+            'Alpine.js', 'Tailwind CSS', 'REST APIs', 'PostgreSQL',
+            'Linux', 'Filament'
+        ],
+        'featured' => [
+            'PHP', 'Laravel', 'Docker', 'Vue.js', 'MySQL', 'Tailwind'
+        ],
+    ],
+
 ];
