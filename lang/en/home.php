@@ -177,6 +177,16 @@ return [
     'service_ai_desc' => 'LLM integrations, Model Context Protocol (MCP) servers, autonomous CLI tooling, and Spec-Driven Development (SDD) workflows.',
 
     // ── V2 Projects ──────────────────────────────────────────────────────────
+    'domain_all' => 'All Systems',
+    'domain_ai' => 'AI & Vector Search',
+    'domain_mobile' => 'Mobile & PWAs',
+    'domain_saas' => 'Enterprise SaaS',
+    'domain_creative' => 'Digital Products',
+    'project_show_specs' => 'Architecture Specifications',
+    'project_hide_specs' => 'Hide Specifications',
+    'project_expand_all' => 'Expand all specifications',
+    'project_collapse_all' => 'Collapse all specifications',
+    'project_no_results' => 'No projects found in this category.',
     'project_anime_recommender_desc' => 'Semantic recommendation and hybrid search engine over 20,000+ anime titles using dense embeddings (OpenAI text-embedding-3-small), PostgreSQL 18 with pgvector, HNSW indexing for sub-millisecond cosine distance queries, and real-time dynamic user preference vector calculation.',
     'project_interval_timer_desc' => 'Cross-platform mobile interval training app (HIIT/Tabata) built with Riverpod, Drift (SQLite) reactive ORM, iOS Dynamic Island & Android MediaStyle background execution, Text-to-Speech audio coaching, and hybrid monetization with RevenueCat and AdMob.',
     'project_flight_prices_desc' => 'Real-time flight price intelligence Progressive Web App (PWA) with SerpApi scraping, automated drop detection, and native Web Push alerts (Firebase Cloud Messaging with VAPID) built with Livewire 4, Flux UI, and Tailwind CSS 4.',

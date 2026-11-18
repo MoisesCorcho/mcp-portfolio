@@ -177,6 +177,16 @@ return [
     'service_ai_desc' => 'Integración de modelos LLM, servidores MCP (Model Context Protocol), herramientas CLI autónomas y metodologías Spec-Driven Development (SDD) para flujos de trabajo asistidos por IA.',
 
     // ── V2 Projects ──────────────────────────────────────────────────────────
+    'domain_all' => 'Todos los Sistemas',
+    'domain_ai' => 'IA & Búsqueda Vectorial',
+    'domain_mobile' => 'Mobile & PWAs',
+    'domain_saas' => 'SaaS Empresarial',
+    'domain_creative' => 'Productos Digitales',
+    'project_show_specs' => 'Especificaciones de Arquitectura',
+    'project_hide_specs' => 'Ocultar Especificaciones',
+    'project_expand_all' => 'Expandir especificaciones',
+    'project_collapse_all' => 'Colapsar especificaciones',
+    'project_no_results' => 'No se encontraron proyectos en esta categoría.',
     'project_anime_recommender_desc' => 'Motor de recomendación semántica y búsqueda híbrida sobre más de 20.000 títulos con embeddings densos (OpenAI text-embedding-3-small), PostgreSQL 18 con pgvector, índices HNSW para consultas de distancia coseno en sub-milisegundos y cálculo dinámico de vectores de perfil de usuario.',
     'project_interval_timer_desc' => 'Aplicación móvil cross-platform para entrenamiento de intervalos (HIIT/Tabata) con Riverpod, ORM reactivo Drift (SQLite), soporte para Dynamic Island en iOS y notificaciones MediaStyle en Android, audio-guía Text-to-Speech y monetización híbrida con RevenueCat y AdMob.',
     'project_flight_prices_desc' => 'Aplicación Web Progresiva (PWA) para monitoreo de tarifas aéreas en tiempo real mediante scraping con SerpApi, detección de caídas de precio y alertas nativas Web Push (Firebase Cloud Messaging con VAPID) con arquitectura reactiva en Livewire 4, Flux UI y Tailwind 4.',

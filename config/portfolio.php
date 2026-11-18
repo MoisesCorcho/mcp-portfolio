@@ -61,9 +61,33 @@ return [
         ],
     ],
 
+    'project_domains' => [
+        [
+            'id' => 'all',
+            'label_key' => 'home.domain_all',
+        ],
+        [
+            'id' => 'ai',
+            'label_key' => 'home.domain_ai',
+        ],
+        [
+            'id' => 'mobile',
+            'label_key' => 'home.domain_mobile',
+        ],
+        [
+            'id' => 'saas',
+            'label_key' => 'home.domain_saas',
+        ],
+        [
+            'id' => 'creative',
+            'label_key' => 'home.domain_creative',
+        ],
+    ],
+
     'projects' => [
         [
             'id' => 'anime_recommender',
+            'domain' => 'ai',
             'title' => 'Anime Recommender Engine',
             'category' => 'AI Engineering & Vector Search',
             'desc_key' => 'home.project_anime_recommender_desc',
@@ -76,6 +100,7 @@ return [
         ],
         [
             'id' => 'interval_timer',
+            'domain' => 'mobile',
             'title' => 'IntervalTimer Pro',
             'category' => 'Cross-Platform Mobile App',
             'desc_key' => 'home.project_interval_timer_desc',
@@ -88,6 +113,7 @@ return [
         ],
         [
             'id' => 'flight_prices',
+            'domain' => 'mobile',
             'title' => 'SkyTrack',
             'category' => 'Real-Time PWA & Price Intelligence',
             'desc_key' => 'home.project_flight_prices_desc',
@@ -100,6 +126,7 @@ return [
         ],
         [
             'id' => 'carfleet',
+            'domain' => 'saas',
             'title' => 'CarFleet',
             'category' => 'Enterprise Fleet & Operations SaaS',
             'desc_key' => 'home.project_carfleet_desc',
@@ -112,6 +139,7 @@ return [
         ],
         [
             'id' => 'ecommerce',
+            'domain' => 'saas',
             'title' => 'Enterprise E-Commerce Engine',
             'category' => 'High-Volume E-Commerce & FinTech',
             'desc_key' => 'home.project_ecommerce_desc',
@@ -124,6 +152,7 @@ return [
         ],
         [
             'id' => 'aws_hackathon',
+            'domain' => 'ai',
             'title' => 'Keep Coding and Nobody Is Fired',
             'category' => 'Generative AI & Cloud Game',
             'desc_key' => 'home.project_hackathon_desc',
@@ -136,6 +165,7 @@ return [
         ],
         [
             'id' => 'inforeal',
+            'domain' => 'saas',
             'title' => 'InfoReal',
             'category' => 'Enterprise News & CMS',
             'desc_key' => 'home.project_inforeal_desc',
@@ -148,6 +178,7 @@ return [
         ],
         [
             'id' => 'amatu',
+            'domain' => 'creative',
             'title' => 'Amatu Café',
             'category' => 'E-Commerce & Digital Experience',
             'desc_key' => 'home.project_amatu_desc',
@@ -159,6 +190,7 @@ return [
         ],
         [
             'id' => 'videogame',
+            'domain' => 'creative',
             'title' => "The Developer's Journey",
             'category' => 'Action-Platformer 2D',
             'desc_key' => 'home.project_videogame_desc',
@@ -172,6 +204,7 @@ return [
         ],
         [
             'id' => 'pdf_compiler',
+            'domain' => 'creative',
             'title' => 'Vector PDF Headless Compiler',
             'category' => 'Automation & Precision Tooling',
             'desc_key' => 'home.project_pdf_compiler_desc',
