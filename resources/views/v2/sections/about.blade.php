@@ -1,26 +1,11 @@
 {{-- ====== Portfolio V2: About Chamber ====== --}}
 <section id="about" class="relative">
     {{-- ── 1. Top Section Header Strip (Full-width grid row) ── --}}
-    <div class="border-b border-zinc-800 p-6 sm:p-10 lg:px-14 lg:py-8 relative">
-        {{-- Clean section label --}}
-        <p class="text-xs font-roboto-mono font-semibold tracking-[0.2em] text-amber-500 uppercase mb-2">
-            {{ __('home.about_label') }}
-        </p>
-
-        {{-- Macro Heading in Oxanium (Solid High-Contrast) --}}
-        <h2 class="font-oxanium font-extrabold text-2xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight sm:leading-tight lg:leading-[1.15]">
-            {{ __('home.about_heading') }}
-            <span class="text-amber-500">
-                {{ __('home.about_heading_accent') }}
-            </span>
-        </h2>
-
-        {{-- Amber Accent Ruler --}}
-        <div class="flex items-center gap-2 mt-4">
-            <span class="h-[2px] w-20 bg-amber-500"></span>
-            <span class="h-[2px] w-2.5 bg-amber-500/40"></span>
-        </div>
-    </div>
+    <x-v2.section-header
+        :label="__('home.about_label')"
+        :title="__('home.about_heading')"
+        :accent="__('home.about_heading_accent')"
+    />
 
     {{-- ── 2. Main Content Grid (12 Columns with 1px Vertical Divider) ── --}}
     <div class="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-zinc-800 relative">
@@ -168,15 +153,6 @@
 
                         <span class="text-amber-500 font-mono font-bold text-2xl sm:text-3xl select-none leading-none" aria-hidden="true">]</span>
                     </div>
-                </div>
-
-                {{-- Technical Tags Matrix (Square 1px-Bordered Cells) --}}
-                <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-3">
-                    @foreach(config('portfolio.skills.featured', []) as $tech)
-                        <div class="border border-zinc-800/80 bg-zinc-900/40 px-2 py-1.5 text-center text-[11px] font-roboto-mono font-medium text-zinc-400 hover:text-amber-400 hover:border-amber-500/50 transition-colors">
-                            {{ $tech }}
-                        </div>
-                    @endforeach
                 </div>
             </div>
 

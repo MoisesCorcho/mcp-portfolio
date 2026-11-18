@@ -21,9 +21,6 @@ return [
             'Vue.js', 'React', 'Next.js', 'TypeScript', 'MySQL', 'Git',
             'Tailwind CSS', 'REST APIs', 'Linux', 'PWA', 'Playwright', 'AWS Bedrock'
         ],
-        'featured' => [
-            'PHP', 'Laravel', 'Docker', 'Flutter', 'PostgreSQL', 'Tailwind'
-        ],
     ],
 
     'services' => [

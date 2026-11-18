@@ -38,6 +38,12 @@ Built with Laravel 12, Laravel Sail (Docker), Tailwind CSS, Alpine.js, GSAP, and
   - Technical skills, services, projects, education, author details, and social links belong in `config/portfolio.php` and must be consumed via `config('portfolio.*')`.
   - Templates must iterate configured collections instead of hardcoding lists in markup.
 
+## Modularity, Decoupling & Pragmatic Architecture
+- **Continuous Architectural Audit**: Always audit code to prevent monolithic files, mixed concerns, or bloated templates. Proactively identify opportunities for clean extraction.
+- **Single Responsibility & Componentization**: Extract distinct subdomains, complex cards, interactive drawers, and self-contained widgets into dedicated Blade components (`resources/views/components/v2/`). Chamber files in `resources/views/v2/sections/` should act as clean structural orchestrators (~80-120 lines), not 300+ line monoliths.
+- **DRY Design Primitives**: Centralize repeated structural patterns (such as section header strips, CAD reticles, and alignment pins) into atomic components.
+- **Zero Overengineering**: Modularity serves maintainability, readability, and testability. Never introduce gratuitous abstraction layers, speculative generic classes, or micro-fragmentation where a clean Blade component or standard Laravel idiom solves the problem directly.
+
 ## Git & Coding Conventions
 - **Commits**: Follow Conventional Commits format (`feat:`, `fix:`, `style:`, `refactor:`, `test:`, `chore:`).
 - **Attribution**: Never add AI attribution trailers or `Co-Authored-By` lines to git commits.

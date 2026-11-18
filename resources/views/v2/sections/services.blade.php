@@ -1,28 +1,12 @@
 {{-- ====== Portfolio V2: Services & Capabilities Chamber ====== --}}
 <section id="services" class="relative border-b border-zinc-800">
     {{-- ── 1. Section Header Strip ── --}}
-    <div class="border-b border-zinc-800 p-6 sm:p-10 lg:px-14 lg:py-8 relative">
-        <p class="text-xs font-roboto-mono font-semibold tracking-[0.2em] text-amber-500 uppercase mb-2">
-            {{ __('home.services_label') }}
-        </p>
-
-        <h2 class="font-oxanium font-extrabold text-2xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight sm:leading-tight lg:leading-[1.15]">
-            {{ __('home.services_heading') }}
-            <span class="text-amber-500">
-                {{ __('home.services_heading_accent') }}
-            </span>
-        </h2>
-
-        {{-- Amber Accent Ruler --}}
-        <div class="flex items-center gap-2 mt-4 mb-3">
-            <span class="h-[2px] w-20 bg-amber-500"></span>
-            <span class="h-[2px] w-2.5 bg-amber-500/40"></span>
-        </div>
-
-        <p class="text-slate-400 font-roboto-mono text-xs sm:text-sm max-w-2xl leading-relaxed">
-            {{ __('home.services_subtitle') }}
-        </p>
-    </div>
+    <x-v2.section-header
+        :label="__('home.services_label')"
+        :title="__('home.services_heading')"
+        :accent="__('home.services_heading_accent')"
+        :subtitle="__('home.services_subtitle')"
+    />
 
     {{-- ── 2. Services Grid (2x2 Orthogonal Matrix with CAD Intersections) ── --}}
     <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 divide-zinc-800 relative">
