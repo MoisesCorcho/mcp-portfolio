@@ -21,7 +21,7 @@ return [
     // ── Hero ─────────────────────────────────────────────────────────────────
     'hero_badge' => 'Available for projects',
     'hero_greeting' => 'My name is',
-    'hero_subtitle' => 'Full-Stack Developer & AI Developer with <strong class="text-slate-200 font-semibold">+4 years of experience</strong> building robust applications with <span class="text-amber-400 font-semibold">Laravel</span>, <span class="text-amber-400 font-semibold">PHP</span>, and the <span class="text-amber-400 font-semibold">TALL Stack</span>, under AI-assisted workflows (SDD).',
+    'hero_subtitle' => 'I am a <strong class="text-slate-200 font-semibold">Full-Stack Developer</strong> with solid professional experience in building and maintaining web and mobile applications. I specialize in <span class="text-amber-400 font-semibold">PHP</span>, <span class="text-amber-400 font-semibold">Laravel</span>, and the <span class="text-amber-400 font-semibold">TALL Stack</span>, with a strong focus on scalable backend systems and efficient frontend integration. I work following <strong class="text-slate-200 font-semibold">Spec-Driven Development (SDD)</strong> processes, leveraging AI-assisted development tools, technical specifications, and structured workflows to improve productivity, code quality, and system design.',
     'hero_cta_primary' => 'View my projects',
     'hero_cta_secondary' => 'About me',
     'hero_social_label' => 'Social media',

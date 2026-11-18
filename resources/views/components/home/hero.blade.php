@@ -62,7 +62,7 @@
                 <span class="section-line mb-8" style="width:80px;"></span>
 
                 {{-- Subtitle --}}
-                <p class="hero-subtitle text-slate-400 max-w-[480px] leading-relaxed mb-8" style="font-size:1.05rem; font-family:var(--font-body);">
+                <p class="hero-subtitle text-slate-400 max-w-[560px] leading-relaxed mb-8" style="font-size:1.02rem; font-family:var(--font-body);">
                     {!! __('home.hero_subtitle') !!}
                 </p>
 

@@ -21,7 +21,7 @@ return [
     // ── Hero ─────────────────────────────────────────────────────────────────
     'hero_badge' => 'Disponible para proyectos',
     'hero_greeting' => 'Mi nombre es',
-    'hero_subtitle' => 'Desarrollador Full-Stack & AI Developer con <strong class="text-slate-200 font-semibold">+4 años de experiencia</strong> construyendo aplicaciones robustas con <span class="text-amber-400 font-semibold">Laravel</span>, <span class="text-amber-400 font-semibold">PHP</span> y el <span class="text-amber-400 font-semibold">Stack TALL</span>, bajo procesos asistidos por IA (SDD).',
+    'hero_subtitle' => 'Soy desarrollador <strong class="text-slate-200 font-semibold">Full-Stack</strong> con sólida experiencia profesional en la construcción y mantenimiento de aplicaciones web. Me especializo en <span class="text-amber-400 font-semibold">PHP</span>, <span class="text-amber-400 font-semibold">Laravel</span> y el <span class="text-amber-400 font-semibold">Stack TALL</span>, con un fuerte enfoque en sistemas backend escalables e integración eficiente del frontend. Trabajo bajo procesos de <strong class="text-slate-200 font-semibold">Spec-Driven Development (SDD)</strong>, utilizando herramientas de desarrollo asistido por IA, especificaciones técnicas y flujos de trabajo estructurados para mejorar la productividad, la calidad del código y el diseño de sistemas.',
     'hero_cta_primary' => 'Ver mis proyectos',
     'hero_cta_secondary' => 'Sobre mí',
     'hero_social_label' => 'Redes sociales',
