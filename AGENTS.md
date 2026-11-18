@@ -27,6 +27,17 @@ Built with Laravel 12, Laravel Sail (Docker), Tailwind CSS, Alpine.js, GSAP, and
   - **Zero "Sci-Fi Cosplay" Rule**: Never inject decorative pseudotext, faux code comments (`//`), fake specification tags (`SPEC:`), or mock coordinates. Content must remain 100% authentic.
   - Typography: `Oxanium` (Display/Headings) and `Roboto Mono` (Body/UI/Code).
 
+## Zero-Hardcoding & Centralization Rules
+- **Semantic Color Tokens**:
+  - Always use theme tokens from `tailwind.config.js`: `bg-canvas`, `bg-chamber`, `bg-card`, `bg-floor`, `bg-void`, `border-zinc-800`, `text-amber-500`, etc.
+  - NEVER use arbitrary `#hex` color classes (e.g. `bg-[#07090e]`) in Blade templates. All shades must be registered in `tailwind.config.js`.
+- **Text & Localization**:
+  - All user-facing copy must be localized via `__()` referencing `lang/es/home.php` and `lang/en/home.php`.
+  - Never pass string fallbacks as argument #2 to `__()` (`__($key, $replace = [])` takes an array as argument #2).
+- **Data Collections & Profiles**:
+  - Technical skills, services, projects, education, author details, and social links belong in `config/portfolio.php` and must be consumed via `config('portfolio.*')`.
+  - Templates must iterate configured collections instead of hardcoding lists in markup.
+
 ## Git & Coding Conventions
 - **Commits**: Follow Conventional Commits format (`feat:`, `fix:`, `style:`, `refactor:`, `test:`, `chore:`).
 - **Attribution**: Never add AI attribution trailers or `Co-Authored-By` lines to git commits.

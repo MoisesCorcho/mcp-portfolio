@@ -8,7 +8,9 @@ return [
 
     // ── Navbar ───────────────────────────────────────────────────────────────
     'nav_about' => 'Acerca de mi',
+    'nav_services' => 'Servicios',
     'nav_projects' => 'Proyectos',
+    'nav_credentials' => 'Trayectoria',
     'nav_contact' => 'Contacto',
     'nav_videogame' => 'Videojuego',
     'nav_experience' => 'Experiencia',
@@ -31,7 +33,7 @@ return [
     'hero_photo_alt' => 'Moisés Corcho Pérez',
 
     // ── Marquee ──────────────────────────────────────────────────────────────
-    'marquee_items' => ['Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'Stack TALL', 'SDD', 'MCPs', 'Clean Code', 'API REST', 'Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'Stack TALL', 'SDD', 'MCPs', 'Clean Code', 'API REST'],
+    'marquee_items' => ['Laravel', 'PHP', 'Flutter', 'MySQL', 'Docker', 'Git', 'Stack TALL', 'SDD', 'MCPs', 'PWA', 'Clean Code', 'API REST', 'Laravel', 'PHP', 'Flutter', 'MySQL', 'Docker', 'Git', 'Stack TALL', 'SDD', 'MCPs', 'PWA'],
 
     // ── About ────────────────────────────────────────────────────────────────
     'about_parallax_bg' => 'SOBRE MÍ',
@@ -157,5 +159,49 @@ return [
     'contact_submit_btn' => 'Enviar mensaje',
     'contact_sending' => 'Enviando…',
     'contact_success' => 'Gracias por tu mensaje. Te responderé lo antes posible.',
+
+    // ── Services ─────────────────────────────────────────────────────────────
+    'services_label' => 'Capacidades',
+    'services_heading' => 'Servicios &',
+    'services_heading_accent' => 'soluciones técnicas',
+    'services_subtitle' => 'Diseño y construcción de software de extremo a extremo, desde aplicaciones móviles y plataformas web hasta arquitectura en la nube e ingeniería de IA.',
+    'service_fullstack_title' => 'Full-Stack SaaS & Web Apps',
+    'service_fullstack_desc' => 'Desarrollo de aplicaciones web escalables y plataformas SaaS de alto rendimiento con Laravel, APIs REST/JSON:API, Vue/React y pasarelas de pago (Stripe) bajo principios de Clean Architecture.',
+    'service_mobile_title' => 'Mobile Apps & PWAs',
+    'service_mobile_desc' => 'Desarrollo de aplicaciones móviles multiplataforma nativas con Flutter & Dart y Progressive Web Apps (PWAs) optimizadas para funcionamiento offline, sincronización en segundo plano y rendimiento fluido.',
+    'service_devops_title' => 'Cloud, Containers & DevOps',
+    'service_devops_desc' => 'Automatización de infraestructura, contenedorización con Docker / Laravel Sail, despliegues continuos con GitHub Actions y optimización de bases de datos relacionales.',
+    'service_ai_title' => 'AI Engineering & Agentic Workflows',
+    'service_ai_desc' => 'Integración de modelos LLM, servidores MCP (Model Context Protocol), herramientas CLI autónomas y metodologías Spec-Driven Development (SDD) para flujos de trabajo asistidos por IA.',
+
+    // ── V2 Projects ──────────────────────────────────────────────────────────
+    'project_inforeal_desc' => 'Plataforma editorial y portal de noticias con panel administrativo avanzado (Filament v3), gestión de contenidos, roles, categorías y frontend interactivo de alto rendimiento con Livewire 3 y Laravel 12.',
+    'project_amatu_desc' => 'E-commerce y experiencia digital boutique para café colombiano de especialidad, desarrollado con Next.js 16 (App Router), React 19, TypeScript y Tailwind CSS 4 sobre Vercel.',
+    'project_hackathon_desc' => 'Simulador cooperativo asimétrico de debugging en producción con IA generativa (AWS Bedrock / Claude Haiku 4.5), Next.js 16, TypeScript, ElastiCache Valkey y suite de 410 tests con TDD estricto.',
+    'project_sparkmvc_desc' => 'Framework PHP MVC modular ligero construido desde cero con routing desacoplado, inyección de dependencias, soporte de middleware y arquitectura limpia.',
+    'project_videogame_desc' => 'Action-Platformer 2D en pixel art construido con Phaser 3, Svelte y Tiled. Gamificación interactiva de carrera profesional.',
+    'project_view_live' => 'Ver en producción',
+    'project_view_game' => 'Abrir experiencia de juego',
+    'project_view_github' => 'Ver código fuente',
+
+    // ── V2 Credentials (Experience, Education, Certifications) ────────────────
+    'credentials_label' => 'Trayectoria & Credenciales',
+    'credentials_heading' => 'Experiencia,',
+    'credentials_heading_accent' => 'educación y certificados',
+    'credentials_subtitle' => 'Historial profesional de impacto, formación universitaria en ingeniería y certificaciones internacionales de industria.',
+    'credentials_tab_experience' => 'Experiencia Laboral',
+    'credentials_tab_education' => 'Educación Formal',
+    'credentials_tab_certs' => 'Certificaciones Oficiales',
+    'edu_degree_systems' => 'Ingeniero de Sistemas',
+    'edu_institution_ucc' => 'Universidad Cooperativa de Colombia (Montería, Córdoba)',
+    'edu_period_ucc' => 'Enero 2018 – Diciembre 2023',
+    'edu_degree_diploma' => 'Diplomado en Docencia y Didáctica Universitaria',
+    'edu_institution_poli' => 'Politécnico Superior de Colombia (Medellín, Antioquia)',
+    'edu_period_poli' => 'Enero 2024 – Febrero 2024',
+    'cert_verified_badge' => 'Certificación Oficial',
+    'cert_verify_link' => 'Verificar',
+    'cert_view_credential' => 'Ver credencial oficial',
+    'v2_footer_rights' => 'Todos los derechos reservados.',
+    'v2_footer_architect' => 'Ingeniero de Sistemas & Arquitecto Full-Stack',
 
 ];

@@ -8,7 +8,9 @@ return [
 
     // ── Navbar ───────────────────────────────────────────────────────────────
     'nav_about' => 'About me',
+    'nav_services' => 'Services',
     'nav_projects' => 'Projects',
+    'nav_credentials' => 'Trajectory',
     'nav_contact' => 'Contact',
     'nav_videogame' => 'Videogame',
     'nav_experience' => 'Experience',
@@ -31,7 +33,7 @@ return [
     'hero_photo_alt' => 'Moisés Corcho Pérez',
 
     // ── Marquee ──────────────────────────────────────────────────────────────
-    'marquee_items' => ['Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'TALL Stack', 'SDD', 'MCPs', 'Clean Code', 'REST API', 'Laravel', 'PHP', 'MySQL', 'Docker', 'Git', 'TALL Stack', 'SDD', 'MCPs', 'Clean Code', 'REST API'],
+    'marquee_items' => ['Laravel', 'PHP', 'Flutter', 'MySQL', 'Docker', 'Git', 'TALL Stack', 'SDD', 'MCPs', 'PWA', 'Clean Code', 'REST API', 'Laravel', 'PHP', 'Flutter', 'MySQL', 'Docker', 'Git', 'TALL Stack', 'SDD', 'MCPs', 'PWA'],
 
     // ── About ────────────────────────────────────────────────────────────────
     'about_parallax_bg' => 'ABOUT ME',
@@ -157,5 +159,49 @@ return [
     'contact_submit_btn' => 'Send message',
     'contact_sending' => 'Sending…',
     'contact_success' => 'Thank you for your message. I\'ll get back to you as soon as possible.',
+
+    // ── Services ─────────────────────────────────────────────────────────────
+    'services_label' => 'Capabilities',
+    'services_heading' => 'Services &',
+    'services_heading_accent' => 'technical solutions',
+    'services_subtitle' => 'End-to-end software engineering, from mobile and web applications to cloud architecture and AI automation.',
+    'service_fullstack_title' => 'Full-Stack SaaS & Web Apps',
+    'service_fullstack_desc' => 'High-performance scalable web applications and SaaS platforms built with Laravel, REST/JSON:API, Vue/React, and payment gateways (Stripe) under Clean Architecture principles.',
+    'service_mobile_title' => 'Mobile Apps & PWAs',
+    'service_mobile_desc' => 'Cross-platform native mobile applications built with Flutter & Dart, and offline-first Progressive Web Apps (PWAs) engineered for fluid performance and background synchronization.',
+    'service_devops_title' => 'Cloud, Containers & DevOps',
+    'service_devops_desc' => 'Infrastructure automation, containerization with Docker / Laravel Sail, continuous delivery with GitHub Actions, and relational database tuning.',
+    'service_ai_title' => 'AI Engineering & Agentic Workflows',
+    'service_ai_desc' => 'LLM integrations, Model Context Protocol (MCP) servers, autonomous CLI tooling, and Spec-Driven Development (SDD) workflows.',
+
+    // ── V2 Projects ──────────────────────────────────────────────────────────
+    'project_inforeal_desc' => 'Modern news media platform and enterprise CMS powered by Laravel 12, Filament v3, Livewire 3, and Tailwind CSS 4 with role-based access control and scheduled publishing.',
+    'project_amatu_desc' => 'Boutique specialty coffee e-commerce experience crafted with Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS 4 deployed on Vercel.',
+    'project_hackathon_desc' => 'Asymmetrical cooperative production debugging simulator powered by generative AI (AWS Bedrock / Claude Haiku 4.5), Next.js 16, TypeScript, ElastiCache Valkey, and 410 TDD tests.',
+    'project_sparkmvc_desc' => 'Lightweight modular PHP MVC framework built from scratch with decoupled routing, dependency injection, and middleware support.',
+    'project_videogame_desc' => 'Interactive 2D pixel-art action-platformer built with Phaser 3, Svelte, and Tiled. Gamified professional portfolio experience.',
+    'project_view_live' => 'Live Demo',
+    'project_view_game' => 'Launch Game Experience',
+    'project_view_github' => 'Source Code',
+
+    // ── V2 Credentials (Experience, Education, Certifications) ────────────────
+    'credentials_label' => 'Trajectory & Credentials',
+    'credentials_heading' => 'Experience,',
+    'credentials_heading_accent' => 'education & certificates',
+    'credentials_subtitle' => 'Proven engineering track record, formal university degree, and industry certifications.',
+    'credentials_tab_experience' => 'Work Experience',
+    'credentials_tab_education' => 'Formal Education',
+    'credentials_tab_certs' => 'Official Certifications',
+    'edu_degree_systems' => 'Systems Engineer',
+    'edu_institution_ucc' => 'Universidad Cooperativa de Colombia (Montería, Córdoba)',
+    'edu_period_ucc' => 'January 2018 – December 2023',
+    'edu_degree_diploma' => 'Diploma in University Teaching & Didactics',
+    'edu_institution_poli' => 'Politécnico Superior de Colombia (Medellín, Antioquia)',
+    'edu_period_poli' => 'January 2024 – February 2024',
+    'cert_verified_badge' => 'Verified Credential',
+    'cert_verify_link' => 'Verify',
+    'cert_view_credential' => 'View official credential',
+    'v2_footer_rights' => 'All rights reserved.',
+    'v2_footer_architect' => 'Systems Engineer & Full-Stack Architect',
 
 ];
