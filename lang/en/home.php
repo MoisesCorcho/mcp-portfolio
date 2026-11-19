@@ -33,7 +33,16 @@ return [
     'hero_photo_alt' => 'Moisés Corcho Pérez',
 
     // ── Marquee ──────────────────────────────────────────────────────────────
-    'marquee_items' => ['Laravel', 'PHP', 'Flutter', 'MySQL', 'Docker', 'Git', 'TALL Stack', 'SDD', 'MCPs', 'PWA', 'Clean Code', 'REST API', 'Laravel', 'PHP', 'Flutter', 'MySQL', 'Docker', 'Git', 'TALL Stack', 'SDD', 'MCPs', 'PWA'],
+    'marquee_items' => [
+        'Laravel 12', 'PHP 8.4', 'PostgreSQL & pgvector', 'Flutter & Riverpod', 'Docker & Sail',
+        'AWS Bedrock & LLMs', 'MCP Servers', 'Filament v4', 'Livewire 3', 'Vue.js & React',
+        'TypeScript', 'GitHub Actions', 'Data Pipelines & ETL', 'SQL Server', 'Clean Architecture',
+        'PWA Offline-First', 'REST APIs',
+        'Laravel 12', 'PHP 8.4', 'PostgreSQL & pgvector', 'Flutter & Riverpod', 'Docker & Sail',
+        'AWS Bedrock & LLMs', 'MCP Servers', 'Filament v4', 'Livewire 3', 'Vue.js & React',
+        'TypeScript', 'GitHub Actions', 'Data Pipelines & ETL', 'SQL Server', 'Clean Architecture',
+        'PWA Offline-First', 'REST APIs',
+    ],
 
     // ── About ────────────────────────────────────────────────────────────────
     'about_parallax_bg' => 'ABOUT ME',

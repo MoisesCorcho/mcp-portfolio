@@ -23,6 +23,25 @@ return [
         ],
     ],
 
+    'marquee' => [
+        ['name' => 'Laravel 12', 'domain' => 'Backend'],
+        ['name' => 'PHP 8.4', 'domain' => 'Backend'],
+        ['name' => 'PostgreSQL & pgvector', 'domain' => 'Database'],
+        ['name' => 'Flutter & Riverpod', 'domain' => 'Mobile'],
+        ['name' => 'Docker & Sail', 'domain' => 'DevOps'],
+        ['name' => 'AWS Bedrock & LLMs', 'domain' => 'AI Systems'],
+        ['name' => 'MCP Servers & SDD', 'domain' => 'Agentic'],
+        ['name' => 'Filament v4 & Livewire 3', 'domain' => 'Fullstack'],
+        ['name' => 'Vue.js & React', 'domain' => 'Frontend'],
+        ['name' => 'TypeScript', 'domain' => 'Frontend'],
+        ['name' => 'GitHub Actions & CI/CD', 'domain' => 'DevOps'],
+        ['name' => 'Data Pipelines & ETL', 'domain' => 'Data Eng'],
+        ['name' => 'SQL Server & PeopleSoft', 'domain' => 'Enterprise'],
+        ['name' => 'Clean Architecture & Pest', 'domain' => 'Quality'],
+        ['name' => 'REST & JSON:API', 'domain' => 'API Core'],
+        ['name' => 'Drift & Offline-First PWA', 'domain' => 'Client'],
+    ],
+
     'services' => [
         [
             'id' => 'fullstack',
