@@ -111,17 +111,21 @@
 
             {{-- Submit Button --}}
             <div>
-                <button
+                <x-v2.extruded-box
+                    as="button"
                     type="submit"
-                    :disabled="loading"
-                    class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-black font-roboto-mono font-bold text-xs uppercase tracking-wider transition-all duration-200 border border-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+                    x-bind:disabled="loading"
+                    variant="amber"
+                    depth="md"
+                    :glow="true"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 disabled:opacity-50 font-roboto-mono font-bold text-xs uppercase tracking-wider"
                 >
                     <span x-show="!loading">{{ __('home.contact_submit_btn') }}</span>
                     <span x-show="loading" style="display: none;">{{ __('home.contact_sending') }}</span>
                     <svg x-show="!loading" class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="square" stroke-linejoin="miter" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                     </svg>
-                </button>
+                </x-v2.extruded-box>
             </div>
         </form>
     </div>

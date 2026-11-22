@@ -52,17 +52,20 @@
                             </div>
                         </a>
 
-                        <button
+                        <x-v2.extruded-box
+                            as="button"
                             type="button"
+                            variant="zinc"
+                            depth="sm"
                             @click="navigator.clipboard.writeText('{{ config('portfolio.owner.email') }}'); copied = true; setTimeout(() => copied = false, 2000)"
-                            class="px-2.5 py-1.5 border border-zinc-800 bg-zinc-900/90 hover:border-amber-500 hover:text-amber-400 text-zinc-400 text-[10px] font-roboto-mono uppercase tracking-wider transition-all flex items-center gap-1.5 flex-shrink-0"
-                            :title="copied ? '{{ __('home.contact_copied') }}' : '{{ __('home.contact_copy') }}'"
+                            class="px-2.5 py-1.5 hover:border-amber-500 hover:text-amber-400 text-zinc-400 text-[10px] font-roboto-mono uppercase tracking-wider flex items-center gap-1.5 flex-shrink-0"
+                            x-bind:title="copied ? '{{ __('home.contact_copied') }}' : '{{ __('home.contact_copy') }}'"
                         >
                             <span x-show="!copied">{{ __('home.contact_copy') }}</span>
                             <span x-show="copied" style="display: none;" class="text-amber-400 font-bold flex items-center gap-1">
                                 <span class="text-amber-500">✓</span> {{ __('home.contact_copied') }}
                             </span>
-                        </button>
+                        </x-v2.extruded-box>
                     </div>
 
                     {{-- Location --}}

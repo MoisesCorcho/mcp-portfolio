@@ -17,7 +17,7 @@
         {{-- Certifications Cards with Banners & Badges --}}
         <div class="space-y-6">
             @foreach(config('portfolio.certifications', []) as $cert)
-                <div class="border border-zinc-800 bg-card overflow-hidden group hover:border-zinc-700 transition-colors">
+                <x-v2.extruded-box variant="card" depth="sm" class="overflow-hidden group block">
                     {{-- Banner Preview with Right-Aligned Focus --}}
                     @if(!empty($cert['banner']))
                         <a
@@ -88,7 +88,7 @@
                             @endforeach
                         </div>
                     </div>
-                </div>
+                </x-v2.extruded-box>
             @endforeach
         </div>
     </div>

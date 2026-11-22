@@ -4,6 +4,7 @@ import Alpine from 'alpinejs';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animate, stagger } from 'motion';
+import { initExtrusions } from './v2/extrusion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -1729,4 +1730,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initExpStars();
     initExperienceSection();
     initQuoteWave();
+    initExtrusions();
 });
+
+if (document.readyState !== 'loading') {
+    initExtrusions();
+}

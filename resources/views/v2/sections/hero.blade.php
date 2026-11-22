@@ -40,22 +40,29 @@
 
             {{-- CTA Buttons in Cyber-Industrial High-Contrast Styling --}}
             <div class="hero-cta flex flex-wrap items-center gap-4 mb-9">
-                <a
+                <x-v2.extruded-box
+                    as="a"
                     href="#portfolio"
-                    class="inline-flex items-center gap-2 px-6 py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-roboto-mono font-bold text-xs uppercase tracking-wider transition-all duration-200 border border-amber-300 shadow-[0_0_25px_rgba(245,158,11,0.25)]"
+                    variant="amber"
+                    depth="md"
+                    :glow="true"
+                    class="inline-flex items-center gap-2 px-6 py-3.5 font-roboto-mono font-bold text-xs uppercase tracking-wider"
                 >
                     <span>{{ __('home.hero_cta_primary') }}</span>
                     <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="square" stroke-linejoin="miter" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                     </svg>
-                </a>
+                </x-v2.extruded-box>
 
-                <a
+                <x-v2.extruded-box
+                    as="a"
                     href="#about"
-                    class="inline-flex items-center gap-2 px-6 py-3.5 bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 font-roboto-mono font-semibold text-xs uppercase tracking-wider transition-all duration-200 border border-zinc-700 hover:border-zinc-500"
+                    variant="zinc"
+                    depth="md"
+                    class="inline-flex items-center gap-2 px-6 py-3.5 font-roboto-mono font-semibold text-xs uppercase tracking-wider"
                 >
                     <span>{{ __('home.hero_cta_secondary') }}</span>
-                </a>
+                </x-v2.extruded-box>
             </div>
 
             {{-- Social Section in Clean Industrial Square Cells --}}

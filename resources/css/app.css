@@ -1704,3 +1704,39 @@ body {
 .group:hover .iso-flow {
     animation: iso-dash 0.9s linear infinite;
 }
+
+/* ── 2.5D Axonometric Extruded Box Primitive (V2) ────────────────────────── */
+.v2-extruded {
+    position: relative;
+    isolation: isolate;
+}
+
+.v2-extruded > .v2-extruded-svg {
+    position: absolute;
+    left: -1.5px;
+    top: -1.5px;
+    overflow: visible;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.v2-extruded-interactive {
+    transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+    cursor: pointer;
+}
+
+.v2-extruded-interactive:hover {
+    transform: translate(-2px, -2px);
+}
+
+.v2-extruded-interactive:active {
+    transform: translate(3px, 2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .v2-extruded-interactive:hover,
+    .v2-extruded-interactive:active {
+        transform: none !important;
+    }
+}
+

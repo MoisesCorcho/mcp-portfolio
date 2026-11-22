@@ -10,10 +10,7 @@
 
         <div class="space-y-6">
             @foreach(config('portfolio.education', []) as $edu)
-                <div class="relative border border-zinc-800 bg-card p-5 sm:p-6 shadow-sm">
-                    <span class="absolute top-1 left-1 font-mono text-[9px] text-amber-500/70 select-none" aria-hidden="true">⌜</span>
-                    <span class="absolute top-1 right-1 font-mono text-[9px] text-amber-500/70 select-none" aria-hidden="true">⌝</span>
-
+                <x-v2.extruded-box variant="card" depth="sm" :cad-pins="true" class="p-5 sm:p-6 block">
                     <span class="inline-block px-2 py-0.5 border border-zinc-800 bg-zinc-900/80 text-[10px] font-roboto-mono text-amber-400 font-semibold uppercase tracking-wider mb-2">
                         {{ $edu['type'] }}
                     </span>
@@ -30,7 +27,7 @@
                         <span>{{ __($edu['period_key']) }}</span>
                         <span>{{ $edu['location'] }}</span>
                     </div>
-                </div>
+                </x-v2.extruded-box>
             @endforeach
         </div>
     </div>

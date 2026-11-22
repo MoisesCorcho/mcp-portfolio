@@ -71,9 +71,11 @@
                     ></span>
 
                     {{-- Job Interactive Module Box --}}
-                    <div
-                        class="border border-zinc-800/90 bg-card/60 hover:bg-card hover:border-zinc-700 transition-all duration-200 overflow-hidden"
-                        :class="expandedJobs.includes({{ $index }}) ? 'border-zinc-700 border-l-2 border-l-amber-500 bg-card shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : ''"
+                    <x-v2.extruded-box
+                        variant="card"
+                        depth="sm"
+                        class="overflow-hidden block"
+                        x-bind:class="expandedJobs.includes({{ $index }}) ? 'border-l-2 border-l-amber-500 bg-card shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : ''"
                     >
                         {{-- Clickable Header Bar --}}
                         <div
@@ -162,7 +164,7 @@
                                 </div>
                             @endif
                         </div>
-                    </div>
+                    </x-v2.extruded-box>
                 </div>
             @endforeach
         </div>
