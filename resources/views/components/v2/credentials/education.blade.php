@@ -1,5 +1,5 @@
 {{-- ====== Portfolio V2 Credentials: Formal University Degree & Diploma ====== --}}
-<div class="lg:col-span-5 p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-chamber/40">
+<div class="lg:col-span-5 p-5 sm:p-8 lg:p-10 pr-6 sm:pr-8 lg:pr-10 flex flex-col justify-between bg-chamber/40">
     <div>
         <div class="flex items-center gap-2 mb-6">
             <span class="w-2 h-2 bg-amber-500"></span>

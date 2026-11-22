@@ -18,7 +18,7 @@
 
     $marginClass = match ($depth) {
         'sm' => 'mr-1.5 mb-1',
-        'lg' => 'mr-4.5 mb-4',
+        'lg' => 'mr-2.5 sm:mr-4.5 mb-2.5 sm:mb-4',
         default => 'mr-2.5 mb-2',
     };
 

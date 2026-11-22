@@ -31,7 +31,7 @@
     />
 
     {{-- ── 2. Engineering Domain Filter Control Strip ── --}}
-    <div class="border-b border-zinc-800 bg-void/50 p-4 sm:px-10 lg:px-14 flex flex-wrap items-center justify-between gap-3 relative">
+    <div class="border-b border-zinc-800 bg-void/50 p-4 sm:px-10 lg:px-14 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 relative">
         {{-- Left: Filter Tabs with Monospace Tags and Counts --}}
         <div class="flex items-center flex-wrap gap-2 sm:gap-2.5 max-w-full">
             <span class="text-[10px] font-roboto-mono uppercase text-zinc-500 font-semibold tracking-widest hidden xl:inline-block mr-1 select-none">
@@ -60,15 +60,18 @@
             @endforeach
         </div>
 
-        {{-- Right: Master Expand / Collapse Specs Toggle with Distinct Separator Barrier --}}
-        <div class="flex items-center gap-3 sm:pl-5 sm:border-l border-zinc-800 ml-auto self-center">
+        {{-- Mobile Small Horizontal Separator Line --}}
+        <div class="w-full sm:hidden border-t border-zinc-800/80 my-0.5" aria-hidden="true"></div>
+
+        {{-- Right: Master Expand / Collapse Specs Toggle (Visible on both mobile & desktop) --}}
+        <div class="flex items-center sm:pl-5 sm:border-l border-zinc-800 sm:ml-auto self-start sm:self-center">
             <x-v2.extruded-box
                 as="button"
                 type="button"
                 @click="toggleAllSpecs()"
                 variant="zinc"
                 depth="sm"
-                class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 font-roboto-mono text-xs uppercase tracking-wider focus:outline-none"
+                class="inline-flex items-center gap-2 px-3.5 py-2 font-roboto-mono text-xs uppercase tracking-wider focus:outline-none"
             >
                 <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="square" stroke-linejoin="miter" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>

@@ -1,5 +1,5 @@
 {{-- ====== Portfolio V2 Credentials: Industry Certifications ====== --}}
-<div class="lg:col-span-7 p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-zinc-950/50">
+<div class="lg:col-span-7 p-5 sm:p-8 lg:p-10 pr-6 sm:pr-8 lg:pr-10 flex flex-col justify-between bg-zinc-950/50">
     <div>
         <div class="flex items-center justify-between gap-2 mb-6">
             <div class="flex items-center gap-2">

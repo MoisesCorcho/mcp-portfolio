@@ -22,7 +22,9 @@ function computeExtrusion(el) {
     const h = el.offsetHeight - 0.75;
     if (w <= 0 || h <= 0) return;
 
-    const depth = +(el.dataset.depth || 8);
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+    const baseDepth = +(el.dataset.depth || 8);
+    const depth = (isMobile && baseDepth > 8) ? 8 : baseDepth;
     const dx = depth;
     const dy = Math.round(depth * 0.72);
     const sd = Math.round(depth * 0.9);

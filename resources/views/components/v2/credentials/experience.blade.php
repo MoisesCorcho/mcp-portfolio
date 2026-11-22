@@ -32,21 +32,26 @@
             <span>{{ __('home.credentials_tab_experience') }}</span>
         </h3>
 
-        {{-- Quick Expand/Collapse All Button --}}
-        <button
+        {{-- Quick Expand/Collapse All Master Button --}}
+        <x-v2.extruded-box
+            as="button"
             type="button"
             @click="toggleAll()"
-            class="font-roboto-mono text-xs text-zinc-400 hover:text-amber-400 uppercase tracking-wider transition-colors flex items-center gap-1.5 focus:outline-none"
+            variant="zinc"
+            depth="sm"
+            class="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 font-roboto-mono text-xs uppercase tracking-wider focus:outline-none"
         >
+            <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="square" stroke-linejoin="miter" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+            </svg>
             <span x-text="expandedJobs.length > 0 ? '{{ __('home.exp_collapse_all') }}' : '{{ __('home.exp_expand_all') }}'"></span>
-            <span class="text-amber-500 text-[10px]" x-text="expandedJobs.length > 0 ? '▲' : '▼'"></span>
-        </button>
+        </x-v2.extruded-box>
     </div>
 
     {{-- Continuous Vertical Spine Timeline --}}
-    <div class="p-6 sm:p-10 lg:px-14 lg:py-10 bg-chamber/20 relative">
+    <div class="p-4 sm:p-10 lg:px-14 lg:py-10 bg-chamber/20 relative pr-6 sm:pr-10 lg:pr-14">
 
-        <div class="space-y-6 sm:space-y-8 pl-8 sm:pl-10 md:pl-12 relative">
+        <div class="space-y-6 sm:space-y-8 pl-6 sm:pl-10 md:pl-12 relative">
             @foreach($jobs as $index => $job)
                 @php
                     $logo = $companyLogos[$job['company']] ?? null;
@@ -80,7 +85,7 @@
                         variant="card"
                         depth="lg"
                         :cad-pins="true"
-                        class="block w-full transition-all duration-200"
+                        class="block transition-all duration-200"
                         x-bind:class="expandedJobs.includes({{ $index }}) ? 'border-l-2 border-l-amber-500 shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : ''"
                     >
                         {{-- Clickable Header Bar --}}
