@@ -30,24 +30,13 @@
             {{-- ── LEFT: Text Content ── --}}
             <div class="flex flex-col">
 
-                {{-- Availability badge --}}
-                <div class="hero-badge inline-flex items-center gap-2 mb-6 self-start px-4 py-1.5 rounded-full glass">
-                    <span class="flex h-2 w-2 relative">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-                    </span>
-                    <span style="font-family:var(--font-display);" class="text-xs font-semibold tracking-[0.14em] uppercase text-amber-400/90">
-                        {{ __('home.hero_badge') }}
-                    </span>
-                </div>
-
-                {{-- Main title --}}
-                <h1
+                {{-- Greeting --}}
+                <p
                     class="hero-title font-display font-bold leading-[1.05] text-slate-300 mb-1"
                     style="font-family:var(--font-display); font-size:clamp(2.2rem, 5vw, 3.5rem);"
                 >
                     {{ __('home.hero_greeting') }}
-                </h1>
+                </p>
 
                 {{-- Name with gradient --}}
                 <h1
@@ -62,7 +51,7 @@
                 <span class="section-line mb-8" style="width:80px;"></span>
 
                 {{-- Subtitle --}}
-                <p class="hero-subtitle text-slate-400 max-w-[480px] leading-relaxed mb-8" style="font-size:1.05rem; font-family:var(--font-body);">
+                <p class="hero-subtitle text-slate-400 max-w-[560px] leading-relaxed mb-8" style="font-size:1.02rem; font-family:var(--font-body);">
                     {!! __('home.hero_subtitle') !!}
                 </p>
 
@@ -109,12 +98,6 @@
                                     background: linear-gradient(to top, rgba(2,6,23,0.6), transparent);
                                     pointer-events:none;"></div>
                     </div>
-
-                    {{-- Amber corner brackets --}}
-                    <span class="absolute -top-2 -left-2 w-6 h-6 pointer-events-none"
-                          style="border-top:2px solid rgba(245,158,11,0.7); border-left:2px solid rgba(245,158,11,0.7); border-radius:4px 0 0 0;"></span>
-                    <span class="absolute -bottom-2 -right-2 w-6 h-6 pointer-events-none"
-                          style="border-bottom:2px solid rgba(245,158,11,0.7); border-right:2px solid rgba(245,158,11,0.7); border-radius:0 0 4px 0;"></span>
 
                     {{-- Tech badges (desktop) --}}
                     <div class="absolute -bottom-2 -left-5 hidden lg:flex flex-col gap-2">

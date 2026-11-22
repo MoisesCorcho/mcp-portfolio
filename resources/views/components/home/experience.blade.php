@@ -39,7 +39,14 @@ $companyLogos = [
     {{-- Expandable experience cards --}}
     <div class="exp-options relative z-10">
         @foreach($experience as $i => $job)
-        <div class="exp-option {{ $i === 0 ? 'active' : '' }}" data-exp-index="{{ $i }}">
+        <div
+            class="exp-option {{ $i === 0 ? 'active' : '' }}"
+            data-exp-index="{{ $i }}"
+            role="button"
+            tabindex="0"
+            aria-expanded="{{ $i === 0 ? 'true' : 'false' }}"
+            aria-label="{{ $job['role'] }} — {{ $job['company'] }}"
+        >
             <div class="exp-shadow"></div>
 
             {{-- Vertical company name — visible only when collapsed --}}
@@ -70,7 +77,11 @@ $companyLogos = [
                     @if(isset($companyLogos[$job['company']]))
                         <img src="{{ asset('img/company_logos/' . $companyLogos[$job['company']]) }}"
                              alt="{{ $job['company'] }}"
-                             class="exp-icon__img">
+                             class="exp-icon__img"
+                             loading="lazy"
+                             decoding="async"
+                             width="40"
+                             height="40">
                     @else
                         {{ strtoupper(mb_substr($job['company'], 0, 1)) }}
                     @endif

@@ -13,9 +13,6 @@
     {{-- Noise circles container (JS populates this) --}}
     <div id="noise-circles" class="absolute inset-0 pointer-events-none" style="z-index:1; overflow:hidden;"></div>
 
-    {{-- Decorative oversized bg text (parallax via JS) --}}
-    <div class="bg-text" style="top: 50%; left: 50%; transform: translate(-50%, -50%);" data-parallax-bg>{{ __('home.about_parallax_bg') }}</div>
-
     {{-- Background orb --}}
     <div style="position:absolute; width:600px; height:600px; background:rgba(245,158,11,0.05); top:50%; right:-200px; transform:translateY(-50%); border-radius:50%; filter:blur(100px); pointer-events:none;"></div>
 
@@ -46,6 +43,10 @@
                                 src="{{ url('/img/MoisesPiano.jpeg') }}"
                                 alt="{{ __('home.about_img_1_alt') }}"
                                 class="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
+                                loading="lazy"
+                                decoding="async"
+                                width="300"
+                                height="192"
                             />
                         </div>
                         <div class="about-img-item rounded-2xl overflow-hidden"
@@ -54,6 +55,10 @@
                                 src="{{ url('/img/GataMascotaPc.jpeg') }}"
                                 alt="{{ __('home.about_img_2_alt') }}"
                                 class="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
+                                loading="lazy"
+                                decoding="async"
+                                width="300"
+                                height="192"
                             />
                         </div>
                     </div>
@@ -65,6 +70,10 @@
                                 src="{{ url('/img/GataMascota.jpeg') }}"
                                 alt="{{ __('home.about_img_3_alt') }}"
                                 class="w-full h-full object-cover min-h-[250px] transition-transform duration-500 hover:scale-105"
+                                loading="lazy"
+                                decoding="async"
+                                width="300"
+                                height="400"
                             />
                         </div>
                     </div>
