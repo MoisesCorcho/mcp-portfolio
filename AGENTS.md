@@ -1,7 +1,7 @@
 # Agent Guidelines — mcp-portfolio
 
 ## Project Overview
-Personal portfolio and professional showcase for Moisés Corcho (Systems Engineer & Full-Stack Architect).
+Personal portfolio and professional showcase for Moisés Corcho (Systems Engineer & Full-Stack Developer).
 Built with Laravel 12, Laravel Sail (Docker), Tailwind CSS, Alpine.js, GSAP, and Vite.
 
 ## Environments & Development Commands

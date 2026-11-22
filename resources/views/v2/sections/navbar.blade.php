@@ -12,17 +12,12 @@
 
         {{-- ── Left: Brand Identifier ── --}}
         <a href="/v2" class="flex items-center gap-3 group">
-            <span class="w-8 h-8 bg-amber-500 text-black font-oxanium font-extrabold text-sm flex items-center justify-center border border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)] select-none">
+            <span class="w-8 h-8 sm:w-9 sm:h-9 bg-amber-500 text-black font-oxanium font-extrabold text-sm sm:text-base flex items-center justify-center border border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)] select-none shrink-0">
                 {{ config('portfolio.owner.brand_initial', 'M') }}
             </span>
-            <div class="flex flex-col">
-                <span class="font-oxanium font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-amber-400 transition-colors uppercase">
-                    {{ config('portfolio.owner.brand_name', 'Moisés Corcho') }}<span class="text-amber-500">.</span>
-                </span>
-                <span class="text-[10px] font-roboto-mono text-zinc-500 uppercase tracking-widest hidden sm:inline">
-                    {{ __('home.hero_badge_role') }}
-                </span>
-            </div>
+            <span class="font-oxanium font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-amber-400 transition-colors uppercase">
+                {{ config('portfolio.owner.brand_name', 'Moisés Corcho') }}<span class="text-amber-500">.</span>
+            </span>
         </a>
 
         {{-- ── Center: Desktop Navigation Links ── --}}

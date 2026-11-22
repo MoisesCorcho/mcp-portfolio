@@ -189,7 +189,6 @@ return [
             'github' => 'https://github.com/MoisesCorcho/NoticiasInfoReal',
             'image' => null,
             'tags' => ['Laravel 12', 'Filament v3', 'Livewire 3', 'Tailwind CSS 4', 'MySQL', 'Docker'],
-            'badge' => 'Production Live Media',
             'featured' => true,
         ],
         [

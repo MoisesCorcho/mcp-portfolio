@@ -18,7 +18,9 @@ return [
     'nav_lang_switch_title_to_en' => 'Switch to English',
     'nav_lang_switch_title_to_es' => 'Cambiar a Español',
     'back_to_v2' => 'Volver al Portfolio V2',
-    'hero_badge_role' => 'Full-Stack Architect',
+    'hero_badge_role' => 'Full-Stack Developer | IA Developer',
+    'nav_role_primary' => 'Full-Stack Developer',
+    'nav_role_secondary' => 'IA Developer',
 
     // ── Footer ───────────────────────────────────────────────────────────────
     'footer_made_with' => '© :year :name. Hecho con ❤️',
@@ -235,6 +237,7 @@ return [
     'cert_verify_link' => 'Verificar',
     'cert_view_credential' => 'Ver credencial oficial',
     'v2_footer_rights' => 'Todos los derechos reservados.',
-    'v2_footer_architect' => 'Ingeniero de Sistemas & Arquitecto Full-Stack',
+    'v2_footer_role' => 'Ingeniero de Sistemas · Full-Stack Developer | IA Developer',
+    'v2_footer_architect' => 'Ingeniero de Sistemas · Full-Stack Developer | IA Developer',
 
 ];

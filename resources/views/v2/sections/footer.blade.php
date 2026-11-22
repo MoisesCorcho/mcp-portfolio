@@ -12,7 +12,7 @@
                     {{ config('portfolio.owner.brand_name', 'Moisés Corcho') }}<span class="text-amber-500">.</span>
                 </span>
                 <span class="text-[10px] font-roboto-mono text-zinc-500 uppercase tracking-widest">
-                    {{ __('home.v2_footer_architect') }}
+                    {{ __('home.v2_footer_role') }}
                 </span>
             </div>
         </div>

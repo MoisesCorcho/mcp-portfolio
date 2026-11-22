@@ -18,7 +18,9 @@ return [
     'nav_lang_switch_title_to_en' => 'Switch to English',
     'nav_lang_switch_title_to_es' => 'Cambiar a Español',
     'back_to_v2' => 'Back to Portfolio V2',
-    'hero_badge_role' => 'Full-Stack Architect',
+    'hero_badge_role' => 'Full-Stack Developer | AI Developer',
+    'nav_role_primary' => 'Full-Stack Developer',
+    'nav_role_secondary' => 'AI Developer',
 
     // ── Footer ───────────────────────────────────────────────────────────────
     'footer_made_with' => '© :year :name. Made with ❤️',
@@ -115,7 +117,7 @@ return [
             'role' => 'DARC Analyst',
             'company' => 'Universidad Cooperativa de Colombia',
             'date' => 'July 2024 – December 2024',
-            'description' => 'Comprehensive management of institutional academic processes from admissions to graduation, ensuring regulatory compliance and procedural accuracy.<br><br><strong class="text-amber-400 font-semibold uppercase text-xs tracking-wider">Data Analytics & Academic Reporting:</strong><br>• Extracted, consolidated, cleaned, and debugged large volumes of academic records from <strong class="text-slate-200">Oracle PeopleSoft</strong>.<br>• Built executive and operational reports with dynamic pivot tables and advanced data modeling in Excel, delivering key performance indicators on enrollment, applicants, academic programs, and student statuses.<br>• Validated and cross-referenced multi-source datasets to eradicate inconsistencies and secure data integrity for deans and administrative leadership.<br><br><strong class="text-amber-400 font-semibold uppercase text-xs tracking-wider">Institutional Training & Process Engineering:</strong><br>• Trained faculty and administrative staff on Oracle PeopleSoft workflows and internal digital tools, boosting operational efficiency.<br>• Authored the official standard operating procedures (SOP) manual adopted by executive leadership for resolving specialized academic cases.<br><br><strong class="text-amber-400 font-semibold uppercase text-xs tracking-wider">Internal Software Development:</strong><br>• Architected and developed an internal <strong class="text-slate-200">IT Asset Management System</strong> using PHP 8.4, Laravel 12, Livewire 3, and Tailwind CSS to streamline hardware inventory and equipment loans.',
+            'description' => 'Comprehensive management of institutional academic processes from admissions to graduation, ensuring regulatory compliance and procedural accuracy.<br><br><strong class="text-amber-400 font-semibold uppercase text-xs tracking-wider">Data Analytics & Academic Reporting:</strong><br>• Extracted, consolidated, cleaned, and debugged large volumes of academic records from <strong class="text-slate-200">Oracle PeopleSoft</strong>.<br>• Built executive and operational reports with dynamic pivot tables and advanced data modeling in Excel, delivering key performance indicators on enrollment, applicants, academic programs, and student statuses.<br>• Validated and cross-referenced multi-source datasets to eradicate inconsistencies and secure data integrity for deans and administrative leadership.<br><br><strong class="text-amber-400 font-semibold uppercase text-xs tracking-wider">Institutional Training & Process Engineering:</strong><br>• Trained faculty and administrative staff on Oracle PeopleSoft workflows and internal digital tools, boosting operational efficiency.<br>• Authored the official standard operating procedures (SOP) manual adopted by executive leadership for resolving specialized academic cases.<br><br><strong class="text-amber-400 font-semibold uppercase text-xs tracking-wider">Internal Software Development:</strong><br>• Designed and developed an internal <strong class="text-slate-200">IT Asset Management System</strong> using PHP 8.4, Laravel 12, Livewire 3, and Tailwind CSS to streamline hardware inventory and equipment loans.',
             'stack' => ['Oracle PeopleSoft', 'Microsoft Excel', 'Data Analysis', 'PHP 8.4', 'Laravel 12', 'Livewire 3', 'Tailwind CSS', 'Git & GitHub'],
         ],
         [
@@ -235,6 +237,7 @@ return [
     'cert_verify_link' => 'Verify',
     'cert_view_credential' => 'View official credential',
     'v2_footer_rights' => 'All rights reserved.',
-    'v2_footer_architect' => 'Systems Engineer & Full-Stack Architect',
+    'v2_footer_role' => 'Systems Engineer · Full-Stack Developer | AI Developer',
+    'v2_footer_architect' => 'Systems Engineer · Full-Stack Developer | AI Developer',
 
 ];
