@@ -1,10 +1,10 @@
 {{-- ====== Portfolio V2: Cyber-Industrial Marquee Telemetry Beam ====== --}}
 <div class="relative border-y border-zinc-800 bg-floor overflow-hidden py-3">
     {{-- Intersection Nodes where the Marquee horizontal lines meet the continuous vertical rails --}}
-    <span class="absolute -top-1.5 -left-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
-    <span class="absolute -top-1.5 -right-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
-    <span class="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
-    <span class="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+    <x-v2.cad-pin class="absolute -top-1.5 -left-1.5" />
+    <x-v2.cad-pin class="absolute -top-1.5 -right-1.5" />
+    <x-v2.cad-pin class="absolute -bottom-1.5 -left-1.5" />
+    <x-v2.cad-pin class="absolute -bottom-1.5 -right-1.5" />
 
     {{-- Left & Right Edge Gradient Fade Masks (Dissolves chips into the floor void) --}}
     <div class="absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-floor via-floor/90 to-transparent z-10 pointer-events-none" aria-hidden="true"></div>

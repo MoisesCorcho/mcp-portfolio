@@ -77,8 +77,8 @@
 
                     {{-- Job Interactive Module Box --}}
                     <x-v2.extruded-box
-                        variant="zinc"
-                        depth="md"
+                        variant="card"
+                        depth="lg"
                         :cad-pins="true"
                         class="block w-full transition-all duration-200"
                         x-bind:class="expandedJobs.includes({{ $index }}) ? 'border-l-2 border-l-amber-500 shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : ''"

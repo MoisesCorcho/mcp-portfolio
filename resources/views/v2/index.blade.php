@@ -42,8 +42,8 @@
             @include('v2.sections.footer')
 
             {{-- Master Bottom Anchor Pins --}}
-            <span class="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
-            <span class="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+            <x-v2.cad-pin class="absolute -bottom-1.5 -left-1.5" />
+            <x-v2.cad-pin class="absolute -bottom-1.5 -right-1.5" />
 
         </div>
     </div>

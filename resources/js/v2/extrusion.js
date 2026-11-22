@@ -27,10 +27,10 @@ function computeExtrusion(el) {
     const dy = Math.round(depth * 0.72);
     const sd = Math.round(depth * 0.9);
 
-    const rightColor = el.dataset.extRight || 'var(--ext-right, #18181b)';
-    const bottomColor = el.dataset.extBottom || 'var(--ext-bottom, #09090b)';
-    const borderColor = el.dataset.extBorder || 'var(--ext-border, #3f3f46)';
-    const shadowColor = el.dataset.extShadow || 'var(--ext-shadow, rgba(0,0,0,0.7))';
+    const rightColor = el.dataset.extRight || 'var(--ext-right, #27272a)';
+    const bottomColor = el.dataset.extBottom || 'var(--ext-bottom, #14151b)';
+    const borderColor = el.dataset.extBorder || 'var(--ext-border, #52525b)';
+    const shadowColor = el.dataset.extShadow || 'var(--ext-shadow, rgba(161, 161, 170, 0.25))';
 
     svg.setAttribute('width', `${w + dx + sd + 8}`);
     svg.setAttribute('height', `${h + dy + sd + 8}`);

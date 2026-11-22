@@ -13,6 +13,8 @@ class V2ExtrudedBoxTest extends TestCase
         $view->assertSee('v2-extruded');
         $view->assertSee('data-extruded', false);
         $view->assertSee('data-depth="8"', false);
+        $view->assertSee('v2-extruded-sheen');
+        $view->assertSee('v2-extruded-beam');
         $view->assertSee('Test Content');
     }
 
@@ -31,9 +33,20 @@ class V2ExtrudedBoxTest extends TestCase
     {
         $view = $this->blade('<x-v2.extruded-box depth="lg" :cad-pins="true">Showroom Card</x-v2.extruded-box>');
 
-        $view->assertSee('data-depth="14"', false);
+        $view->assertSee('data-depth="16"', false);
         $view->assertSee('bg-amber-500/80');
         $view->assertSee('Showroom Card');
+    }
+
+    public function test_social_links_renders_extruded_boxes(): void
+    {
+        $view = $this->blade('<x-v2.social-links :include-cv="true" />');
+
+        $view->assertSee('v2-extruded');
+        $view->assertSee('aria-label="Instagram"', false);
+        $view->assertSee('aria-label="LinkedIn"', false);
+        $view->assertSee('aria-label="GitHub"', false);
+        $view->assertSee('CV');
     }
 
     public function test_experience_chambers_use_extruded_boxes(): void

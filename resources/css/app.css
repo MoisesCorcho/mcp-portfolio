@@ -41,6 +41,7 @@ body {
 /* ── Custom Scrollbar ────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
 }
 ::-webkit-scrollbar-track {
     background: var(--slate-950);
@@ -51,6 +52,19 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #fbbf24;
+}
+
+/* Utilities for hiding scrollbars completely */
+.scrollbar-none::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+.scrollbar-none,
+.no-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
 }
 
 /* ── Text Selection ──────────────────────────────────────────────────────── */
@@ -1733,10 +1747,81 @@ body {
     transform: translate(3px, 2px);
 }
 
+/* ── Glass Sheen Specular Glint (Hover / Focus Beam) ────────────────────── */
+/* 
+   Para ajustar la velocidad del destello manualmente:
+   Modifica '--v2-glint-duration' abajo (ej: '1.0s' más rápido, '2.0s' más lento).
+*/
+:root {
+    --v2-glint-duration: 1.6s;
+}
+
+.v2-extruded-sheen {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.v2-extruded-beam {
+    position: absolute;
+    top: -50%;
+    bottom: -50%;
+    left: -130%;
+    width: 65%;
+    background: linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.04) 18%,
+        rgba(255, 255, 255, 0.22) 34%,
+        rgba(255, 255, 255, 0.55) 43%,
+        rgba(255, 255, 255, 0.08) 47%,
+        transparent 51%,
+        rgba(255, 255, 255, 0.35) 58%,
+        rgba(255, 255, 255, 0.06) 66%,
+        transparent 80%,
+        transparent 100%
+    );
+    transform: skewX(-22deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.v2-extruded-interactive:hover .v2-extruded-beam,
+.v2-extruded-interactive:focus-visible .v2-extruded-beam,
+.v2-extruded:hover .v2-extruded-beam {
+    animation: v2-glass-sweep var(--v2-glint-duration, 1.6s) cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes v2-glass-sweep {
+    0% {
+        left: -130%;
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.95;
+    }
+    80% {
+        opacity: 0.95;
+    }
+    100% {
+        left: 190%;
+        opacity: 0;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .v2-extruded-interactive:hover,
     .v2-extruded-interactive:active {
         transform: none !important;
+    }
+
+    .v2-extruded-interactive:hover .v2-extruded-beam,
+    .v2-extruded-interactive:focus-visible .v2-extruded-beam,
+    .v2-extruded:hover .v2-extruded-beam {
+        animation: none !important;
+        opacity: 0 !important;
     }
 }
 

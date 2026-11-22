@@ -7,8 +7,8 @@
     <div class="max-w-7xl mx-auto border-x border-zinc-800 relative px-4 sm:px-8 lg:px-12 flex items-center justify-between h-16 sm:h-20">
 
         {{-- CAD Intersection Pins at bottom junction of the navbar and continuous rails --}}
-        <span class="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
-        <span class="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+        <x-v2.cad-pin class="absolute -bottom-1.5 -left-1.5" />
+        <x-v2.cad-pin class="absolute -bottom-1.5 -right-1.5" />
 
         {{-- ── Left: Brand Identifier ── --}}
         <a href="/v2" class="flex items-center gap-3 group">
@@ -69,34 +69,45 @@
         {{-- ── Right: Language Switcher & Contact CTA ── --}}
         <div class="hidden lg:flex items-center gap-3">
             {{-- Orthogonal Language Switcher Cell --}}
-            <a
+            <x-v2.extruded-box
+                as="a"
                 href="{{ route('lang.switch', app()->getLocale() === 'es' ? 'en' : 'es') }}"
-                class="w-10 h-10 border border-zinc-800 bg-zinc-900/80 hover:border-amber-500 hover:text-amber-400 hover:bg-amber-500/10 text-zinc-300 font-roboto-mono text-xs font-bold transition-all flex items-center justify-center select-none"
+                variant="zinc"
+                depth="sm"
+                :glow="true"
+                class="w-10 h-10 text-zinc-100 font-roboto-mono text-xs font-bold flex items-center justify-center select-none"
                 title="{{ app()->getLocale() === 'es' ? __('home.nav_lang_switch_title_to_en') : __('home.nav_lang_switch_title_to_es') }}"
             >
                 {{ app()->getLocale() === 'es' ? 'EN' : 'ES' }}
-            </a>
+            </x-v2.extruded-box>
 
             {{-- Primary Action CTA Button (Zero Rounded Corners) --}}
-            <a
+            <x-v2.extruded-box
+                as="a"
                 href="#contact"
-                class="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-roboto-mono font-bold text-xs uppercase tracking-wider transition-all duration-200 border border-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+                variant="amber"
+                depth="sm"
+                :glow="true"
+                class="inline-flex items-center gap-2 px-5 py-2.5 font-roboto-mono font-bold text-xs uppercase tracking-wider"
             >
                 <span>{{ __('home.nav_cta') }}</span>
                 <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="square" stroke-linejoin="miter" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
-            </a>
+            </x-v2.extruded-box>
         </div>
 
         {{-- ── Mobile Hamburger Toggle (Orthogonal 40x40 Cell) ── --}}
         <div class="flex items-center gap-2 lg:hidden">
-            <a
+            <x-v2.extruded-box
+                as="a"
                 href="{{ route('lang.switch', app()->getLocale() === 'es' ? 'en' : 'es') }}"
-                class="w-10 h-10 border border-zinc-800 bg-zinc-900/80 hover:border-amber-500 hover:text-amber-400 hover:bg-amber-500/10 text-zinc-300 font-roboto-mono text-xs font-bold transition-all flex items-center justify-center select-none"
+                variant="zinc"
+                depth="sm"
+                class="w-10 h-10 text-zinc-100 font-roboto-mono text-xs font-bold flex items-center justify-center select-none"
             >
                 {{ app()->getLocale() === 'es' ? 'EN' : 'ES' }}
-            </a>
+            </x-v2.extruded-box>
 
             <button
                 @click="navOpen = !navOpen"
@@ -170,16 +181,20 @@
             </a>
 
             <div class="pt-3">
-                <a
+                <x-v2.extruded-box
+                    as="a"
                     @click="navOpen = false"
                     href="{{ request()->routeIs('v2.home') ? '#contact' : '/v2#contact' }}"
-                    class="w-full flex items-center justify-center gap-2 py-3 bg-amber-500 hover:bg-amber-400 text-black font-roboto-mono font-bold text-xs uppercase tracking-wider border border-amber-300"
+                    variant="amber"
+                    depth="sm"
+                    :glow="true"
+                    class="w-full flex items-center justify-center gap-2 py-3 font-roboto-mono font-bold text-xs uppercase tracking-wider"
                 >
                     <span>{{ __('home.nav_cta') }}</span>
                     <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="square" stroke-linejoin="miter" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                     </svg>
-                </a>
+                </x-v2.extruded-box>
             </div>
         </div>
     </div>

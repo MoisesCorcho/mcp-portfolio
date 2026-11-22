@@ -14,8 +14,8 @@
     {{-- ── 3. Formal Education & Industry Certifications (2-Column Grid) ── --}}
     <div class="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-zinc-800 relative">
         {{-- Center Column Intersection Pins on Desktop (5/12 = 41.666667%) --}}
-        <span class="hidden lg:block absolute -top-1.5 left-[41.666667%] -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
-        <span class="hidden lg:block absolute -bottom-1.5 left-[41.666667%] -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+        <x-v2.cad-pin class="hidden lg:block absolute -top-1.5 left-[41.666667%] -translate-x-1.5" />
+        <x-v2.cad-pin class="hidden lg:block absolute -bottom-1.5 left-[41.666667%] -translate-x-1.5" />
 
         {{-- ── LEFT: Formal University Degree & Diploma (5 Cols) ── --}}
         <x-v2.credentials.education />

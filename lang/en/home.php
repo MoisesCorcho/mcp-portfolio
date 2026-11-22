@@ -191,6 +191,7 @@ return [
     'domain_mobile' => 'Mobile & PWAs',
     'domain_saas' => 'Enterprise SaaS',
     'domain_creative' => 'Digital Products',
+    'portfolio_filter_label' => 'Filter:',
     'project_show_specs' => 'Architecture Specifications',
     'project_hide_specs' => 'Hide Specifications',
     'project_expand_all' => 'Expand all specifications',
@@ -210,6 +211,7 @@ return [
     'project_view_live' => 'Live Demo',
     'project_view_game' => 'Launch Game Experience',
     'project_view_github' => 'Source Code',
+    'project_full_stack' => 'Full Stack:',
 
     // ── V2 Credentials (Experience, Education, Certifications) ────────────────
     'credentials_label' => 'Trajectory & Credentials',
@@ -228,6 +230,7 @@ return [
     'edu_degree_diploma' => 'Diploma in University Teaching & Didactics',
     'edu_institution_poli' => 'Politécnico Superior de Colombia (Medellín, Antioquia)',
     'edu_period_poli' => 'January 2024 – February 2024',
+    'edu_seal_note' => 'Official accredited university degree authorized for professional practice.',
     'cert_verified_badge' => 'Verified Credential',
     'cert_verify_link' => 'Verify',
     'cert_view_credential' => 'View official credential',

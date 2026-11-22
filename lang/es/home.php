@@ -191,6 +191,7 @@ return [
     'domain_mobile' => 'Mobile & PWAs',
     'domain_saas' => 'SaaS Empresarial',
     'domain_creative' => 'Productos Digitales',
+    'portfolio_filter_label' => 'Filtro:',
     'project_show_specs' => 'Especificaciones de Arquitectura',
     'project_hide_specs' => 'Ocultar Especificaciones',
     'project_expand_all' => 'Expandir especificaciones',
@@ -210,6 +211,7 @@ return [
     'project_view_live' => 'Ver en producción',
     'project_view_game' => 'Abrir experiencia de juego',
     'project_view_github' => 'Ver código fuente',
+    'project_full_stack' => 'Stack Completo:',
 
     // ── V2 Credentials (Experience, Education, Certifications) ────────────────
     'credentials_label' => 'Trayectoria & Credenciales',
@@ -228,6 +230,7 @@ return [
     'edu_degree_diploma' => 'Diplomado en Docencia y Didáctica Universitaria',
     'edu_institution_poli' => 'Politécnico Superior de Colombia (Medellín, Antioquia)',
     'edu_period_poli' => 'Enero 2024 – Febrero 2024',
+    'edu_seal_note' => 'Título universitario oficial convalidado y habilitado para ejercicio profesional.',
     'cert_verified_badge' => 'Certificación Oficial',
     'cert_verify_link' => 'Verificar',
     'cert_view_credential' => 'Ver credencial oficial',

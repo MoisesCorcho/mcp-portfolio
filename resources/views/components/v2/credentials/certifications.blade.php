@@ -15,9 +15,9 @@
         </div>
 
         {{-- Certifications Cards with Banners & Badges --}}
-        <div class="space-y-6">
+        <div class="space-y-10 sm:space-y-12">
             @foreach(config('portfolio.certifications', []) as $cert)
-                <x-v2.extruded-box variant="card" depth="md" class="group block">
+                <x-v2.extruded-box variant="card" depth="lg" class="group block">
                     {{-- Banner Preview with Right-Aligned Focus --}}
                     @if(!empty($cert['banner']))
                         <a
