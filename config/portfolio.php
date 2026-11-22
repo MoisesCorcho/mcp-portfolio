@@ -19,7 +19,7 @@ return [
             'PHP', 'Laravel', 'PostgreSQL', 'pgvector', 'Docker',
             'Flutter', 'Riverpod', 'Drift (SQLite)', 'Livewire', 'Filament',
             'Vue.js', 'React', 'Next.js', 'TypeScript', 'MySQL', 'Git',
-            'Tailwind CSS', 'REST APIs', 'Linux', 'PWA', 'Playwright', 'AWS Bedrock'
+            'Tailwind CSS', 'REST APIs', 'Linux', 'PWA', 'Playwright', 'AWS Bedrock',
         ],
     ],
 
