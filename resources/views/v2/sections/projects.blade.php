@@ -65,16 +65,25 @@
         </button>
     </div>
 
-    {{-- ── 3. Projects Grid (Orthogonal CAD Matrix with Central Spine) ── --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 relative">
+    {{-- ── 3. Projects Grid (3x3 Orthogonal Matrix with Continuous Vertical Rails) ── --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative">
 
-        {{-- Continuous Central Spine Rail on Desktop --}}
-        <div class="hidden lg:block absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2 bg-zinc-800 pointer-events-none z-10" aria-hidden="true"></div>
+        {{-- Continuous Tablet Rail (md: 50% center) --}}
+        <div class="hidden md:block lg:hidden absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2 bg-zinc-800 pointer-events-none z-10" aria-hidden="true"></div>
 
-        {{-- Top Center CAD Pin (intersection with filter bar) --}}
-        <span class="hidden lg:block absolute -top-1.5 left-1/2 -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
-        {{-- Bottom Center CAD Pin (intersection with bottom floor line) --}}
-        <span class="hidden lg:block absolute -bottom-1.5 left-1/2 -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+        {{-- Continuous Desktop Rails (lg: 1/3 and 2/3) --}}
+        <div class="hidden lg:block absolute top-0 bottom-0 left-1/3 w-px -translate-x-1/2 bg-zinc-800 pointer-events-none z-10" aria-hidden="true"></div>
+        <div class="hidden lg:block absolute top-0 bottom-0 left-2/3 w-px -translate-x-1/2 bg-zinc-800 pointer-events-none z-10" aria-hidden="true"></div>
+
+        {{-- Tablet CAD Pins (md) --}}
+        <span class="hidden md:block lg:hidden absolute -top-1.5 left-1/2 -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+        <span class="hidden md:block lg:hidden absolute -bottom-1.5 left-1/2 -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+
+        {{-- Desktop CAD Pins (lg: 1/3 and 2/3 intersections with top & bottom floor lines) --}}
+        <span class="hidden lg:block absolute -top-1.5 left-1/3 -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+        <span class="hidden lg:block absolute -top-1.5 left-2/3 -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+        <span class="hidden lg:block absolute -bottom-1.5 left-1/3 -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
+        <span class="hidden lg:block absolute -bottom-1.5 left-2/3 -translate-x-1.5 w-3 h-3 bg-amber-500 z-20 border border-black pointer-events-none" aria-hidden="true"></span>
 
         @foreach($projects as $index => $project)
             <x-v2.projects.card :project="$project" />
