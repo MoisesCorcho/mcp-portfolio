@@ -20,7 +20,7 @@
 
     @isset($navbar)
         {{ $navbar }}
-    @elseif(!request()->is('v2*'))
+    @elseif(request()->is('v1*'))
         <x-layout.navbar></x-layout.navbar>
     @endisset
 
@@ -28,7 +28,7 @@
         {{ $slot }}
     </main>
 
-    @if(!request()->is('v2*'))
+    @if(request()->is('v1*'))
         <x-layout.footer></x-layout.footer>
     @endif
 
