@@ -7,11 +7,11 @@
     <div class="border-b border-zinc-800 bg-chamber/80 backdrop-blur-sm sticky top-16 sm:top-20 z-40">
         <div class="max-w-7xl mx-auto border-x border-zinc-800 px-4 sm:px-8 lg:px-12 py-3 flex items-center justify-between text-xs font-roboto-mono">
             <a
-                href="/v2"
+                href="/"
                 class="inline-flex items-center gap-2 text-zinc-300 hover:text-amber-400 font-semibold transition-colors duration-200 group"
             >
                 <span class="group-hover:-translate-x-1 transition-transform duration-200">←</span>
-                <span>{{ __('home.back_to_v2') }}</span>
+                <span>{{ __('home.back_to_home') }}</span>
             </a>
 
             <div class="flex items-center gap-3">

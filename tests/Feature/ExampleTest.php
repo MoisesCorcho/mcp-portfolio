@@ -11,18 +11,11 @@ class ExampleTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A basic test example.
+     * Test that the root path renders Portfolio V2 (Cyber-Industrial Continuous Chassis).
      */
     public function test_the_application_returns_a_successful_response(): void
     {
         $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
-    public function test_the_v2_route_returns_a_successful_response(): void
-    {
-        $response = $this->get('/v2');
 
         $response->assertStatus(200);
         $response->assertSee('Oxanium');
@@ -54,13 +47,36 @@ class ExampleTest extends TestCase
         $response->assertSee('Filament v3');
     }
 
-    public function test_the_v2_videogame_route_returns_a_successful_response(): void
+    public function test_the_v2_route_redirects_to_root(): void
     {
-        $response = $this->get('/v2/videogame');
+        $response = $this->get('/v2');
+
+        $response->assertStatus(301);
+        $response->assertRedirect('/');
+    }
+
+    public function test_the_videogame_route_returns_a_successful_response(): void
+    {
+        $response = $this->get('/videogame');
 
         $response->assertStatus(200);
         $response->assertSee("THE DEVELOPER'S", false);
-        $response->assertSee('Volver al Portfolio V2');
+        $response->assertSee('Volver al Inicio');
         $response->assertSee('Phaser 3');
+    }
+
+    public function test_the_v2_videogame_route_redirects_to_videogame(): void
+    {
+        $response = $this->get('/v2/videogame');
+
+        $response->assertStatus(301);
+        $response->assertRedirect('/videogame');
+    }
+
+    public function test_the_legacy_v1_route_returns_a_successful_response(): void
+    {
+        $response = $this->get('/v1');
+
+        $response->assertStatus(200);
     }
 }

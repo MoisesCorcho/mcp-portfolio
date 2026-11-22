@@ -14,17 +14,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Primary Production Route: Portfolio V2 Continuous Chassis
 Route::get('/', function () {
-    return view('home');
-});
-
-Route::get('/v2', function () {
     return view('v2.index');
-})->name('v2.home');
+})->name('home');
 
-Route::get('/v2/videogame', function () {
+// Alias & Permanent 301 Redirect for previous /v2 route
+Route::redirect('/v2', '/', 301)->name('v2.home');
+
+// Dedicated Videogame Chamber
+Route::get('/videogame', function () {
     return view('v2.videogame');
-})->name('v2.videogame');
+})->name('videogame');
+
+Route::redirect('/v2/videogame', '/videogame', 301)->name('v2.videogame');
+
+// Legacy V1 Showcase Archive
+Route::get('/v1', function () {
+    return view('home');
+})->name('v1.home');
 
 Route::post('/contact/submit', [ContactController::class, 'submit']);
 

@@ -16,12 +16,11 @@ Built with Laravel 12, Laravel Sail (Docker), Tailwind CSS, Alpine.js, GSAP, and
 
 ## Frontend Architecture & Design System
 - **Current Production (`/`)**:
-  - Main landing view: `resources/views/home.blade.php` with components in `resources/views/components/home/`.
-  - Stays frozen and intact until V2 reaches 100% feature parity.
-- **Next Generation (`/v2`)**:
-  - All new design work belongs exclusively in `resources/views/v2/`.
-  - Master continuous chassis: `resources/views/v2/index.blade.php`.
-  - Modular chambers: `resources/views/v2/sections/`.
+  - Main landing view: `resources/views/v2/index.blade.php` (Cyber-Industrial Continuous Chassis) with modular chambers in `resources/views/v2/sections/`.
+  - Dedicated chambers: `resources/views/v2/videogame.blade.php` mounted at `/videogame`.
+  - Legacy V1 archive preserved at `/v1` (`resources/views/home.blade.php`).
+- **Legacy & Transition**:
+  - `/v2` and `/v2/videogame` are configured with permanent 301 redirects to `/` and `/videogame`.
 - **Design System Authority**:
   - Follow `DESIGN.md` at project root for all styling decisions.
   - **Zero "Sci-Fi Cosplay" Rule**: Never inject decorative pseudotext, faux code comments (`//`), fake specification tags (`SPEC:`), or mock coordinates. Content must remain 100% authentic.

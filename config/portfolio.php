@@ -209,7 +209,7 @@ return [
             'title' => "The Developer's Journey",
             'category' => 'Action-Platformer 2D',
             'desc_key' => 'home.project_videogame_desc',
-            'url' => '/v2/videogame',
+            'url' => '/videogame',
             'external_url' => 'https://portfolio-videogame.vercel.app/',
             'github' => 'https://github.com/MoisesCorcho/portfolio-videogame',
             'image' => null,

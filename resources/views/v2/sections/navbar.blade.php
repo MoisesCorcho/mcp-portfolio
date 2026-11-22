@@ -11,7 +11,7 @@
         <x-v2.cad-pin class="absolute -bottom-1.5 -right-1.5" />
 
         {{-- ── Left: Brand Identifier ── --}}
-        <a href="/v2" class="flex items-center gap-3 group">
+        <a href="/" class="flex items-center gap-3 group">
             <span class="w-8 h-8 sm:w-9 sm:h-9 bg-amber-500 text-black font-oxanium font-extrabold text-sm sm:text-base flex items-center justify-center border border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)] select-none shrink-0">
                 {{ config('portfolio.owner.brand_initial', 'M') }}
             </span>
@@ -23,38 +23,38 @@
         {{-- ── Center: Desktop Navigation Links ── --}}
         <nav class="hidden lg:flex items-center gap-1 font-roboto-mono text-xs font-semibold tracking-wider uppercase">
             <a
-                href="{{ request()->routeIs('v2.home') ? '#about' : '/v2#about' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#about' : '/#about' }}"
                 class="px-3.5 py-2 text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-zinc-800 transition-all duration-200"
             >
                 {{ __('home.nav_about') }}
             </a>
             <a
-                href="{{ request()->routeIs('v2.home') ? '#services' : '/v2#services' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#services' : '/#services' }}"
                 class="px-3.5 py-2 text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-zinc-800 transition-all duration-200"
             >
                 {{ __('home.nav_services') }}
             </a>
             <a
-                href="{{ request()->routeIs('v2.home') ? '#portfolio' : '/v2#portfolio' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#portfolio' : '/#portfolio' }}"
                 class="px-3.5 py-2 text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-zinc-800 transition-all duration-200"
             >
                 {{ __('home.nav_projects') }}
             </a>
             <a
-                href="{{ request()->routeIs('v2.home') ? '#experience' : '/v2#experience' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#experience' : '/#experience' }}"
                 class="px-3.5 py-2 text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-zinc-800 transition-all duration-200"
             >
                 {{ __('home.nav_experience') }}
             </a>
             <a
-                href="/v2/videogame"
-                class="px-3.5 py-2 transition-all duration-200 flex items-center gap-1.5 border {{ request()->routeIs('v2.videogame') ? 'border-amber-500 text-amber-400 bg-amber-500/10' : 'text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border-transparent hover:border-zinc-800' }}"
+                href="/videogame"
+                class="px-3.5 py-2 transition-all duration-200 flex items-center gap-1.5 border {{ request()->routeIs('videogame') || request()->routeIs('v2.videogame') ? 'border-amber-500 text-amber-400 bg-amber-500/10' : 'text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border-transparent hover:border-zinc-800' }}"
             >
                 <span>{{ __('home.nav_videogame') }}</span>
                 <span class="text-[10px] text-amber-500">↗</span>
             </a>
             <a
-                href="{{ request()->routeIs('v2.home') ? '#contact' : '/v2#contact' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#contact' : '/#contact' }}"
                 class="px-3.5 py-2 text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-zinc-800 transition-all duration-200"
             >
                 {{ __('home.nav_contact') }}
@@ -133,43 +133,43 @@
         <div class="max-w-7xl mx-auto border-x border-zinc-800 px-6 py-6 flex flex-col gap-3 font-roboto-mono text-xs uppercase tracking-wider font-semibold">
             <a
                 @click="navOpen = false"
-                href="{{ request()->routeIs('v2.home') ? '#about' : '/v2#about' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#about' : '/#about' }}"
                 class="py-3 px-4 border border-zinc-800 bg-zinc-950/60 text-zinc-200 hover:text-amber-400 hover:border-amber-500 transition-colors"
             >
                 {{ __('home.nav_about') }}
             </a>
             <a
                 @click="navOpen = false"
-                href="{{ request()->routeIs('v2.home') ? '#services' : '/v2#services' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#services' : '/#services' }}"
                 class="py-3 px-4 border border-zinc-800 bg-zinc-950/60 text-zinc-200 hover:text-amber-400 hover:border-amber-500 transition-colors"
             >
                 {{ __('home.nav_services') }}
             </a>
             <a
                 @click="navOpen = false"
-                href="{{ request()->routeIs('v2.home') ? '#portfolio' : '/v2#portfolio' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#portfolio' : '/#portfolio' }}"
                 class="py-3 px-4 border border-zinc-800 bg-zinc-950/60 text-zinc-200 hover:text-amber-400 hover:border-amber-500 transition-colors"
             >
                 {{ __('home.nav_projects') }}
             </a>
             <a
                 @click="navOpen = false"
-                href="{{ request()->routeIs('v2.home') ? '#experience' : '/v2#experience' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#experience' : '/#experience' }}"
                 class="py-3 px-4 border border-zinc-800 bg-zinc-950/60 text-zinc-200 hover:text-amber-400 hover:border-amber-500 transition-colors"
             >
                 {{ __('home.nav_experience') }}
             </a>
             <a
                 @click="navOpen = false"
-                href="/v2/videogame"
-                class="py-3 px-4 border bg-zinc-950/60 transition-colors flex items-center justify-between {{ request()->routeIs('v2.videogame') ? 'border-amber-500 text-amber-400' : 'border-zinc-800 text-zinc-200 hover:text-amber-400 hover:border-amber-500' }}"
+                href="/videogame"
+                class="py-3 px-4 border bg-zinc-950/60 transition-colors flex items-center justify-between {{ request()->routeIs('videogame') || request()->routeIs('v2.videogame') ? 'border-amber-500 text-amber-400' : 'border-zinc-800 text-zinc-200 hover:text-amber-400 hover:border-amber-500' }}"
             >
                 <span>{{ __('home.nav_videogame') }}</span>
                 <span class="text-amber-500">↗</span>
             </a>
             <a
                 @click="navOpen = false"
-                href="{{ request()->routeIs('v2.home') ? '#contact' : '/v2#contact' }}"
+                href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#contact' : '/#contact' }}"
                 class="py-3 px-4 border border-zinc-800 bg-zinc-950/60 text-zinc-200 hover:text-amber-400 hover:border-amber-500 transition-colors"
             >
                 {{ __('home.nav_contact') }}
@@ -179,7 +179,7 @@
                 <x-v2.extruded-box
                     as="a"
                     @click="navOpen = false"
-                    href="{{ request()->routeIs('v2.home') ? '#contact' : '/v2#contact' }}"
+                    href="{{ request()->routeIs('home') || request()->routeIs('v2.home') ? '#contact' : '/#contact' }}"
                     variant="amber"
                     depth="sm"
                     :glow="true"

@@ -51,7 +51,7 @@ class V2ExtrudedBoxTest extends TestCase
 
     public function test_experience_chambers_use_extruded_boxes(): void
     {
-        $response = $this->get('/v2');
+        $response = $this->get('/');
 
         $response->assertStatus(200);
         $response->assertSee('v2-extruded');
