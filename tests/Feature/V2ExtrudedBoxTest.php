@@ -35,4 +35,13 @@ class V2ExtrudedBoxTest extends TestCase
         $view->assertSee('bg-amber-500/80');
         $view->assertSee('Showroom Card');
     }
+
+    public function test_experience_chambers_use_extruded_boxes(): void
+    {
+        $response = $this->get('/v2');
+
+        $response->assertStatus(200);
+        $response->assertSee('v2-extruded');
+        $response->assertSee('data-extruded', false);
+    }
 }

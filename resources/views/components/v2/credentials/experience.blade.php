@@ -47,15 +47,20 @@
     <div class="p-6 sm:p-10 lg:px-14 lg:py-10 bg-chamber/20 relative">
 
         <div class="space-y-6 sm:space-y-8 pl-8 sm:pl-10 md:pl-12 relative">
-            {{-- Continuous Vertical Steel Spine Rail (piercing straight through all nodes) --}}
-            <div class="absolute top-6 bottom-6 left-0 w-px bg-zinc-800" aria-hidden="true"></div>
-
             @foreach($jobs as $index => $job)
                 @php
                     $logo = $companyLogos[$job['company']] ?? null;
                 @endphp
 
                 <div class="relative group">
+                    @if(!$loop->last)
+                        {{-- Vertical Spine Segment connecting Node i to Node i+1 (terminates exactly at the last node) --}}
+                        <div
+                            class="absolute top-[34px] sm:top-[40px] -bottom-[58px] sm:-bottom-[72px] -left-8 sm:-left-10 md:-left-12 -translate-x-1/2 w-px bg-zinc-800 z-0 pointer-events-none"
+                            aria-hidden="true"
+                        ></div>
+                    @endif
+
                     {{-- Horizontal Bus Trace connecting vertical rail & node directly to the experience card --}}
                     <div
                         class="absolute top-[40px] sm:top-[46px] -left-8 sm:-left-10 md:-left-12 w-8 sm:w-10 md:w-12 h-px transition-colors duration-200 z-0"
@@ -72,10 +77,11 @@
 
                     {{-- Job Interactive Module Box --}}
                     <x-v2.extruded-box
-                        variant="card"
-                        depth="sm"
-                        class="overflow-hidden block"
-                        x-bind:class="expandedJobs.includes({{ $index }}) ? 'border-l-2 border-l-amber-500 bg-card shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : ''"
+                        variant="zinc"
+                        depth="md"
+                        :cad-pins="true"
+                        class="block w-full transition-all duration-200"
+                        x-bind:class="expandedJobs.includes({{ $index }}) ? 'border-l-2 border-l-amber-500 shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : ''"
                     >
                         {{-- Clickable Header Bar --}}
                         <div
@@ -143,7 +149,7 @@
                             x-transition:enter="transition ease-out duration-200"
                             x-transition:enter-start="opacity-0 -translate-y-2"
                             x-transition:enter-end="opacity-100 translate-y-0"
-                            class="px-5 pb-6 sm:px-6 sm:pb-6 pt-1 border-t border-zinc-800/80"
+                            class="px-5 pb-6 sm:px-6 sm:pb-6 pt-1 border-t border-zinc-800/80 overflow-hidden"
                             style="display: none;"
                         >
                             <div class="font-roboto-mono text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl py-3 space-y-2">

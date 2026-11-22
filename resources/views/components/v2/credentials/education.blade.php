@@ -10,7 +10,7 @@
 
         <div class="space-y-6">
             @foreach(config('portfolio.education', []) as $edu)
-                <x-v2.extruded-box variant="card" depth="sm" :cad-pins="true" class="p-5 sm:p-6 block">
+                <x-v2.extruded-box variant="card" depth="md" :cad-pins="true" class="p-5 sm:p-6 block">
                     <span class="inline-block px-2 py-0.5 border border-zinc-800 bg-zinc-900/80 text-[10px] font-roboto-mono text-amber-400 font-semibold uppercase tracking-wider mb-2">
                         {{ $edu['type'] }}
                     </span>
