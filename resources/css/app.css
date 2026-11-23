@@ -1776,7 +1776,7 @@ body {
         position: absolute;
         top: -50%;
         bottom: -50%;
-        left: -130%;
+        left: 0;
         width: 65%;
         background: linear-gradient(
             115deg,
@@ -1791,7 +1791,8 @@ body {
             transparent 80%,
             transparent 100%
         );
-        transform: skewX(-22deg);
+        transform: translateX(-150%) skewX(-22deg);
+        will-change: transform, opacity;
         opacity: 0;
         pointer-events: none;
     }
@@ -1804,7 +1805,7 @@ body {
 
     @keyframes v2-glass-sweep {
         0% {
-            left: -130%;
+            transform: translateX(-150%) skewX(-22deg);
             opacity: 0;
         }
         15% {
@@ -1814,10 +1815,16 @@ body {
             opacity: 0.95;
         }
         100% {
-            left: 190%;
+            transform: translateX(350%) skewX(-22deg);
             opacity: 0;
         }
     }
+}
+
+/* ── Modern Web CSS Containment ─────────────────────────────────────────── */
+.v2-chamber-contain {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 800px;
 }
 
 @media (prefers-reduced-motion: reduce) {

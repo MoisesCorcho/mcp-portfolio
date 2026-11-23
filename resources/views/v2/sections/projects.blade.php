@@ -12,7 +12,7 @@
 
 <section
     id="portfolio"
-    class="relative border-b border-zinc-800"
+    class="relative border-b border-zinc-800 v2-chamber-contain"
     x-data="{
         activeDomain: 'all',
         allExpanded: false,

@@ -1,5 +1,5 @@
 {{-- ====== Portfolio V2: Credentials & Trajectory Chamber ====== --}}
-<section id="experience" class="relative border-b border-zinc-800">
+<section id="experience" class="relative border-b border-zinc-800 v2-chamber-contain">
     {{-- ── 1. Section Header Strip ── --}}
     <x-v2.section-header
         :label="__('home.credentials_label')"

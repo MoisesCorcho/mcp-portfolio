@@ -92,12 +92,19 @@
 
                     {{-- Photo Container --}}
                     <div class="relative overflow-hidden border border-zinc-800">
-                        <img
-                            src="{{ url('/img/moises-1.jpg') }}"
-                            alt="{{ __('home.hero_photo_alt') }}"
-                            class="w-full block object-cover contrast-[1.05]"
-                            style="aspect-ratio: 4/5; object-position: top;"
-                        />
+                        <picture>
+                            <source srcset="{{ asset('img/moises-1.webp') }}" type="image/webp">
+                            <img
+                                src="{{ asset('img/moises-1.jpg') }}"
+                                alt="{{ __('home.hero_photo_alt') }}"
+                                width="480"
+                                height="600"
+                                fetchpriority="high"
+                                decoding="sync"
+                                class="w-full block object-cover contrast-[1.05]"
+                                style="aspect-ratio: 4/5; object-position: top;"
+                            />
+                        </picture>
                     </div>
 
                 </div>

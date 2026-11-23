@@ -3,10 +3,25 @@
     x-data="{
         index: 0,
         skills: {{ json_encode(config('portfolio.skills.cycling', [])) }},
-        init() {
-            setInterval(() => {
-                this.index = (this.index + 1) % this.skills.length;
+        timer: null,
+        start() {
+            if (this.timer) return;
+            this.timer = setInterval(() => {
+                if (!document.hidden) {
+                    this.index = (this.index + 1) % this.skills.length;
+                }
             }, 2200);
+        },
+        init() {
+            this.start();
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    clearInterval(this.timer);
+                    this.timer = null;
+                } else {
+                    this.start();
+                }
+            });
         }
     }"
     class="border border-zinc-800 bg-card p-3.5 flex items-center shadow-sm"

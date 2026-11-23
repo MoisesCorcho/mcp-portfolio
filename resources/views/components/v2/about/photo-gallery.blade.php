@@ -4,15 +4,18 @@
         <x-v2.cad-corners />
 
         <div class="relative overflow-hidden border border-zinc-800 aspect-[16/9]">
-            <img
-                src="{{ url('/img/MoisesPiano.jpeg') }}"
-                alt="{{ __('home.about_img_1_alt') }}"
-                class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                loading="lazy"
-                decoding="async"
-                width="400"
-                height="225"
-            />
+            <picture>
+                <source srcset="{{ asset('img/MoisesPiano.webp') }}" type="image/webp">
+                <img
+                    src="{{ asset('img/MoisesPiano.jpeg') }}"
+                    alt="{{ __('home.about_img_1_alt') }}"
+                    class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="225"
+                />
+            </picture>
         </div>
     </div>
 
@@ -23,15 +26,18 @@
             <x-v2.cad-corners size="text-[9px]" />
 
             <div class="relative overflow-hidden border border-zinc-800 aspect-square">
-                <img
-                    src="{{ url('/img/GataMascotaPc.jpeg') }}"
-                    alt="{{ __('home.about_img_2_alt') }}"
-                    class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                    loading="lazy"
-                    decoding="async"
-                    width="200"
-                    height="200"
-                />
+                <picture>
+                    <source srcset="{{ asset('img/GataMascotaPc.webp') }}" type="image/webp">
+                    <img
+                        src="{{ asset('img/GataMascotaPc.jpeg') }}"
+                        alt="{{ __('home.about_img_2_alt') }}"
+                        class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
+                        width="200"
+                        height="200"
+                    />
+                </picture>
             </div>
         </div>
 
@@ -40,15 +46,18 @@
             <x-v2.cad-corners size="text-[9px]" />
 
             <div class="relative overflow-hidden border border-zinc-800 aspect-square">
-                <img
-                    src="{{ url('/img/GataMascota.jpeg') }}"
-                    alt="{{ __('home.about_img_3_alt') }}"
-                    class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                    loading="lazy"
-                    decoding="async"
-                    width="200"
-                    height="200"
-                />
+                <picture>
+                    <source srcset="{{ asset('img/GataMascota.webp') }}" type="image/webp">
+                    <img
+                        src="{{ asset('img/GataMascota.jpeg') }}"
+                        alt="{{ __('home.about_img_3_alt') }}"
+                        class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
+                        width="200"
+                        height="200"
+                    />
+                </picture>
             </div>
         </div>
     </div>

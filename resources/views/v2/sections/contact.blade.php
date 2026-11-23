@@ -1,5 +1,5 @@
 {{-- ====== Portfolio V2: Contact Chamber ====== --}}
-<section id="contact" class="relative">
+<section id="contact" class="relative v2-chamber-contain">
     {{-- ── 1. Section Header Strip ── --}}
     <x-v2.section-header
         :label="__('home.contact_label')"

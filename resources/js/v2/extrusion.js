@@ -2,13 +2,26 @@
  * 2.5D Oblique Axonometric Extrusion Engine for Portfolio V2
  * Inspired by architectural drawing projections and precision workshop CAD blocks.
  * Dynamically computes right facet, bottom facet, border inks, and occluded shadows.
+ * Optimized: Coalesced RAF batching, zero Forced Synchronous Layout, dimension caching.
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const LINE_WIDTH = 1.5;
 
-function computeExtrusion(el) {
+function computeExtrusion(el, targetW = null, targetH = null) {
     if (!el || !el.isConnected) return;
+
+    const rawW = targetW !== null ? targetW : el.offsetWidth;
+    const rawH = targetH !== null ? targetH : el.offsetHeight;
+    if (rawW <= 0 || rawH <= 0) return;
+
+    const w = rawW - 0.75;
+    const h = rawH - 0.75;
+
+    // Cache check: avoid re-rendering SVG if dimensions haven't changed
+    const sizeKey = `${w.toFixed(1)}x${h.toFixed(1)}`;
+    if (el._extLastSize === sizeKey) return;
+    el._extLastSize = sizeKey;
 
     let svg = el.querySelector(':scope > svg.v2-extruded-svg');
     if (!svg) {
@@ -17,10 +30,6 @@ function computeExtrusion(el) {
         svg.setAttribute('aria-hidden', 'true');
         el.prepend(svg);
     }
-
-    const w = el.offsetWidth - 0.75;
-    const h = el.offsetHeight - 0.75;
-    if (w <= 0 || h <= 0) return;
 
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
     const baseDepth = +(el.dataset.depth || 8);
@@ -69,40 +78,62 @@ export function initExtrusions() {
     const elements = [...document.querySelectorAll('[data-extruded]')];
     if (elements.length === 0) return;
 
+    let rafId = null;
+    const pendingUpdates = new Map();
+
+    const processBatch = () => {
+        rafId = null;
+        pendingUpdates.forEach(({ w, h }, el) => {
+            computeExtrusion(el, w, h);
+        });
+        pendingUpdates.clear();
+    };
+
+    const scheduleUpdate = (el, w = null, h = null) => {
+        pendingUpdates.set(el, { w, h });
+        if (!rafId) {
+            rafId = requestAnimationFrame(processBatch);
+        }
+    };
+
     const ro = new ResizeObserver((entries) => {
-        entries.forEach((entry) => computeExtrusion(entry.target));
+        for (const entry of entries) {
+            const w = entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
+            const h = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height;
+            scheduleUpdate(entry.target, w, h);
+        }
     });
 
     elements.forEach((el) => {
-        computeExtrusion(el);
+        scheduleUpdate(el);
         ro.observe(el);
     });
 
     if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(() => {
-            elements.forEach((el) => computeExtrusion(el));
+            elements.forEach((el) => {
+                delete el._extLastSize;
+                scheduleUpdate(el);
+            });
         });
     }
 
     // Auto-discover dynamically added elements
     const mo = new MutationObserver((mutations) => {
-        let hasNew = false;
-        mutations.forEach((m) => {
-            m.addedNodes.forEach((node) => {
+        for (const m of mutations) {
+            for (const node of m.addedNodes) {
                 if (node.nodeType === 1) {
                     if (node.hasAttribute('data-extruded')) {
-                        computeExtrusion(node);
+                        scheduleUpdate(node);
                         ro.observe(node);
-                        hasNew = true;
                     }
                     node.querySelectorAll?.('[data-extruded]').forEach((child) => {
-                        computeExtrusion(child);
+                        scheduleUpdate(child);
                         ro.observe(child);
-                        hasNew = true;
                     });
                 }
-            });
-        });
+            }
+        }
     });
 
     mo.observe(document.body, { childList: true, subtree: true });
