@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -43,6 +41,7 @@ body {
 /* ── Custom Scrollbar ────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
 }
 ::-webkit-scrollbar-track {
     background: var(--slate-950);
@@ -53,6 +52,19 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #fbbf24;
+}
+
+/* Utilities for hiding scrollbars completely */
+.scrollbar-none::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+.scrollbar-none,
+.no-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
 }
 
 /* ── Text Selection ──────────────────────────────────────────────────────── */
@@ -72,25 +84,9 @@ body {
     font-family: var(--font-display);
 }
 
-.gradient-text {
-    background: linear-gradient(135deg, #f59e0b 0%, #fb923c 50%, #f59e0b 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 200% auto;
-    animation: gradient-flow 4s linear infinite;
-}
-
-@keyframes gradient-flow {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
-}
-
+.gradient-text,
 .gradient-text-static {
-    background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--amber);
 }
 
 /* ── Navbar ──────────────────────────────────────────────────────────────── */
@@ -168,35 +164,14 @@ body {
     text-shadow: 0 0 40px rgba(245, 158, 11, 0.4);
 }
 
-/* ── Hero name fill animation ─────────────────────────────────────────────── */
+/* ── Hero name typography ─────────────────────────────────────────────────── */
 .hero-name-word {
-    display: block;
-    position: relative;
-    background: linear-gradient(135deg, rgba(245,158,11,0.22) 0%, rgba(251,146,60,0.18) 50%, rgba(245,158,11,0.22) 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    display: inline-block;
+    color: var(--text-primary);
 }
 
-.hero-name-word::before {
-    content: attr(data-content);
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    max-width: 0;
-    white-space: nowrap;
-    background: linear-gradient(135deg, #f59e0b 0%, #fb923c 50%, #f59e0b 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: hero-name-fill 2.5s linear infinite;
-}
-
-@keyframes hero-name-fill {
-    from { max-width: 0; }
-    to   { max-width: 100%; }
+.hero-name-word:last-child {
+    color: var(--amber);
 }
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
@@ -285,9 +260,22 @@ body {
     z-index: 2;
 }
 
-.portfolio-card:hover .card-actions {
+.portfolio-card:hover .card-actions,
+.portfolio-card:focus-within .card-actions {
     transform: translateY(0);
     opacity: 1;
+}
+
+@media (hover: none) {
+    .portfolio-card .card-actions {
+        transform: translateY(0);
+        opacity: 1;
+        position: static;
+        padding: 0.75rem 1.25rem 0;
+    }
+    .portfolio-card .card-overlay {
+        display: none;
+    }
 }
 
 /* ── Buttons ─────────────────────────────────────────────────────────────── */
@@ -348,12 +336,14 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.25rem 0.75rem;
+    min-height: 40px;
+    min-width: 44px;
+    padding: 0.35rem 0.85rem;
     background: rgba(245, 158, 11, 0.08);
     color: var(--amber);
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     letter-spacing: 0.1em;
     border-radius: 999px;
     border: 1px solid rgba(245, 158, 11, 0.35);
@@ -475,11 +465,7 @@ body {
     line-height: var(--item-h);
     white-space: nowrap;
     letter-spacing: -0.01em;
-    /* amber-to-white gradient text */
-    background: linear-gradient(135deg, #f1f5f9 30%, #fbbf24 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #fbbf24;
 }
 
 /* ── Keyframes ── */
@@ -704,7 +690,6 @@ body {
 .portfolio-aurora-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(140px);
     pointer-events: none;
     will-change: transform;
 }
@@ -792,14 +777,14 @@ body {
 /* ── About quote card ────────────────────────────────────────────────────── */
 .quote-card {
     position: relative;
-    padding: 1.5rem 1.5rem 1.5rem 2rem;
+    padding: 1.5rem 1.75rem;
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-left: 3px solid var(--amber);
-    border-radius: 12px;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 16px;
     font-style: italic;
     color: var(--text-muted);
     backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .quote-card::before {
@@ -815,34 +800,20 @@ body {
     font-style: normal;
 }
 
-/* ── Quote word-bounce animation ─────────────────────────────────────────── */
-/* cycle = 12 words × 0.5s + 2s pause = 8s                                   */
-/* peak  = 0.25s / 8s = 3.12%   |   land = 0.5s / 8s = 6.25%               */
+/* ── Quote word wave animation ───────────────────────────────────────────── */
 .bounce-word {
     display: inline-block;
-    animation: word-bounce linear infinite;
-    text-shadow: 0 1px 0 rgba(245,158,11,0.18),
-                 0 2px 5px rgba(0,0,0,0.35);
-    /* Forzar hardware acceleration y evitar que el navegador "pierda" el renderizado */
-    will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    animation: word-glow 4s ease-in-out infinite;
+    transition: color 0.3s ease;
 }
 
-@keyframes word-bounce {
-    0%, 6.25%, 100% {
-        transform: translateY(0);
-        text-shadow: 0 1px 0 rgba(245,158,11,0.18),
-                     0 2px 5px rgba(0,0,0,0.35);
+@keyframes word-glow {
+    0%, 100% {
+        color: var(--text-muted);
     }
-    3.12% {
-        transform: translateY(-16px);
-        text-shadow: 0 1px 0 rgba(245,158,11,0.55),
-                     0 2px 0 rgba(245,158,11,0.40),
-                     0 3px 0 rgba(245,158,11,0.28),
-                     0 4px 0 rgba(245,158,11,0.18),
-                     0 5px 0 rgba(245,158,11,0.09),
-                     0 20px 22px rgba(0,0,0,0.50);
+    50% {
+        color: var(--text-primary);
+        text-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
     }
 }
 
@@ -1703,3 +1674,170 @@ body {
         font-size: 0.7rem;
     }
 }
+
+/* ── Reduced Motion Accessibility ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    /* Disable infinite looping ambient motions while preserving static layout and visual appearance */
+    .portfolio-aurora-orb,
+    .portfolio-circles li,
+    .exp-stars__layer,
+    .hero-orb,
+    .bounce-word,
+    .about-tech-scroller,
+    .marquee-track {
+        animation: none !important;
+        transform: none !important;
+    }
+
+    /* Keep transitions focused on opacity and colors, avoiding large spatial shifts */
+    .portfolio-card,
+    .btn-primary,
+    .btn-outline,
+    .nav-link,
+    .social-icon-link {
+        transition-property: color, background-color, border-color, opacity;
+        transform: none !important;
+    }
+
+    .group:hover .iso-flow {
+        animation: none !important;
+    }
+}
+
+/* ── Isometric CAD Schematics (Services V2) ─────────────────────────────── */
+@keyframes iso-dash {
+    to {
+        stroke-dashoffset: -9;
+    }
+}
+
+.group:hover .iso-flow {
+    animation: iso-dash 0.9s linear infinite;
+}
+
+/* ── 2.5D Axonometric Extruded Box Primitive (V2) ────────────────────────── */
+.v2-extruded {
+    position: relative;
+    isolation: isolate;
+}
+
+.v2-extruded > .v2-extruded-svg {
+    position: absolute;
+    left: -1.5px;
+    top: -1.5px;
+    overflow: visible;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.v2-extruded-interactive {
+    transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+    cursor: pointer;
+}
+
+.v2-extruded-interactive:hover {
+    transform: translate(-2px, -2px);
+}
+
+.v2-extruded-interactive:active {
+    transform: translate(3px, 2px);
+}
+
+/* ── Glass Sheen Specular Glint (Hover / Focus Beam) ────────────────────── */
+/* 
+   Para ajustar la velocidad del destello manualmente:
+   Modifica '--v2-glint-duration' abajo (ej: '1.0s' más rápido, '2.0s' más lento).
+*/
+:root {
+    --v2-glint-duration: 1.6s;
+}
+
+/* Deshabilitado por defecto en móviles y dispositivos táctiles */
+.v2-extruded-sheen {
+    display: none;
+}
+
+/* Activo exclusivamente en desktop con puntero de mouse real */
+@media (min-width: 640px) and (hover: hover) and (pointer: fine) {
+    .v2-extruded-sheen {
+        display: block;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .v2-extruded-beam {
+        position: absolute;
+        top: -50%;
+        bottom: -50%;
+        left: 0;
+        width: 65%;
+        background: linear-gradient(
+            115deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.04) 18%,
+            rgba(255, 255, 255, 0.22) 34%,
+            rgba(255, 255, 255, 0.55) 43%,
+            rgba(255, 255, 255, 0.08) 47%,
+            transparent 51%,
+            rgba(255, 255, 255, 0.35) 58%,
+            rgba(255, 255, 255, 0.06) 66%,
+            transparent 80%,
+            transparent 100%
+        );
+        transform: translateX(-150%) skewX(-22deg);
+        will-change: transform, opacity;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .v2-extruded-interactive:hover .v2-extruded-beam,
+    .v2-extruded-interactive:focus-visible .v2-extruded-beam,
+    .v2-extruded:hover .v2-extruded-beam {
+        animation: v2-glass-sweep var(--v2-glint-duration, 1.6s) cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @keyframes v2-glass-sweep {
+        0% {
+            transform: translateX(-150%) skewX(-22deg);
+            opacity: 0;
+        }
+        15% {
+            opacity: 0.95;
+        }
+        80% {
+            opacity: 0.95;
+        }
+        100% {
+            transform: translateX(350%) skewX(-22deg);
+            opacity: 0;
+        }
+    }
+}
+
+/* ── Modern Web CSS Containment ─────────────────────────────────────────── */
+.v2-chamber-contain {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 800px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .v2-extruded-interactive:hover,
+    .v2-extruded-interactive:active {
+        transform: none !important;
+    }
+
+    .v2-extruded-interactive:hover .v2-extruded-beam,
+    .v2-extruded-interactive:focus-visible .v2-extruded-beam,
+    .v2-extruded:hover .v2-extruded-beam {
+        animation: none !important;
+        opacity: 0 !important;
+    }
+}
+
