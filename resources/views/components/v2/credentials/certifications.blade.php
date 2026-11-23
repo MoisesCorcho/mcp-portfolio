@@ -29,8 +29,11 @@
                             <img
                                 src="{{ asset($cert['banner']) }}"
                                 alt="{{ $cert['title'] }}"
+                                width="800"
+                                height="144"
                                 class="w-full h-full object-cover object-right group-hover/banner:scale-[1.02] transition-transform duration-500"
                                 loading="lazy"
+                                decoding="async"
                             />
                             {{-- Hover Badge Overlay --}}
                             <span class="absolute top-2 right-2 px-2 py-0.5 bg-black/80 border border-zinc-800 text-[10px] font-roboto-mono text-zinc-300 opacity-0 group-hover/banner:opacity-100 transition-opacity flex items-center gap-1.5 backdrop-blur-sm">

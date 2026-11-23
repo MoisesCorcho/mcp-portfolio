@@ -3,7 +3,6 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animate, stagger } from 'motion';
 import { initExtrusions } from './v2/extrusion';
 
 gsap.registerPlugin(ScrollTrigger);

@@ -28,6 +28,7 @@ class ExampleTest extends TestCase
         $response->assertDontSee('EXPERIMENTO');
         $response->assertDontSee('VERTICAL SLICE POC');
         $response->assertDontSee('Track Record');
+        $response->assertDontSee('Hecho con ❤️');
         $response->assertSee('InfoReal');
         $response->assertSee('Amatu Café', false);
         $response->assertSee('Keep Coding and Nobody Is Fired');
@@ -78,5 +79,6 @@ class ExampleTest extends TestCase
         $response = $this->get('/v1');
 
         $response->assertStatus(200);
+        $response->assertSee('Hecho con ❤️');
     }
 }
