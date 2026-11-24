@@ -3,18 +3,13 @@
     <div class="p-6 sm:px-10 lg:px-14 py-8 flex flex-col sm:flex-row items-center justify-between gap-6">
 
         {{-- Brand & Role --}}
-        <div class="flex items-center gap-3">
-            <span class="w-8 h-8 bg-amber-500 text-black font-oxanium font-extrabold text-sm flex items-center justify-center border border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)] select-none">
-                {{ config('portfolio.owner.brand_initial', 'M') }}
+        <div class="flex items-center gap-4">
+            <a href="/" class="group flex items-center my-auto" aria-label="Home">
+                <x-v2.brand-logo class="h-11 sm:h-13 w-auto text-white group-hover:text-amber-400 group-hover:drop-shadow-[0_0_12px_rgba(245,158,11,0.5)] transition-all duration-200 shrink-0 select-none" />
+            </a>
+            <span class="text-[10px] sm:text-[11px] font-roboto-mono text-zinc-500 uppercase tracking-widest border-l border-zinc-800 pl-4 py-1">
+                {{ __('home.v2_footer_role') }}
             </span>
-            <div class="flex flex-col text-left">
-                <span class="font-oxanium font-bold text-sm sm:text-base tracking-tight text-white uppercase">
-                    {{ config('portfolio.owner.brand_name', 'Moisés Corcho') }}<span class="text-amber-500">.</span>
-                </span>
-                <span class="text-[10px] font-roboto-mono text-zinc-500 uppercase tracking-widest">
-                    {{ __('home.v2_footer_role') }}
-                </span>
-            </div>
         </div>
 
         {{-- Copyright & Location --}}

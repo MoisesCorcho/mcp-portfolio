@@ -11,13 +11,8 @@
         <x-v2.cad-pin class="absolute -bottom-1.5 -right-1.5" />
 
         {{-- ── Left: Brand Identifier ── --}}
-        <a href="/" class="flex items-center gap-3 group">
-            <span class="w-8 h-8 sm:w-9 sm:h-9 bg-amber-500 text-black font-oxanium font-extrabold text-sm sm:text-base flex items-center justify-center border border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)] select-none shrink-0">
-                {{ config('portfolio.owner.brand_initial', 'M') }}
-            </span>
-            <span class="font-oxanium font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-amber-400 transition-colors uppercase">
-                {{ config('portfolio.owner.brand_name', 'Moisés Corcho') }}<span class="text-amber-500">.</span>
-            </span>
+        <a href="/" class="flex items-center group my-auto" aria-label="{{ config('portfolio.owner.brand_name', 'Moisés Corcho') }}">
+            <x-v2.brand-logo class="h-10 sm:h-16 w-auto text-white group-hover:text-amber-400 group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.5)] transition-all duration-200 shrink-0 select-none" />
         </a>
 
         {{-- ── Center: Desktop Navigation Links ── --}}
