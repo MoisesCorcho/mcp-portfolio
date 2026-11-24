@@ -12,14 +12,14 @@ S6: "name mcp-portfolio-rag host https://mcp-portfolio-rag-id4629h.svc.aped-4627
 S7: "el proyecto que esta puesto en mis proyectos como ENTERPRISE E-COMMERCE ENGINE, en realidad se llama https://leenhoney.com/ y ese es su dominio en produccion"
 
 ## Tasks
-- [ ] T1 (S5, S7) [inline]: Codify SOLID guidelines in AGENTS.md and link https://leenhoney.com/ in config/portfolio.php.
-- [ ] T2 (S4, S5) [inline]: Build RAG Domain Contracts, DTOs, and Enums following type-first conventions.
-- [ ] T3 (S4, S6) [inline]: Implement OpenAI & Pinecone infrastructure Gateways and bind them via ServiceProvider.
-- [ ] T4 (S1, S7) [inline]: Create structured technical Markdown knowledge base for all portfolio repositories.
-- [ ] T5 (S1, S4, S6) [inline]: Implement document chunking, embedding generation action, and artisan rag:index command.
-- [ ] T6 (S2, S4) [inline]: Build context retrieval action, system prompt with guardrails, and SSE streaming endpoint.
-- [ ] T7 (S3) [inline]: Implement Cyber-Industrial HUD Drawer chat interface with Alpine.js streaming in Portfolio V2.
-- [ ] T8 (S2, S3) [inline]: Add voice interaction layer (Web Speech STT + ElevenLabs/WebSpeech TTS fallback).
+- [x] T1 (S5, S7) [inline]: Codify SOLID guidelines in AGENTS.md and link https://leenhoney.com/ in config/portfolio.php. Commit: 2342f35.
+- [x] T2 (S4, S5) [inline]: Build RAG Domain Contracts, DTOs, and Enums following type-first conventions. Commit: 4d352a4.
+- [x] T3 (S4, S6) [inline]: Implement OpenAI & Pinecone infrastructure Gateways and bind them via ServiceProvider. Commit: 41671cb.
+- [x] T4 (S1, S7) [inline]: Create structured technical Markdown knowledge base for all portfolio repositories. Commit: 590fade.
+- [x] T5 (S1, S4, S6) [inline]: Implement document chunking, embedding generation action, and artisan rag:index command. Commit: fe860f7.
+- [x] T6 (S2, S4) [inline]: Build context retrieval action, system prompt with guardrails, and SSE streaming endpoint. Commit: 86a246d.
+- [x] T7 (S3) [inline]: Implement Cyber-Industrial HUD Drawer chat interface with Alpine.js streaming in Portfolio V2. Commit: 9396628.
+- [x] T8 (S2, S3) [inline]: Add voice interaction layer (Web Speech STT + ElevenLabs/WebSpeech TTS fallback). Commit: 9396628.
 
 ## Log
 L1: "Hacer dentro del portfolio un chatbot que además sea un rack es decir por cada proyecto que he hecho por cada repositorio hacer un análisis exhaustivo de qué hice dentro de ese repositorio de que hice con qué tecnologías trabajé de qué manera de qué cosas puedo trabajar y que no hay que hacer varios archivos ya sea en marca down o sea en PDF o de diferentes maneras total que es para poder hacer el rack y hacer un chat Boys un chatbot que tenga voz a poder ser mi voz clonada pero si no una gratis con mi leven Labs y que se pueda charlar con este se puede charlar y se pueda preguntar sobre qué proyectos puedo hacer y qué proyectos no puedo hacer y por qué"
