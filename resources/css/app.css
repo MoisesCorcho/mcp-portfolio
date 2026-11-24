@@ -1841,3 +1841,30 @@ body {
     }
 }
 
+/* ── Feline Brand Logo & Loader Animation ────────────────────────────────── */
+.v2-cat-tail-animated {
+    transform-box: view-box;
+    transform-origin: 380px 240px;
+    animation: v2-cat-tail-sway 2.4s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes v2-cat-tail-sway {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    28% {
+        transform: rotate(-5.5deg);
+    }
+    72% {
+        transform: rotate(6.5deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .v2-cat-tail-animated {
+        animation: none !important;
+    }
+}
+
+
