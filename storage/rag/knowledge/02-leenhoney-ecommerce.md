@@ -1,4 +1,4 @@
-# Project: Leen Honey (Enterprise E-Commerce Engine)
+# Project: LeenHoney Ecommerce
 
 ## Overview & Links
 - **Official Production Domain**: https://leenhoney.com/

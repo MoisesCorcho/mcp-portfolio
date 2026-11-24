@@ -5,7 +5,16 @@
     class="relative z-50"
 >
     {{-- Floating Action Trigger (Bottom-Right HUD node) --}}
-    <div class="fixed bottom-6 right-6 z-40 print:hidden">
+    <div
+        x-show="!isOpen"
+        x-transition:enter="transition-opacity ease-out duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity ease-in duration-150"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed bottom-6 right-6 z-40 print:hidden"
+    >
         <x-v2.extruded-box
             as="button"
             type="button"
@@ -299,6 +308,7 @@ document.addEventListener('alpine:init', () => {
         userInput: '',
         messages: [],
         recognition: null,
+        currentAudio: null,
 
         init() {
             this.initSpeechRecognition();
@@ -316,6 +326,10 @@ document.addEventListener('alpine:init', () => {
                 this.recognition.stop();
                 this.isListening = false;
             }
+            if (this.currentAudio) {
+                this.currentAudio.pause();
+                this.currentAudio = null;
+            }
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
             }
@@ -323,8 +337,14 @@ document.addEventListener('alpine:init', () => {
 
         toggleVoice() {
             this.voiceEnabled = !this.voiceEnabled;
-            if (!this.voiceEnabled && 'speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
+            if (!this.voiceEnabled) {
+                if (this.currentAudio) {
+                    this.currentAudio.pause();
+                    this.currentAudio = null;
+                }
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                }
             }
         },
 
@@ -375,9 +395,14 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        speak(text) {
-            if (!('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
+        async speak(text) {
+            if (this.currentAudio) {
+                this.currentAudio.pause();
+                this.currentAudio = null;
+            }
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
 
             // Sanitize technical markdown links, tags, and formatting for fluid audio delivery
             const cleanText = text
@@ -388,11 +413,38 @@ document.addEventListener('alpine:init', () => {
 
             if (!cleanText) return;
 
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = document.documentElement.lang === 'en' ? 'en-US' : 'es-ES';
-            utterance.rate = 1.05;
+            // 1. Attempt ElevenLabs backend synthesis first (for cloned voice)
+            try {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                const response = await fetch('/api/rag/tts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken || '',
+                        'Accept': 'audio/mpeg'
+                    },
+                    body: JSON.stringify({ text: cleanText.substring(0, 500) })
+                });
 
-            window.speechSynthesis.speak(utterance);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const audioUrl = URL.createObjectURL(blob);
+                    this.currentAudio = new Audio(audioUrl);
+                    this.currentAudio.onended = () => { this.currentAudio = null; };
+                    await this.currentAudio.play();
+                    return;
+                }
+            } catch (err) {
+                // Silently fallback to native browser synthesis
+            }
+
+            // 2. Native Web Speech Synthesis Fallback
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = document.documentElement.lang === 'en' ? 'en-US' : 'es-ES';
+                utterance.rate = 1.05;
+                window.speechSynthesis.speak(utterance);
+            }
         },
 
         async submitMessage() {

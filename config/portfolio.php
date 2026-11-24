@@ -156,7 +156,7 @@ return [
         [
             'id' => 'ecommerce',
             'domain' => 'saas',
-            'title' => 'Enterprise E-Commerce Engine',
+            'title' => 'LeenHoney Ecommerce',
             'category' => 'High-Volume E-Commerce & FinTech',
             'desc_key' => 'home.project_ecommerce_desc',
             'url' => 'https://leenhoney.com/',
