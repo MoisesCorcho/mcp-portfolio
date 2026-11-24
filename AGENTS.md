@@ -43,6 +43,21 @@ Built with Laravel 12, Laravel Sail (Docker), Tailwind CSS, Alpine.js, GSAP, and
 - **DRY Design Primitives**: Centralize repeated structural patterns (such as section header strips, CAD reticles, and alignment pins) into atomic components.
 - **Zero Overengineering**: Modularity serves maintainability, readability, and testability. Never introduce gratuitous abstraction layers, speculative generic classes, or micro-fragmentation where a clean Blade component or standard Laravel idiom solves the problem directly.
 
+## Backend & SOLID Architecture Conventions
+- **Directory Layout (Type First, Area Second)**:
+  - Top-level folders under `app/` are grouped by role/type: `app/Actions/`, `app/Services/`, `app/DTOs/`, `app/Enums/`, `app/Contracts/`, `app/Gateways/`, `app/Exceptions/`.
+  - Inside each type folder, group by domain area (e.g. `app/Actions/Rag/`, `app/Services/Rag/`, `app/DTOs/Rag/`, `app/Enums/Rag/`).
+- **Class & Filename Suffixes (Mandatory)**:
+  - Actions: `*Action.php` (single domain verb, invokable `__invoke()`).
+  - Services: `*Service.php` (reusable capability shared by multiple actions).
+  - DTOs: `*DTO.php` (`readonly` classes with strict types & constructor property promotion).
+  - Enums: `*Enum.php` (string-backed enums, never class constants or raw string checks).
+  - Contracts / Interfaces: `*Interface.php` in `app/Contracts/{Area}/`.
+  - Gateways: `*Gateway.php` in `app/Gateways/{Area}/` (implementing domain contracts).
+- **Strict Typing & Conventions**:
+  - Every new PHP file starts with `declare(strict_types=1);`.
+  - Invert external dependencies (DIP): domain actions/services must depend strictly on `*Interface`, never on concrete third-party gateways. Bindings reside in service providers.
+
 ## Git & Coding Conventions
 - **Commits**: Follow Conventional Commits format (`feat:`, `fix:`, `style:`, `refactor:`, `test:`, `chore:`).
 - **Attribution**: Never add AI attribution trailers or `Co-Authored-By` lines to git commits.
