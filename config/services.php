@@ -31,4 +31,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'openai' => [
+        'key' => env('OPENAI_API_KEY'),
+    ],
+
+    'pinecone' => [
+        'key' => env('PINECONE_API_KEY'),
+        'index' => env('PINECONE_INDEX_NAME'),
+        'host' => env('PINECONE_HOST'),
+    ],
+
 ];
