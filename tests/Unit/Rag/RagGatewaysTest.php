@@ -54,19 +54,17 @@ class RagGatewaysTest extends TestCase
         $gateway->embed('Text');
     }
 
-    public function test_pinecone_vector_store_gateway_upsert_and_query(): void
+    public function test_pinecone_vector_store_gateway_documents_api_upsert_and_query(): void
     {
         Http::fake([
-            'https://fake-index.pinecone.io/vectors/upsert' => Http::response(['upsertedCount' => 1], 200),
-            'https://fake-index.pinecone.io/query' => Http::response([
+            'https://fake-index.pinecone.io/namespaces/__default__/documents/upsert' => Http::response(['upsertedCount' => 1], 200),
+            'https://fake-index.pinecone.io/namespaces/__default__/documents/search' => Http::response([
                 'matches' => [
                     [
-                        'id' => 'doc-1',
-                        'score' => 0.92,
-                        'metadata' => [
-                            'content' => 'Leen Honey e-commerce architecture',
-                            'project' => 'leenhoney',
-                        ],
+                        '_id' => 'doc-1',
+                        '_score' => 0.92,
+                        'content' => 'Leen Honey e-commerce architecture',
+                        'project' => 'leenhoney',
                     ],
                 ],
             ], 200),
@@ -84,6 +82,39 @@ class RagGatewaysTest extends TestCase
         $this->assertSame('doc-1', $results[0]->id);
         $this->assertSame(0.92, $results[0]->score);
         $this->assertSame('Leen Honey e-commerce architecture', $results[0]->content);
+    }
+
+    public function test_pinecone_vector_store_gateway_legacy_fallback(): void
+    {
+        Http::fake([
+            'https://fake-index.pinecone.io/namespaces/__default__/documents/upsert' => Http::response(['message' => 'Not Found'], 404),
+            'https://fake-index.pinecone.io/vectors/upsert' => Http::response(['upsertedCount' => 1], 200),
+            'https://fake-index.pinecone.io/namespaces/__default__/documents/search' => Http::response(['message' => 'Not Found'], 404),
+            'https://fake-index.pinecone.io/query' => Http::response([
+                'matches' => [
+                    [
+                        'id' => 'doc-legacy',
+                        'score' => 0.88,
+                        'metadata' => [
+                            'content' => 'Legacy vector store content',
+                        ],
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $gateway = new PineconeVectorStoreGateway(apiKey: 'pin-key', host: 'https://fake-index.pinecone.io');
+
+        $gateway->upsert([
+            new VectorRecordDTO('doc-legacy', [0.1, 0.2], ['content' => 'Legacy']),
+        ]);
+
+        $results = $gateway->query([0.1, 0.2], topK: 1);
+
+        $this->assertCount(1, $results);
+        $this->assertSame('doc-legacy', $results[0]->id);
+        $this->assertSame(0.88, $results[0]->score);
+        $this->assertSame('Legacy vector store content', $results[0]->content);
     }
 
     public function test_pinecone_missing_host_throws_exception(): void
