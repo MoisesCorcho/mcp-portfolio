@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Rag\ChatController;
+use App\Http\Controllers\Rag\TtsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware(['throttle:30,1'])->post('/rag/chat', [ChatController::class, 'stream']);
+Route::middleware(['throttle:30,1'])->post('/rag/tts', [TtsController::class, 'synthesize']);
 
