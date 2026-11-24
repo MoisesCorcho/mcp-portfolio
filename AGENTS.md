@@ -59,5 +59,6 @@ Built with Laravel 12, Laravel Sail (Docker), Tailwind CSS, Alpine.js, GSAP, and
   - Invert external dependencies (DIP): domain actions/services must depend strictly on `*Interface`, never on concrete third-party gateways. Bindings reside in service providers.
 
 ## Git & Coding Conventions
+- **Strict Zero-Unauthorized-Commits Rule (MANDATORY)**: Never perform git commits (`git commit`) without explicit user permission in chat. An agent may only commit when the user explicitly instructs it (e.g. "haz commit", "realiza el commit", "commitea"). When authorized in a turn, that permission applies ONLY to that single turn or work unit, never to future turns, unless the user explicitly commands to keep committing for the remainder of the session.
 - **Commits**: Follow Conventional Commits format (`feat:`, `fix:`, `style:`, `refactor:`, `test:`, `chore:`).
 - **Attribution**: Never add AI attribution trailers or `Co-Authored-By` lines to git commits.
