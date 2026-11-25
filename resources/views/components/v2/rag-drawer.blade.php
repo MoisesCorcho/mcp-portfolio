@@ -206,7 +206,7 @@
                         </div>
 
                         {{-- Message Text Content --}}
-                        <div class="whitespace-pre-wrap leading-relaxed select-text" x-text="msg.content"></div>
+                        <div class="whitespace-pre-wrap leading-relaxed select-text" x-html="formatMarkdown(msg.content)"></div>
 
                         {{-- Citations / Grounding Sources --}}
                         <template x-if="msg.sources && msg.sources.length > 0">
@@ -245,34 +245,44 @@
         {{-- ── Drawer Footer / Input Toolbar ── --}}
         <footer class="p-3 sm:p-4 border-t border-zinc-800 bg-canvas/90 shrink-0 space-y-2">
             {{-- Audio listening indicator --}}
-            <div x-show="isListening" class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 border border-amber-500 text-amber-400 text-xs">
-                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                <span class="text-[11px] font-bold uppercase tracking-wider">{{ __('home.rag_listening') }}</span>
+            <div x-show="isListening" x-cloak class="flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/30 text-red-400 text-xs">
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                <span class="text-[11px] font-bold uppercase tracking-wider font-roboto-mono">{{ __('home.rag_listening') }}</span>
             </div>
 
-            <form @submit.prevent="submitMessage()" class="flex items-center gap-2">
-                {{-- Speech-To-Text Microphone Button --}}
+            <form @submit.prevent="submitMessage()" class="flex items-end gap-2">
+                {{-- Speech-To-Text Microphone Button (Square stop icon when recording) --}}
                 <button
                     type="button"
                     @click="toggleMicrophone()"
-                    class="h-10 w-10 border flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                    :class="isListening ? 'border-red-500 bg-red-500/20 text-red-400 animate-pulse' : 'border-zinc-800 bg-zinc-900 hover:border-amber-500 text-zinc-300 hover:text-amber-400'"
-                    :title="isListening ? 'Detener micrófono' : 'Hablar por micrófono'"
+                    class="h-10 w-10 border flex items-center justify-center transition-all cursor-pointer shrink-0"
+                    :class="isListening ? 'border-red-500 bg-red-500/20 text-red-400 ring-2 ring-red-500/40' : 'border-zinc-800 bg-zinc-900 hover:border-amber-500 text-zinc-300 hover:text-amber-400'"
+                    :title="isListening ? 'Detener grabación' : 'Hablar por micrófono'"
                 >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 003-3V5a3 3 0 10-6 0v6a3 3 0 003 3z" />
-                    </svg>
+                    <template x-if="!isListening">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 003-3V5a3 3 0 10-6 0v6a3 3 0 003 3z" />
+                        </svg>
+                    </template>
+                    <template x-if="isListening">
+                        <svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+                            <rect x="6" y="6" width="12" height="12" rx="1.5" />
+                        </svg>
+                    </template>
                 </button>
 
-                {{-- Text Input --}}
+                {{-- Expanding Textarea Input --}}
                 <div class="flex-1 relative">
-                    <input
-                        type="text"
+                    <textarea
+                        x-ref="inputTextarea"
                         x-model="userInput"
+                        @input="autoResizeTextarea()"
+                        @keydown.enter="handleEnterKey($event)"
                         :disabled="isLoading"
+                        rows="1"
                         placeholder="{{ __('home.rag_input_placeholder') }}"
-                        class="w-full h-10 px-3.5 bg-zinc-900 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-amber-500 font-roboto-mono text-xs transition-colors disabled:opacity-50"
-                    />
+                        class="w-full min-h-[40px] max-h-36 py-2.5 px-3.5 bg-zinc-900 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-amber-500 font-roboto-mono text-xs transition-all disabled:opacity-50 resize-none leading-relaxed block overflow-y-auto"
+                    ></textarea>
                 </div>
 
                 {{-- Extruded Send Button --}}
@@ -289,8 +299,7 @@
                 </x-v2.extruded-box>
             </form>
 
-            <div class="flex items-center justify-between text-[10px] text-zinc-600 uppercase tracking-widest pt-1">
-                <span>EST. TTFT: ~40MS // SSE STREAMING</span>
+            <div class="flex items-center justify-end text-[10px] text-zinc-600 uppercase tracking-widest pt-1">
                 <span>PINECONE & OPENAI GROUNDED</span>
             </div>
         </footer>
@@ -309,6 +318,8 @@ document.addEventListener('alpine:init', () => {
         messages: [],
         recognition: null,
         currentAudio: null,
+        baseInput: '',
+        finalVoiceTranscript: '',
 
         init() {
             this.initSpeechRecognition();
@@ -350,6 +361,24 @@ document.addEventListener('alpine:init', () => {
 
         askPreset(question) {
             this.userInput = question;
+            this.autoResizeTextarea();
+            this.submitMessage();
+        },
+
+        autoResizeTextarea() {
+            this.$nextTick(() => {
+                const el = this.$refs.inputTextarea;
+                if (!el) return;
+                el.style.height = 'auto';
+                el.style.height = Math.min(el.scrollHeight, 144) + 'px';
+            });
+        },
+
+        handleEnterKey(event) {
+            if (event.shiftKey) {
+                return;
+            }
+            event.preventDefault();
             this.submitMessage();
         },
 
@@ -359,8 +388,8 @@ document.addEventListener('alpine:init', () => {
 
             this.recognition = new SpeechRecognition();
             this.recognition.lang = document.documentElement.lang === 'en' ? 'en-US' : 'es-CO';
-            this.recognition.continuous = false;
-            this.recognition.interimResults = false;
+            this.recognition.continuous = true;
+            this.recognition.interimResults = true;
 
             this.recognition.onstart = () => {
                 this.isListening = true;
@@ -368,17 +397,77 @@ document.addEventListener('alpine:init', () => {
 
             this.recognition.onend = () => {
                 this.isListening = false;
+                this.baseInput = '';
+                this.finalVoiceTranscript = '';
             };
 
-            this.recognition.onerror = (e) => {
+            this.recognition.onerror = () => {
                 this.isListening = false;
             };
 
             this.recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                this.userInput = transcript;
-                this.submitMessage();
+                let interim = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    const text = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        this.finalVoiceTranscript += (this.finalVoiceTranscript ? ' ' : '') + text.trim();
+                    } else {
+                        interim += text;
+                    }
+                }
+
+                const full = (this.baseInput ? this.baseInput + ' ' : '') +
+                             (this.finalVoiceTranscript ? this.finalVoiceTranscript + ' ' : '') +
+                             interim;
+
+                this.userInput = this.normalizeSpokenText(full.trimStart());
+                this.autoResizeTextarea();
             };
+        },
+
+        normalizeSpokenText(text) {
+            if (!text) return '';
+            return text
+                .replace(/mucho\s*escorpio/gi, 'Moisés Corcho')
+                .replace(/moises\s*escorpio/gi, 'Moisés Corcho')
+                .replace(/moisés\s*escorpio/gi, 'Moisés Corcho')
+                .replace(/mucho\s*corcho/gi, 'Moisés Corcho')
+                .replace(/\bde\s*gu[ií]a\s*y\s*de\s*arquitectura\b/gi, 'de IA y de arquitectura')
+                .replace(/\bgu[ií]a\s*y\s*arquitectura\b/gi, 'IA y arquitectura');
+        },
+
+        formatMarkdown(text) {
+            if (!text) return '';
+
+            // 1. Sanitize HTML entities to avoid XSS vulnerabilities
+            let safe = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // 2. Fenced code blocks ```lang ... ```
+            safe = safe.replace(/```(?:[a-zA-Z0-9_-]+)?\n?([\s\S]*?)```/g, '<pre class="my-2 p-2.5 bg-zinc-950 border border-zinc-800 text-amber-300 font-roboto-mono text-[11px] overflow-x-auto select-all"><code>$1</code></pre>');
+
+            // 3. Inline code `code`
+            safe = safe.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 bg-zinc-950 border border-zinc-800 text-amber-400 font-roboto-mono text-[11px] select-all">$1</code>');
+
+            // 4. Bold + Italic ***text***
+            safe = safe.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong class="font-bold text-zinc-100"><em class="italic text-zinc-300">$1</em></strong>');
+
+            // 5. Bold **text**
+            safe = safe.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-bold text-zinc-100">$1</strong>');
+
+            // 6. Italic *text*
+            safe = safe.replace(/\*([^*]+)\*/g, '<em class="italic text-zinc-300">$1</em>');
+
+            // 7. Clickable Hyperlinks [Title](https://...)
+            // Strictly enforce http/https protocols to prevent javascript: and data: exploits
+            safe = safe.replace(
+                /\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g,
+                '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-amber-400 underline hover:text-amber-300 font-medium transition-colors inline-flex items-center gap-0.5" title="$1">$1<svg class="w-2.5 h-2.5 inline opacity-70 ml-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>'
+            );
+
+            return safe;
         },
 
         toggleMicrophone() {
@@ -391,7 +480,14 @@ document.addEventListener('alpine:init', () => {
                 this.recognition.stop();
                 this.isListening = false;
             } else {
-                this.recognition.start();
+                this.baseInput = this.userInput.trim();
+                this.finalVoiceTranscript = '';
+                try {
+                    this.recognition.start();
+                    this.isListening = true;
+                } catch (e) {
+                    // Recognition might already be running
+                }
             }
         },
 
@@ -448,6 +544,11 @@ document.addEventListener('alpine:init', () => {
         },
 
         async submitMessage() {
+            if (this.isListening && this.recognition) {
+                this.recognition.stop();
+                this.isListening = false;
+            }
+
             const query = this.userInput.trim();
             if (!query || this.isLoading) return;
 
@@ -458,6 +559,7 @@ document.addEventListener('alpine:init', () => {
             });
 
             this.userInput = '';
+            this.autoResizeTextarea();
             this.isLoading = true;
             this.scrollToBottom();
 
@@ -497,6 +599,7 @@ document.addEventListener('alpine:init', () => {
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder('utf-8');
                 let buffer = '';
+                let currentEvent = 'message';
 
                 while (true) {
                     const { done, value } = await reader.read();
@@ -506,7 +609,6 @@ document.addEventListener('alpine:init', () => {
                     const lines = buffer.split('\n');
                     buffer = lines.pop() || '';
 
-                    let currentEvent = 'message';
                     for (const line of lines) {
                         const trimmed = line.trim();
                         if (trimmed.startsWith('event: ')) {
@@ -517,7 +619,7 @@ document.addEventListener('alpine:init', () => {
                                 const parsed = JSON.parse(rawData);
                                 if (currentEvent === 'context' && parsed.sources) {
                                     this.messages[assistantIndex].sources = parsed.sources;
-                                } else if (currentEvent === 'token' && parsed.token) {
+                                } else if (currentEvent === 'token' && parsed.token !== undefined) {
                                     this.messages[assistantIndex].content += parsed.token;
                                     this.scrollToBottom();
                                 } else if (currentEvent === 'error') {
