@@ -42,6 +42,7 @@ final class OpenAiLlmGateway implements LlmProviderInterface
         $key = $this->resolveKey();
         $messages = $this->buildMessages($prompt);
         $fullContent = '';
+        $buffer = '';
 
         $body = json_encode([
             'model' => $prompt->model->value,
@@ -60,8 +61,12 @@ final class OpenAiLlmGateway implements LlmProviderInterface
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
         curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 
-        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use (&$fullContent, $onChunk) {
-            $lines = explode("\n", $data);
+        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use (&$fullContent, &$buffer, $onChunk) {
+            $buffer .= $data;
+            $lines = explode("\n", $buffer);
+            // Retain incomplete trailing line in the persistent buffer
+            $buffer = array_pop($lines) ?? '';
+
             foreach ($lines as $line) {
                 $line = trim($line);
                 if (!str_starts_with($line, 'data: ')) {
