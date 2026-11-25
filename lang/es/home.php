@@ -15,6 +15,7 @@ return [
     'nav_videogame' => 'Videojuego',
     'nav_experience' => 'Experiencia',
     'nav_cta' => 'Contáctame',
+    'nav_ai_advisor' => 'AI Advisor',
     'nav_lang_switch_title_to_en' => 'Switch to English',
     'nav_lang_switch_title_to_es' => 'Cambiar a Español',
     'back_to_v2' => 'Volver al Inicio',
@@ -22,6 +23,23 @@ return [
     'hero_badge_role' => 'Full-Stack Developer | IA Developer',
     'nav_role_primary' => 'Full-Stack Developer',
     'nav_role_secondary' => 'IA Developer',
+
+    // ── RAG Voice HUD Drawer ──────────────────────────────────────────────────
+    'rag_drawer_title' => 'Moisés AI',
+    'rag_drawer_badge' => 'RAG ENGINE: ONLINE',
+    'rag_drawer_subtitle' => 'Grounding técnico sobre repositorios y arquitectura',
+    'rag_welcome_title' => 'Moisés AI — Digital Twin',
+    'rag_assistant_label' => 'MOISÉS AI',
+    'rag_welcome_desc' => 'Pregúntame sobre la experiencia real de Moisés, sus repositorios, qué tecnologías domina, qué puede construir o qué proyectos están fuera de su alcance.',
+    'rag_input_placeholder' => 'Escribe una pregunta técnica o usa el micrófono...',
+    'rag_send' => 'Enviar',
+    'rag_voice_toggle' => 'Voz',
+    'rag_listening' => 'Escuchando...',
+    'rag_sources_label' => 'Fuentes Grounding:',
+    'rag_suggestion_1' => '¿Qué arquitectura utilizó Moisés en Leen Honey?',
+    'rag_suggestion_2' => '¿Moisés puede construir una app móvil en Flutter?',
+    'rag_suggestion_3' => '¿Qué experiencia tiene con RAG y búsqueda vectorial?',
+    'rag_suggestion_4' => '¿Moisés programa contratos inteligentes en blockchain?',
 
     // ── Footer ───────────────────────────────────────────────────────────────
     'footer_made_with' => '© :year :name. Hecho con ❤️',

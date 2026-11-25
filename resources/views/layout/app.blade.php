@@ -40,6 +40,10 @@
         {{ $slot }}
     </main>
 
+    @if(!request()->is('v1*'))
+        <x-v2.rag-drawer />
+    @endif
+
     @if(request()->is('v1*'))
         <x-layout.footer></x-layout.footer>
     @endif

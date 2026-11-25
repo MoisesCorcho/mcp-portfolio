@@ -156,10 +156,10 @@ return [
         [
             'id' => 'ecommerce',
             'domain' => 'saas',
-            'title' => 'Enterprise E-Commerce Engine',
+            'title' => 'LeenHoney Ecommerce',
             'category' => 'High-Volume E-Commerce & FinTech',
             'desc_key' => 'home.project_ecommerce_desc',
-            'url' => null,
+            'url' => 'https://leenhoney.com/',
             'github' => 'https://github.com/MoisesCorcho/ecommerce',
             'image' => null,
             'tags' => ['Laravel 13', 'Filament v5', 'Stripe & Bold Webhooks', 'Spatie RBAC', 'i18n Multi-Currency', 'Fortify'],
