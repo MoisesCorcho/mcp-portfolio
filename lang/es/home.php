@@ -3,8 +3,8 @@
 return [
 
     // ── Layout ──────────────────────────────────────────────────────────────
-    'meta_description' => ':name — Desarrollador Web Backend con 4 años de experiencia en Laravel, PHP y MySQL.',
-    'page_title' => ':name — Dev Portfolio',
+    'meta_description' => ':name — Ingeniero de Sistemas, Full-Stack & AI Developer. Especializado en arquitecturas SaaS de producción, Clean Architecture (Laravel/PHP, PostgreSQL, Docker), apps móviles multiplataforma (Flutter) y motores de IA con RAG.',
+    'page_title' => ':name — Ingeniero de Sistemas & Full-Stack AI Developer',
 
     // ── Navbar ───────────────────────────────────────────────────────────────
     'nav_about' => 'Acerca de mi',
