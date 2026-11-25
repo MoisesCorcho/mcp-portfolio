@@ -65,7 +65,7 @@ final class ChatController extends Controller
             }, $contextChunks);
 
             echo "event: context\n";
-            echo 'data: ' . json_encode(['sources' => $sources], JSON_UNESCAPED_UNICODE) . "\n\n";
+            echo 'data: '.json_encode(['sources' => $sources], JSON_UNESCAPED_UNICODE)."\n\n";
             if (function_exists('ob_flush') && ob_get_level() > 0) {
                 @ob_flush();
             }
@@ -74,7 +74,7 @@ final class ChatController extends Controller
             try {
                 $this->llmProvider->streamChat($prompt, function (string $token): void {
                     echo "event: token\n";
-                    echo 'data: ' . json_encode(['token' => $token], JSON_UNESCAPED_UNICODE) . "\n\n";
+                    echo 'data: '.json_encode(['token' => $token], JSON_UNESCAPED_UNICODE)."\n\n";
                     if (function_exists('ob_flush') && ob_get_level() > 0) {
                         @ob_flush();
                     }
@@ -82,14 +82,14 @@ final class ChatController extends Controller
                 });
 
                 echo "event: done\n";
-                echo 'data: ' . json_encode(['done' => true], JSON_UNESCAPED_UNICODE) . "\n\n";
+                echo 'data: '.json_encode(['done' => true], JSON_UNESCAPED_UNICODE)."\n\n";
                 if (function_exists('ob_flush') && ob_get_level() > 0) {
                     @ob_flush();
                 }
                 flush();
             } catch (\Throwable $e) {
                 echo "event: error\n";
-                echo 'data: ' . json_encode(['error' => $e->getMessage()], JSON_UNESCAPED_UNICODE) . "\n\n";
+                echo 'data: '.json_encode(['error' => $e->getMessage()], JSON_UNESCAPED_UNICODE)."\n\n";
                 if (function_exists('ob_flush') && ob_get_level() > 0) {
                     @ob_flush();
                 }

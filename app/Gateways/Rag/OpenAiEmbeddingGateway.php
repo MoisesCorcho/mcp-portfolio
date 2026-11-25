@@ -43,7 +43,7 @@ final class OpenAiEmbeddingGateway implements EmbeddingProviderInterface
             ]);
 
         if ($response->failed()) {
-            throw new EmbeddingException('OpenAI Embedding API error: ' . $response->body());
+            throw new EmbeddingException('OpenAI Embedding API error: '.$response->body());
         }
 
         $data = $response->json('data') ?? [];

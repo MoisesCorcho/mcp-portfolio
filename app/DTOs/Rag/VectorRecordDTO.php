@@ -7,8 +7,8 @@ namespace App\DTOs\Rag;
 final readonly class VectorRecordDTO
 {
     /**
-     * @param array<int, float> $values
-     * @param array<string, mixed> $metadata
+     * @param  array<int, float>  $values
+     * @param  array<string, mixed>  $metadata
      */
     public function __construct(
         public string $id,

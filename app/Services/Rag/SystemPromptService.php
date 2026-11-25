@@ -8,7 +8,7 @@ final class SystemPromptService
 {
     public function getSystemPrompt(): string
     {
-        return <<<PROMPT
+        return <<<'PROMPT'
 Eres el asistente técnico oficial de Moisés Corcho Pérez (Ingeniero de Sistemas, Full-Stack Developer & AI Developer).
 
 Directrices estrictas:

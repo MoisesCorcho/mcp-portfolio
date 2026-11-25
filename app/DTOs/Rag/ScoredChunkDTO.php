@@ -7,7 +7,7 @@ namespace App\DTOs\Rag;
 final readonly class ScoredChunkDTO
 {
     /**
-     * @param array<string, mixed> $metadata
+     * @param  array<string, mixed>  $metadata
      */
     public function __construct(
         public string $id,

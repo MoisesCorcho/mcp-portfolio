@@ -22,19 +22,19 @@ final class IndexKnowledgeBaseAction
     /**
      * Ingest and index technical markdown files from storage/rag/knowledge.
      *
-     * @param ?callable(string $message): void $progressCallback
+     * @param  ?callable(string $message): void  $progressCallback
      * @return int Total chunks indexed
      */
     public function __invoke(?string $specificFile = null, ?callable $progressCallback = null): int
     {
         $dir = storage_path('rag/knowledge');
 
-        if (!File::isDirectory($dir)) {
+        if (! File::isDirectory($dir)) {
             return 0;
         }
 
         $files = $specificFile
-            ? [new \SplFileInfo($dir . '/' . basename($specificFile))]
+            ? [new \SplFileInfo($dir.'/'.basename($specificFile))]
             : File::files($dir);
 
         $allChunks = [];
@@ -53,7 +53,7 @@ final class IndexKnowledgeBaseAction
             }
 
             if ($progressCallback) {
-                $progressCallback("Chunked {$file->getFilename()} (" . count($chunks) . " chunks)");
+                $progressCallback("Chunked {$file->getFilename()} (".count($chunks).' chunks)');
             }
         }
 
@@ -85,14 +85,14 @@ final class IndexKnowledgeBaseAction
             }
 
             if ($progressCallback) {
-                $progressCallback("Generated embeddings for batch " . ($batchIndex + 1) . "/" . count($chunkBatches));
+                $progressCallback('Generated embeddings for batch '.($batchIndex + 1).'/'.count($chunkBatches));
             }
         }
 
         $this->vectorStore->upsert($records);
 
         if ($progressCallback) {
-            $progressCallback("Successfully upserted " . count($records) . " vector records into Pinecone.");
+            $progressCallback('Successfully upserted '.count($records).' vector records into Pinecone.');
         }
 
         return count($records);

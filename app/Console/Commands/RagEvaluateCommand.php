@@ -28,7 +28,7 @@ final class RagEvaluateCommand extends Command
     public function handle(RetrieveRelevantContextAction $retrieveContext): int
     {
         $benchmarkPath = base_path('tests/Fixtures/Rag/golden_dataset.json');
-        if (!File::exists($benchmarkPath)) {
+        if (! File::exists($benchmarkPath)) {
             $this->error("Golden dataset not found at {$benchmarkPath}");
 
             return Command::FAILURE;
@@ -42,7 +42,7 @@ final class RagEvaluateCommand extends Command
         }
 
         $topK = (int) $this->option('top-k');
-        $this->info("Evaluating RAG Pipeline against Golden Dataset (" . count($items) . " test cases, Top-K: {$topK})...\n");
+        $this->info('Evaluating RAG Pipeline against Golden Dataset ('.count($items)." test cases, Top-K: {$topK})...\n");
 
         $rows = [];
         $hits = 0;
@@ -76,14 +76,14 @@ final class RagEvaluateCommand extends Command
                 $hits++;
             }
 
-            $topScore = !empty($chunks) ? round($chunks[0]->score, 3) : 0.0;
+            $topScore = ! empty($chunks) ? round($chunks[0]->score, 3) : 0.0;
             if ($topScore > 0) {
                 $totalScores += $topScore;
                 $scoredCount++;
             }
 
             $status = $isHit ? '<fg=green>PASS</>' : '<fg=red>FAIL</>';
-            $shortQuery = mb_substr($query, 0, 45) . (mb_strlen($query) > 45 ? '...' : '');
+            $shortQuery = mb_substr($query, 0, 45).(mb_strlen($query) > 45 ? '...' : '');
 
             $rows[] = [
                 $id,
@@ -106,14 +106,14 @@ final class RagEvaluateCommand extends Command
         );
 
         $this->newLine();
-        $this->line("──────────────────────────────────────────────────────────");
-        $this->info("Evaluation Summary:");
-        $this->line("  • Total Benchmark Cases : " . count($items));
-        $this->line("  • Successful Hits       : {$hits}/" . count($items));
-        $this->line("  • Hit Rate @ {$topK}        : <fg=" . ($hitRate >= 90 ? 'green' : 'yellow') . ">{$hitRate}%</>");
+        $this->line('──────────────────────────────────────────────────────────');
+        $this->info('Evaluation Summary:');
+        $this->line('  • Total Benchmark Cases : '.count($items));
+        $this->line("  • Successful Hits       : {$hits}/".count($items));
+        $this->line("  • Hit Rate @ {$topK}        : <fg=".($hitRate >= 90 ? 'green' : 'yellow').">{$hitRate}%</>");
         $this->line("  • Average Top Score     : {$avgScore}");
         $this->line("  • Total Time            : {$totalDuration}s");
-        $this->line("──────────────────────────────────────────────────────────");
+        $this->line('──────────────────────────────────────────────────────────');
 
         return $hitRate >= 80 ? Command::SUCCESS : Command::FAILURE;
     }

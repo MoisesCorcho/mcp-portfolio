@@ -24,11 +24,12 @@ final class MarkdownChunkerService
         foreach ($lines as $line) {
             if (str_starts_with($line, '# ')) {
                 $docTitle = trim(substr($line, 2));
+
                 continue;
             }
 
             if (str_starts_with($line, '## ')) {
-                if (!empty($currentLines)) {
+                if (! empty($currentLines)) {
                     $sections[] = [
                         'heading' => $currentHeading,
                         'content' => trim(implode("\n", $currentLines)),
@@ -36,13 +37,14 @@ final class MarkdownChunkerService
                     $currentLines = [];
                 }
                 $currentHeading = trim(substr($line, 3));
+
                 continue;
             }
 
             $currentLines[] = $line;
         }
 
-        if (!empty($currentLines)) {
+        if (! empty($currentLines)) {
             $sections[] = [
                 'heading' => $currentHeading,
                 'content' => trim(implode("\n", $currentLines)),

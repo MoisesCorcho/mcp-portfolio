@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Gateways\Rag;
 
 use App\Contracts\Rag\LlmProviderInterface;
-use App\DTOs\Rag\ChatMessageDTO;
 use App\DTOs\Rag\ChatPromptDTO;
 use App\Exceptions\Rag\LlmException;
 use Illuminate\Support\Facades\Http;
@@ -31,7 +30,7 @@ final class OpenAiLlmGateway implements LlmProviderInterface
             ]);
 
         if ($response->failed()) {
-            throw new LlmException('OpenAI Chat error: ' . $response->body());
+            throw new LlmException('OpenAI Chat error: '.$response->body());
         }
 
         return (string) ($response->json('choices.0.message.content') ?? '');
@@ -69,7 +68,7 @@ final class OpenAiLlmGateway implements LlmProviderInterface
 
             foreach ($lines as $line) {
                 $line = trim($line);
-                if (!str_starts_with($line, 'data: ')) {
+                if (! str_starts_with($line, 'data: ')) {
                     continue;
                 }
                 $payload = trim(substr($line, 6));
@@ -83,6 +82,7 @@ final class OpenAiLlmGateway implements LlmProviderInterface
                     $onChunk($token);
                 }
             }
+
             return strlen($data);
         });
 
@@ -91,7 +91,7 @@ final class OpenAiLlmGateway implements LlmProviderInterface
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if (!$success || $httpCode >= 400) {
+        if (! $success || $httpCode >= 400) {
             throw new LlmException("OpenAI stream error (HTTP {$httpCode}): {$err}");
         }
 
@@ -102,12 +102,12 @@ final class OpenAiLlmGateway implements LlmProviderInterface
     {
         $messages = [];
 
-        if (!empty($prompt->contextChunks)) {
+        if (! empty($prompt->contextChunks)) {
             $contextText = "Relevant technical context retrieved from Moisés Corcho's portfolio & repositories:\n\n";
             foreach ($prompt->contextChunks as $i => $chunk) {
                 $index = $i + 1;
-                $contextText .= "--- Document {$index} (Score: " . round($chunk->score, 3) . ") ---\n";
-                $contextText .= $chunk->content . "\n\n";
+                $contextText .= "--- Document {$index} (Score: ".round($chunk->score, 3).") ---\n";
+                $contextText .= $chunk->content."\n\n";
             }
 
             $messages[] = [

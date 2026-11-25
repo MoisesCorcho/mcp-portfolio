@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Http;
 final class PineconeVectorStoreGateway implements VectorStoreInterface
 {
     private const API_VERSION = '2026-07';
+
     private const DEFAULT_NAMESPACE = '__default__';
 
     public function __construct(
@@ -42,18 +43,19 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
                 'Api-Key' => $key,
                 'Content-Type' => 'application/json',
                 'X-Pinecone-API-Version' => self::API_VERSION,
-            ])->timeout(60)->post("{$host}/namespaces/" . self::DEFAULT_NAMESPACE . "/documents/upsert", [
+            ])->timeout(60)->post("{$host}/namespaces/".self::DEFAULT_NAMESPACE.'/documents/upsert', [
                 'documents' => $chunk,
             ]);
 
             // If Documents API is not supported (classic/legacy vector index), fall back to Vectors API
             if ($response->status() === 404 || str_contains($response->body(), 'vectors')) {
                 $this->upsertLegacyVectors($host, $key, $records);
+
                 return;
             }
 
             if ($response->failed()) {
-                throw new VectorStoreException('Pinecone upsert error: ' . $response->body());
+                throw new VectorStoreException('Pinecone upsert error: '.$response->body());
             }
         }
     }
@@ -75,7 +77,7 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
             'include_fields' => ['*'],
         ];
 
-        if (!empty($filter)) {
+        if (! empty($filter)) {
             $payload['filter'] = $filter;
         }
 
@@ -83,7 +85,7 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
             'Api-Key' => $key,
             'Content-Type' => 'application/json',
             'X-Pinecone-API-Version' => self::API_VERSION,
-        ])->timeout(15)->post("{$host}/namespaces/" . self::DEFAULT_NAMESPACE . "/documents/search", $payload);
+        ])->timeout(15)->post("{$host}/namespaces/".self::DEFAULT_NAMESPACE.'/documents/search', $payload);
 
         // Fallback to legacy vectors query if Documents API is not found
         if ($response->status() === 404 || str_contains($response->body(), 'vectors')) {
@@ -91,7 +93,7 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
         }
 
         if ($response->failed()) {
-            throw new VectorStoreException('Pinecone query error: ' . $response->body());
+            throw new VectorStoreException('Pinecone query error: '.$response->body());
         }
 
         $matches = $response->json('matches') ?? $response->json('results') ?? [];
@@ -99,7 +101,7 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
 
         foreach ($matches as $match) {
             $fields = $match['fields'] ?? [];
-            $metadata = !empty($fields) ? $fields : ($match['metadata'] ?? $match);
+            $metadata = ! empty($fields) ? $fields : ($match['metadata'] ?? $match);
             $content = (string) ($match['content'] ?? $metadata['content'] ?? '');
 
             unset($metadata['_id'], $metadata['id'], $metadata['_score'], $metadata['score'], $metadata['embedding'], $metadata['fields']);
@@ -128,17 +130,18 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
             'Api-Key' => $key,
             'Content-Type' => 'application/json',
             'X-Pinecone-API-Version' => self::API_VERSION,
-        ])->timeout(15)->post("{$host}/namespaces/" . self::DEFAULT_NAMESPACE . "/documents/delete", [
+        ])->timeout(15)->post("{$host}/namespaces/".self::DEFAULT_NAMESPACE.'/documents/delete', [
             'ids' => array_values($ids),
         ]);
 
         if ($response->status() === 404) {
             $this->deleteLegacyVectors($host, $key, $ids);
+
             return;
         }
 
         if ($response->failed()) {
-            throw new VectorStoreException('Pinecone delete error: ' . $response->body());
+            throw new VectorStoreException('Pinecone delete error: '.$response->body());
         }
     }
 
@@ -161,7 +164,7 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
             ]);
 
             if ($response->failed()) {
-                throw new VectorStoreException('Pinecone upsert error: ' . $response->body());
+                throw new VectorStoreException('Pinecone upsert error: '.$response->body());
             }
         }
     }
@@ -175,7 +178,7 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
             'includeValues' => false,
         ];
 
-        if (!empty($filter)) {
+        if (! empty($filter)) {
             $payload['filter'] = $filter;
         }
 
@@ -185,7 +188,7 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
         ])->timeout(15)->post("{$host}/query", $payload);
 
         if ($response->failed()) {
-            throw new VectorStoreException('Pinecone query error: ' . $response->body());
+            throw new VectorStoreException('Pinecone query error: '.$response->body());
         }
 
         $matches = $response->json('matches') ?? [];
@@ -216,7 +219,7 @@ final class PineconeVectorStoreGateway implements VectorStoreInterface
         ]);
 
         if ($response->failed()) {
-            throw new VectorStoreException('Pinecone delete error: ' . $response->body());
+            throw new VectorStoreException('Pinecone delete error: '.$response->body());
         }
     }
 

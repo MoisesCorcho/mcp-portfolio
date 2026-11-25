@@ -15,7 +15,7 @@ class RagGoldenDatasetTest extends TestCase
 {
     private function loadGoldenDataset(): array
     {
-        $filePath = __DIR__ . '/../../Fixtures/Rag/golden_dataset.json';
+        $filePath = __DIR__.'/../../Fixtures/Rag/golden_dataset.json';
         $this->assertFileExists($filePath);
 
         $items = json_decode((string) file_get_contents($filePath), true);
@@ -90,7 +90,7 @@ class RagGoldenDatasetTest extends TestCase
 
             $this->assertTrue(
                 $hit,
-                "Hit Rate @ 4 failed for: '{$benchmark['query']}'. Expected: " . implode(', ', $benchmark['expected_document_ids'])
+                "Hit Rate @ 4 failed for: '{$benchmark['query']}'. Expected: ".implode(', ', $benchmark['expected_document_ids'])
             );
         }
     }

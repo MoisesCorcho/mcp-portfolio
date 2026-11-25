@@ -52,7 +52,7 @@ final class ElevenLabsTtsGateway implements TtsProviderInterface
         ]);
 
         if ($response->failed()) {
-            throw new TtsException('ElevenLabs API error: ' . $response->body());
+            throw new TtsException('ElevenLabs API error: '.$response->body());
         }
 
         return $response->body();

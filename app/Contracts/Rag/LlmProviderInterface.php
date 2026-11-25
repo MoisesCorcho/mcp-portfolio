@@ -16,7 +16,7 @@ interface LlmProviderInterface
     /**
      * Stream the chat response token-by-token invoking the provided callback.
      *
-     * @param callable(string $token): void $onChunk
+     * @param  callable(string $token): void  $onChunk
      */
     public function streamChat(ChatPromptDTO $prompt, callable $onChunk): string;
 }

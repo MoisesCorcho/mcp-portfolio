@@ -16,7 +16,7 @@ class RagIndexingTest extends TestCase
 {
     public function test_markdown_chunker_service_splits_into_semantic_chunks(): void
     {
-        $service = new MarkdownChunkerService();
+        $service = new MarkdownChunkerService;
         $markdown = <<<'MD'
 # Leen Honey Project
 ## Problem Statement
@@ -43,7 +43,7 @@ MD;
 
     public function test_index_knowledge_base_action_workflow(): void
     {
-        $chunker = new MarkdownChunkerService();
+        $chunker = new MarkdownChunkerService;
         $embeddingMock = Mockery::mock(EmbeddingProviderInterface::class);
         $vectorStoreMock = Mockery::mock(VectorStoreInterface::class);
 
