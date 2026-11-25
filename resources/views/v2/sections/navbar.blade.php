@@ -56,23 +56,8 @@
             </a>
         </nav>
 
-        {{-- ── Right: Language Switcher, AI Advisor & Contact CTA ── --}}
+        {{-- ── Right: Language Switcher & Contact CTA ── --}}
         <div class="hidden lg:flex items-center gap-3">
-            {{-- AI Advisor Trigger Button --}}
-            <x-v2.extruded-box
-                as="button"
-                type="button"
-                @click="$dispatch('open-rag-drawer')"
-                variant="zinc"
-                depth="sm"
-                :glow="true"
-                class="inline-flex items-center gap-2 px-3.5 py-2.5 text-amber-400 border-amber-500/40 hover:border-amber-400 font-roboto-mono font-bold text-xs uppercase tracking-wider select-none cursor-pointer"
-                title="{{ __('home.rag_drawer_title') }}"
-            >
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>{{ __('home.nav_ai_advisor') }}</span>
-            </x-v2.extruded-box>
-
             {{-- Orthogonal Language Switcher Cell --}}
             <x-v2.extruded-box
                 as="a"
@@ -104,20 +89,6 @@
 
         {{-- ── Mobile Hamburger Toggle (Orthogonal 40x40 Cell) ── --}}
         <div class="flex items-center gap-2 lg:hidden">
-            <x-v2.extruded-box
-                as="button"
-                type="button"
-                @click="$dispatch('open-rag-drawer')"
-                variant="zinc"
-                depth="sm"
-                class="w-10 h-10 text-amber-400 border-amber-500/40 flex items-center justify-center select-none cursor-pointer"
-                title="{{ __('home.rag_drawer_title') }}"
-            >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-            </x-v2.extruded-box>
-
             <x-v2.extruded-box
                 as="a"
                 href="{{ route('lang.switch', app()->getLocale() === 'es' ? 'en' : 'es') }}"
