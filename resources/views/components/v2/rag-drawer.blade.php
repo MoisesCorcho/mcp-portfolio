@@ -21,19 +21,32 @@
             @click="openDrawer()"
             variant="zinc"
             depth="sm"
-            :glow="true"
-            class="group flex items-center gap-3 px-4 py-3 bg-chamber/95 border-amber-500/40 text-amber-400 hover:border-amber-400 shadow-2xl transition-all duration-200 font-roboto-mono text-xs font-bold uppercase tracking-wider select-none cursor-pointer"
+            :glow="false"
+            class="group relative flex items-center gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-chamber/95 border-zinc-800 hover:border-zinc-700 shadow-xl transition-all duration-200 font-roboto-mono select-none cursor-pointer"
             title="{{ __('home.rag_drawer_title') }}"
             aria-label="{{ __('home.rag_drawer_title') }}"
         >
-            <span class="relative flex h-2.5 w-2.5">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-            </span>
-            <span class="hidden sm:inline text-zinc-200 group-hover:text-amber-400 transition-colors">AI ADVISOR</span>
-            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-            </svg>
+            {{-- Minimalist Cyber-Bot Icon --}}
+            <x-v2.ai-advisor-icon class="w-7 h-7 sm:w-8 sm:h-8 text-zinc-300 group-hover:text-white transition-colors duration-200" />
+
+            {{-- HUD Identity Block --}}
+            <div class="flex flex-col text-left pr-1">
+                <div class="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest text-emerald-400 font-roboto-mono">
+                    <span class="relative flex h-1.5 w-1.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                    </span>
+                    <span>ONLINE</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="font-oxanium text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-100 group-hover:text-white transition-colors">
+                        MOISÉS AI
+                    </span>
+                    <span class="hidden md:inline-block px-1.5 py-0.5 text-[8px] font-roboto-mono font-bold uppercase tracking-wider bg-zinc-800 border border-zinc-700 text-zinc-300">
+                        RAG
+                    </span>
+                </div>
+            </div>
         </x-v2.extruded-box>
     </div>
 
@@ -73,10 +86,8 @@
         {{-- ── Drawer Header ── --}}
         <header class="p-4 sm:p-5 border-b border-zinc-800 bg-canvas/80 backdrop-blur-md flex items-center justify-between shrink-0">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 border border-amber-500/40 bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                <div class="w-9 h-9 border border-zinc-800 bg-zinc-900/60 flex items-center justify-center shrink-0">
+                    <x-v2.ai-advisor-icon class="w-5 h-5 text-zinc-300" />
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
@@ -189,7 +200,7 @@
                     >
                         {{-- Message Header Tag --}}
                         <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-zinc-500 border-b border-zinc-800/60 pb-1.5 mb-1.5">
-                            <span x-text="msg.role === 'user' ? 'USUARIO' : 'AI TECHNICAL ADVISOR'"></span>
+                            <span x-text="msg.role === 'user' ? 'USUARIO' : '{{ __('home.rag_assistant_label') }}'"></span>
                             <template x-if="msg.role === 'assistant' && msg.content">
                                 <button
                                     type="button"
@@ -529,9 +540,12 @@ document.addEventListener('alpine:init', () => {
                     this.currentAudio.onended = () => { this.currentAudio = null; };
                     await this.currentAudio.play();
                     return;
+                } else {
+                    const errDetail = await response.text();
+                    console.warn('ElevenLabs TTS endpoint returned HTTP ' + response.status + ':', errDetail);
                 }
             } catch (err) {
-                // Silently fallback to native browser synthesis
+                console.warn('Error during ElevenLabs synthesis/playback, using browser fallback:', err);
             }
 
             // 2. Native Web Speech Synthesis Fallback

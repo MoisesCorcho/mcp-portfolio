@@ -13,9 +13,8 @@ class RagDrawerRenderTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
-        $response->assertSee('AI ADVISOR');
-        $response->assertSee('AI Project Advisor');
-        $response->assertSee('SYS//RAG_ENGINE: ONLINE');
+        $response->assertSee('MOISÉS AI');
+        $response->assertSee('RAG ENGINE: ONLINE');
         $response->assertSee('Leen Honey');
     }
 }

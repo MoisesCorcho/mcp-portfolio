@@ -25,10 +25,11 @@ return [
     'nav_role_secondary' => 'AI Developer',
 
     // ── RAG Voice HUD Drawer ──────────────────────────────────────────────────
-    'rag_drawer_title' => 'AI Project Advisor',
-    'rag_drawer_badge' => 'SYS//RAG_ENGINE: ONLINE',
+    'rag_drawer_title' => 'Moisés AI',
+    'rag_drawer_badge' => 'RAG ENGINE: ONLINE',
     'rag_drawer_subtitle' => 'Technical grounding on repositories & architecture',
-    'rag_welcome_title' => 'Official Technical Assistant',
+    'rag_welcome_title' => 'Moisés AI — Digital Twin',
+    'rag_assistant_label' => 'MOISÉS AI',
     'rag_welcome_desc' => 'Ask about Moisés’s hands-on experience, repositories, tech stacks, what he can build, and what is out of scope.',
     'rag_input_placeholder' => 'Type a technical question or use microphone...',
     'rag_send' => 'Send',
