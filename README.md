@@ -7,7 +7,7 @@
 [![Pinecone](https://img.shields.io/badge/Pinecone-Vector_DB-000000?style=flat&logo=pinecone&logoColor=white)](https://www.pinecone.io)
 [![OpenAI](https://img.shields.io/badge/OpenAI-Embeddings_%26_LLM-412991?style=flat&logo=openai&logoColor=white)](https://openai.com)
 [![ElevenLabs](https://img.shields.io/badge/ElevenLabs-Voice_Cloning-black?style=flat)](https://elevenlabs.io)
-[![Tests](https://img.shields.io/badge/Tests-33%20Passed%20(134%20Assertions)-success?style=flat&logo=pest)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-45%20Passed%20(394%20Assertions)-success?style=flat&logo=pest)](tests/)
 
 Personal portfolio and professional showcase for **Moisés Corcho Pérez** (Systems Engineer, Full-Stack Developer & AI Developer). Built on a **Cyber-Industrial Neo-Brutalist Continuous Chassis** (V2) with an enterprise-grade, fully decoupled **RAG (Retrieval-Augmented Generation) Knowledge Engine** and bidirectional voice assistant.
 
@@ -22,7 +22,8 @@ mcp-portfolio/
 ├── app/
 │   ├── Actions/Rag/                  # Single-purpose domain verbs (Invokable)
 │   │   ├── IndexKnowledgeBaseAction.php       # Ingests, chunks, embeds & upserts to Pinecone
-│   │   └── RetrieveRelevantContextAction.php  # Semantic search with score threshold filtering
+│   │   ├── RecordRagInteractionAction.php     # Non-blocking MySQL telemetry persistence
+│   │   └── RetrieveRelevantContextAction.php  # Cached embedding search + score threshold filter
 │   ├── Contracts/Rag/                # Ports / Inversion of Control interfaces (DIP)
 │   │   ├── EmbeddingProviderInterface.php     # Vector embedding generation contract
 │   │   ├── LlmProviderInterface.php           # Non-streaming & streaming LLM contract
@@ -30,30 +31,37 @@ mcp-portfolio/
 │   │   └── TtsProviderInterface.php           # Audio text-to-speech synthesis contract
 │   ├── DTOs/Rag/                     # Immutable, typed data transfer objects (readonly)
 │   │   ├── ChatMessageDTO.php                 # Role/content chat interaction payload
-│   │   ├── ChatPromptDTO.php                  # Guardrailed LLM inference context
+│   │   ├── ChatPromptDTO.php                  # Guardrailed LLM inference context + maxTokens
 │   │   ├── DocumentChunkDTO.php               # Partitioned Markdown chunk with metadata
+│   │   ├── RagInteractionLogDTO.php           # Structured Q&A log payload
 │   │   ├── ScoredChunkDTO.php                 # Search match with similarity score
 │   │   └── VectorRecordDTO.php                # High-dimensional vector + Pinecone payload
 │   ├── Enums/Rag/                    # String-backed domain vocabularies (*Enum suffix)
 │   │   ├── EmbeddingModelEnum.php             # text-embedding-3-small (1536) / large (3072)
 │   │   ├── LlmModelEnum.php                   # gpt-4o-mini / gpt-4o
 │   │   ├── MessageRoleEnum.php                # system / user / assistant
-│   │   └── RagDocumentTypeEnum.php            # project / experience / skill / general
+│   │   ├── RagBlockedReasonEnum.php           # empty_context
+│   │   ├── RagDocumentTypeEnum.php            # project / experience / skill / general
+│   │   └── RagLogStatusEnum.php               # completed / blocked / error
 │   ├── Gateways/Rag/                 # Concrete infrastructure adapters implementing contracts
 │   │   ├── OpenAiEmbeddingGateway.php         # OpenAI API v1/embeddings adapter
 │   │   ├── OpenAiLlmGateway.php               # OpenAI chat completions & cURL stream adapter
 │   │   ├── PineconeVectorStoreGateway.php     # Pinecone serverless REST data plane adapter
 │   │   └── ElevenLabsTtsGateway.php           # ElevenLabs cloned voice synthesis adapter
 │   ├── Http/Controllers/Rag/
-│   │   ├── ChatController.php                 # Server-Sent Events (SSE) streaming endpoint
+│   │   ├── ChatController.php                 # SSE streaming, exact cache & short-circuit
 │   │   └── TtsController.php                  # MP3 voice generation endpoint with caching
+│   ├── Models/
+│   │   └── RagLog.php                         # Eloquent model for rag_logs telemetry
 │   ├── Console/Commands/
-│   │   ├── RagIndexCommand.php                # artisan rag:index (Batch vectorization)
-│   │   └── RagEvaluateCommand.php             # artisan rag:evaluate (Golden dataset benchmark)
+│   │   ├── RagEvaluateCommand.php             # artisan rag:evaluate (Golden dataset benchmark)
+│   │   ├── RagIndexCommand.php                # artisan rag:index (Upsert + cache version bump)
+│   │   └── RagLogsCommand.php                 # artisan rag:logs (Inspect DB Q&A interactions)
 │   └── Services/Rag/
 │       ├── MarkdownChunkerService.php         # Semantic Markdown partitioning by headings
-│       └── SystemPromptService.php            # 3rd-person technical persona & guardrails
-├── storage/rag/knowledge/            # 10 comprehensive technical Markdown dossiers
+│       ├── RagCacheService.php                # Versioned exact response & embedding cache
+│       └── SystemPromptService.php            # 3rd-person persona, scope & anti-injection rules
+├── storage/rag/knowledge/            # 12 structured Markdown dossiers
 │   ├── 01-profile-and-capabilities.md
 │   ├── 02-leenhoney-ecommerce.md
 │   ├── 03-carfleet-saas.md
@@ -63,10 +71,12 @@ mcp-portfolio/
 │   ├── 07-keep-coding-hackathon.md
 │   ├── 08-inforeal-cms.md
 │   ├── 09-amatu-cafe.md
-│   └── 10-videogame-and-pdf-tooling.md
+│   ├── 10-videogame-and-pdf-tooling.md
+│   ├── 11-career-leadership-and-interviews.md
+│   └── 12-soft-skills-and-personal-profile.md
 ├── tests/
 │   ├── Fixtures/Rag/
-│   │   └── golden_dataset.json       # 12 Ground-truth test cases covering all repos & boundaries
+│   │   └── golden_dataset.json       # 20 Ground-truth test cases covering repos, skills & scope
 │   └── Feature/Rag/
 │       └── RagGoldenDatasetTest.php  # Automated retrieval accuracy test (Hit Rate @ 4)
 └── resources/views/
@@ -95,15 +105,22 @@ flowchart TD
 
     subgraph BACKEND["Laravel 12 Application (SOLID / Hexagonal Core)"]
         subgraph HTTP_LAYER["HTTP & Routing Layer"]
-            CTRL_CHAT["ChatController (POST /api/rag/chat)"]
-            CTRL_TTS["TtsController (POST /api/rag/tts)"]
+            CTRL_CHAT["ChatController (POST /api/rag/chat - throttle:10,1)"]
+            CTRL_TTS["TtsController (POST /api/rag/tts - throttle:10,1)"]
         end
 
         subgraph ACTIONS_LAYER["Domain Actions & Services"]
             ACT_INDEX["IndexKnowledgeBaseAction"]
             ACT_RETRIEVE["RetrieveRelevantContextAction"]
+            ACT_LOG["RecordRagInteractionAction"]
             SRV_CHUNKER["MarkdownChunkerService"]
+            SRV_CACHE["RagCacheService (v{N} Exact Cache)"]
             SRV_PROMPT["SystemPromptService"]
+        end
+
+        subgraph PERSISTENCE_LAYER["Cache & Telemetry"]
+            CACHE_STORE["Laravel Cache (rag:kb_version)"]
+            DB_LOGS["MySQL (rag_logs)"]
         end
 
         subgraph CONTRACTS_LAYER["Domain Ports / DIP Contracts"]
@@ -137,11 +154,16 @@ flowchart TD
     %% Real-Time Chat Query Pipeline
     UI_MIC -.->|Normalized Voice Transcript| UI_INPUT
     UI_INPUT -->|JSON: message + history| CTRL_CHAT
+    CTRL_CHAT --> SRV_CACHE
+    SRV_CACHE --> CACHE_STORE
     CTRL_CHAT --> ACT_RETRIEVE
+    ACT_RETRIEVE --> SRV_CACHE
     ACT_RETRIEVE --> INT_EMBED
     ACT_RETRIEVE --> INT_VECTOR
     CTRL_CHAT --> SRV_PROMPT
     CTRL_CHAT --> INT_LLM
+    CTRL_CHAT --> ACT_LOG
+    ACT_LOG --> DB_LOGS
     CTRL_CHAT -->|Stream: context, token, done| UI_SSE
     UI_SSE -.->|Optional Auto-Play Text| UI_AUDIO
 
@@ -165,26 +187,24 @@ flowchart TD
 ### 🔄 The Three Core Workflows Explained
 
 #### 1. Batch Vectorization & Ingestion (`sail artisan rag:index`)
-1. **Source Dossiers:** Ingests 10 structured Markdown files from `storage/rag/knowledge/` representing Moisés's real repos, stacks, architectural decisions, and boundaries.
+1. **Source Dossiers:** Ingests 12 structured Markdown files from `storage/rag/knowledge/` representing Moisés's real repos, leadership scenarios, soft skills, personal interests, and boundaries.
 2. **Semantic Partitioning:** `MarkdownChunkerService` parses files by H1/H2 boundaries, ensuring each chunk retains its `document_id`, `section`, and `document_title` metadata without slicing sentences across boundaries.
 3. **Dense Vectorization:** `OpenAiEmbeddingGateway` invokes OpenAI's `text-embedding-3-small` in batches of 20, generating 1536-dimensional floating point vectors.
-4. **Documents API Upsert:** `PineconeVectorStoreGateway` formats records with unique IDs and flattens metadata, posting them in batches of 50 to `POST /namespaces/__default__/documents/upsert` with the mandatory `X-Pinecone-API-Version: 2026-07` header.
+4. **Documents API Upsert & Cache Invalidation:** `PineconeVectorStoreGateway` formats records with unique IDs and flattens metadata, posting them in batches of 50 to `POST /namespaces/__default__/documents/upsert` with the mandatory `X-Pinecone-API-Version: 2026-07` header. `RagIndexCommand` then bumps the `rag:kb_version` cache key to invalidate stale cached responses and embeddings.
 
-#### 2. Real-Time Semantic Retrieval & SSE Streaming (`POST /api/rag/chat`)
-1. **User Request:** Dispatched via the expanding textarea or voice microphone to `POST /api/rag/chat`.
-2. **Context Retrieval:** `RetrieveRelevantContextAction` embeds the query on the fly, queries Pinecone using a `dense_vector` clause on the `embedding` field, and filters out noise with a minimum similarity threshold (`minScore >= 0.30`).
-3. **Guardrailed Assembly:** `SystemPromptService` injects the system prompt, formatting the retrieved chunks into an XML-like `<portfolio_context>` block and commanding the model to act as an objective, third-person technical advisor that refuses out-of-scope technologies (e.g. Solidity, Unreal Engine).
-4. **Non-Blocking SSE Delivery:** `OpenAiLlmGateway` initiates a streamed cURL request to `gpt-4o-mini`. A persistent line buffer (`$buffer = array_pop($lines)`) prevents TCP packet fragmentation from dropping partial words. Tokens are flushed immediately to the client as Server-Sent Events (`event: context`, `event: token`, `event: done`).
+#### 2. Real-Time Semantic Retrieval, Guardrails & SSE Streaming (`POST /api/rag/chat`)
+1. **Rate Limit & Exact Cache:** Protected by `throttle:10,1`. For first-turn queries (`history` empty), `ChatController` checks `RagCacheService` using normalized query hashes (`rag:resp:v{N}:{hash}`) and replays cached answers via SSE with zero OpenAI/Pinecone calls.
+2. **Context Retrieval:** `RetrieveRelevantContextAction` checks cached embeddings first, embeds on cache miss, queries Pinecone (`topK = 4`), and filters out noise (`minScore >= 0.30`).
+3. **Empty-Context Short-Circuit:** If retrieval returns `[]` on a first-turn query, `ChatController` short-circuits with a localized fallback (`home.rag_out_of_scope_fallback`) without calling OpenAI.
+4. **Guardrailed Assembly & Token Cap:** `SystemPromptService` enforces 3rd-person tone, strict portfolio/personal-profile scope, anti-prompt-injection rules, and professional abuse deflection, while `ChatPromptDTO` caps output via `max_tokens = 600`.
+5. **Non-Blocking SSE & Telemetry:** `OpenAiLlmGateway` streams tokens from `gpt-4o-mini` (`temperature: 0.2`) using a persistent cURL line buffer, emitting `context`, `token`, and `done` events. After completion, `RecordRagInteractionAction` persists anonymized telemetry (`session_hash`, `chunks_count`, `top_score`, `cache_hit`, `blocked_reason`, `latency_ms`, `status`) into `rag_logs`, inspectable via `php artisan rag:logs`.
 
 #### 3. Voice Synthesis with Automated Fallback (`POST /api/rag/tts`)
 1. **Primary Synthesis (ElevenLabs):** If configured, the frontend queries `POST /api/rag/tts`. `ElevenLabsTtsGateway` synthesizes audio using Moisés's cloned voice and returns an `audio/mpeg` stream.
 2. **Zero-Crash Fallback (Browser Speech):** If the API key is unset, quotas are exhausted, or an HTTP 503 occurs, the frontend silently falls back to the browser's native `window.speechSynthesis`, providing a 100% reliable voice experience with zero external dependencies.
 
 #### 4. Ground Truth Quality Assurance (`sail artisan rag:evaluate`)
-The system includes a **Golden Dataset** benchmark (`tests/Fixtures/Rag/golden_dataset.json`) with 12 comprehensive test cases. Running `sail artisan rag:evaluate` computes real-time retrieval metrics against Pinecone:
-* **Hit Rate @ 4:** **100%** (every golden query successfully retrieves its expected document in the top 4 results).
-* **Average Cosine Score:** **0.58**.
-* **Automated CI Integration:** Backed by PHPUnit feature test `tests/Feature/Rag/RagGoldenDatasetTest.php`.
+The system includes a **Golden Dataset** benchmark (`tests/Fixtures/Rag/golden_dataset.json`) with 20 comprehensive test cases covering repositories, leadership, soft skills, personal profile, and negative boundaries. Running `sail artisan rag:evaluate` computes real-time retrieval metrics against Pinecone (`Hit Rate @ 4 >= 80%` threshold), backed by PHPUnit feature test `tests/Feature/Rag/RagGoldenDatasetTest.php`.
 
 ---
 
@@ -197,8 +217,8 @@ The system includes a **Golden Dataset** benchmark (`tests/Fixtures/Rag/golden_d
 * **Internationalization:** Full dynamic localization (`lang/es/` and `lang/en/`) covering copy, project metadata, and CV details.
 
 ### 2. Enterprise AI Project Advisor (RAG & Voice HUD Drawer)
-* **Grounded Semantic Retrieval:** Custom vector search over 10 structured Markdown dossiers detailing Moisés's real repositories, tech stacks, engineering decisions, and architectural scope.
-* **Zero Hallucination Guardrails:** The system speaks as an objective 3rd-person technical advisor. When asked about technologies outside Moisés's expertise (e.g. low-level embedded C, AAA Unreal Engine 3D games, or blockchain smart contracts), it explicitly clarifies boundaries and redirects to proven capabilities.
+* **Grounded Semantic Retrieval:** Custom vector search over 12 structured Markdown dossiers detailing Moisés's real repositories, tech stacks, engineering decisions, soft skills, personal interests, and architectural scope.
+* **Multi-Layer Guardrails & Exact Cache:** Empty-context short-circuiting, prompt-injection & off-topic rules, `max_tokens = 600` output cap, `throttle:10,1` rate limiting, versioned exact normalized cache (`rag:kb_version`), and non-blocking MySQL telemetry (`rag_logs` + `php artisan rag:logs`).
 * **High-Performance Streaming (SSE):** Token-by-token streaming via Server-Sent Events (`POST /api/rag/chat`) with time-to-first-token (TTFT) under 50ms, accompanied by real-time source citations and similarity scores.
 * **Bidirectional Voice Interface:**
   * **Speech-to-Text (STT):** Integrated Web Speech API for real-time microphone dictation at zero latency and zero API cost.
@@ -260,8 +280,8 @@ Create a `.env` file in the project root based on `.env.example`:
 git clone https://github.com/MoisesCorcho/mcp-portfolio.git
 cd mcp-portfolio
 
-# 2. Checkout feature branch
-git checkout feat/v2-ai-chatbot-rag
+# 2. Checkout main branch
+git checkout main
 
 # 3. Setup environment file
 cp .env.example .env
@@ -321,12 +341,15 @@ php artisan test
 php artisan test --filter=Rag
 ```
 
-Current test matrix:
-* `Tests\Unit\Rag\RagDomainTest`: DTOs, Enums, dimensions, immutability (5 tests).
-* `Tests\Unit\Rag\RagGatewaysTest`: Mocked OpenAI & Pinecone HTTP adapters, DI container binding (6 tests).
-* `Tests\Unit\Rag\RagIndexingTest`: Markdown semantic chunking, upsert orchestration, Artisan command (3 tests).
-* `Tests\Feature\Rag\RagChatApiTest`: Context retrieval, threshold filtering, SSE streaming output (3 tests).
+Current test matrix (45 tests, 394 assertions):
+* `Tests\Unit\ExampleTest`: Baseline unit assertion (1 test).
+* `Tests\Unit\Rag\RagDomainTest`: DTOs, Enums, `maxTokens`, guardrail prompt rules (7 tests).
+* `Tests\Unit\Rag\RagGatewaysTest`: Mocked OpenAI & Pinecone HTTP adapters, `max_tokens` payload, DI container binding (7 tests).
+* `Tests\Unit\Rag\RagIndexingTest`: Markdown semantic chunking (including personal profile), upsert orchestration, cache version bump on `rag:index` (4 tests).
+* `Tests\Feature\ExampleTest`: V2 root, `/videogame`, `/v1`, and 301 redirects (5 tests).
+* `Tests\Feature\Rag\RagChatApiTest`: Embedding/response exact cache, history bypass, empty-context short-circuit, `rag_logs` persistence, `rag:logs` CLI, `throttle:10,1` (9 tests).
 * `Tests\Feature\Rag\RagDrawerRenderTest`: Blade view rendering, HUD triggers, localization (1 test).
+* `Tests\Feature\Rag\RagGoldenDatasetTest`: Golden dataset structure & Hit Rate @ 4 simulation across 20 cases (2 tests).
 * `Tests\Feature\Rag\RagTtsTest`: ElevenLabs audio synthesis, 503 fallback handling (4 tests).
 * `Tests\Feature\V2ExtrudedBoxTest`: 2.5D extruded box physics, CAD corner pins (5 tests).
 
@@ -342,15 +365,18 @@ git pull origin main
 composer install --no-dev --optimize-autoloader
 npm ci && npm run build
 
-# 3. Cache configuration, routes, and views
+# 3. Run pending database migrations (including rag_logs)
+php artisan migrate --force
+
+# 4. Cache configuration, routes, and views
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# 4. Synchronize RAG vector embeddings
+# 5. Synchronize RAG vector embeddings & bump cache version
 php artisan rag:index
 
-# 5. Restart PHP-FPM / Octane
+# 6. Restart PHP-FPM / Octane
 systemctl restart php8.2-fpm
 ```
 

@@ -40,6 +40,7 @@ return [
     'rag_suggestion_2' => '¿Moisés puede construir una app móvil en Flutter?',
     'rag_suggestion_3' => '¿Qué experiencia tiene con RAG y búsqueda vectorial?',
     'rag_suggestion_4' => '¿Moisés programa contratos inteligentes en blockchain?',
+    'rag_out_of_scope_fallback' => 'Solo puedo responder preguntas sobre la experiencia técnica, proyectos, habilidades blandas e intereses personales documentados de Moisés Corcho. ¿Qué te gustaría saber sobre él o su portafolio?',
 
     // ── Footer ───────────────────────────────────────────────────────────────
     'footer_made_with' => '© :year :name. Hecho con ❤️',

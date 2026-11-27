@@ -20,5 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['throttle:30,1'])->post('/rag/chat', [ChatController::class, 'stream']);
-Route::middleware(['throttle:30,1'])->post('/rag/tts', [TtsController::class, 'synthesize']);
+Route::middleware(['throttle:10,1'])->post('/rag/chat', [ChatController::class, 'stream']);
+Route::middleware(['throttle:10,1'])->post('/rag/tts', [TtsController::class, 'synthesize']);

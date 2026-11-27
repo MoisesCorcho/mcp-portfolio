@@ -17,5 +17,6 @@ final readonly class ChatPromptDTO
         public array $contextChunks = [],
         public LlmModelEnum $model = LlmModelEnum::Gpt4oMini,
         public float $temperature = 0.2,
+        public int $maxTokens = 600,
     ) {}
 }
