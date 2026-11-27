@@ -6,6 +6,22 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="{{ __('home.meta_description', ['name' => config('portfolio.owner.name')]) }}">
     <title>{{ __('home.page_title', ['name' => config('portfolio.owner.name')]) }}</title>
+
+    <!-- Open Graph / LinkedIn / WhatsApp / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ __('home.page_title', ['name' => config('portfolio.owner.name')]) }}">
+    <meta property="og:description" content="{{ __('home.meta_description', ['name' => config('portfolio.owner.name')]) }}">
+    <meta property="og:image" content="{{ asset('img/brand/og-preview.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="{{ __('home.page_title', ['name' => config('portfolio.owner.name')]) }}">
+    <meta name="twitter:description" content="{{ __('home.meta_description', ['name' => config('portfolio.owner.name')]) }}">
+    <meta name="twitter:image" content="{{ asset('img/brand/og-preview.png') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v=5">
     <link rel="alternate icon" href="{{ asset('favicon.ico') }}?v=5">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}?v=5">
@@ -39,6 +55,10 @@
     <main>
         {{ $slot }}
     </main>
+
+    @if(!request()->is('v1*'))
+        <x-v2.rag-drawer />
+    @endif
 
     @if(request()->is('v1*'))
         <x-layout.footer></x-layout.footer>

@@ -31,4 +31,20 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'openai' => [
+        'key' => env('OPENAI_API_KEY'),
+    ],
+
+    'pinecone' => [
+        'key' => env('PINECONE_API_KEY'),
+        'index' => env('PINECONE_INDEX_NAME'),
+        'host' => env('PINECONE_HOST'),
+    ],
+
+    'elevenlabs' => [
+        'key' => env('ELEVENLABS_API_KEY'),
+        'voice_id' => env('ELEVENLABS_VOICE_ID'),
+        'model_id' => env('ELEVENLABS_MODEL_ID', 'eleven_multilingual_v2'),
+    ],
+
 ];

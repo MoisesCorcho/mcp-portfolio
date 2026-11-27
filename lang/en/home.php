@@ -3,8 +3,8 @@
 return [
 
     // ── Layout ──────────────────────────────────────────────────────────────
-    'meta_description' => ':name — Backend Web Developer with 4 years of experience in Laravel, PHP and MySQL.',
-    'page_title' => ':name — Dev Portfolio',
+    'meta_description' => ':name — Systems Engineer, Full-Stack & AI Developer. Specializing in production SaaS architectures, Clean Architecture (Laravel/PHP, PostgreSQL, Docker), cross-platform mobile apps (Flutter), and grounded RAG AI engines.',
+    'page_title' => ':name — Systems Engineer & Full-Stack AI Developer',
 
     // ── Navbar ───────────────────────────────────────────────────────────────
     'nav_about' => 'About me',
@@ -15,6 +15,7 @@ return [
     'nav_videogame' => 'Videogame',
     'nav_experience' => 'Experience',
     'nav_cta' => 'Contact me',
+    'nav_ai_advisor' => 'AI Advisor',
     'nav_lang_switch_title_to_en' => 'Switch to English',
     'nav_lang_switch_title_to_es' => 'Cambiar a Español',
     'back_to_v2' => 'Back to Home',
@@ -22,6 +23,23 @@ return [
     'hero_badge_role' => 'Full-Stack Developer | AI Developer',
     'nav_role_primary' => 'Full-Stack Developer',
     'nav_role_secondary' => 'AI Developer',
+
+    // ── RAG Voice HUD Drawer ──────────────────────────────────────────────────
+    'rag_drawer_title' => 'Moisés AI',
+    'rag_drawer_badge' => 'RAG ENGINE: ONLINE',
+    'rag_drawer_subtitle' => 'Technical grounding on repositories & architecture',
+    'rag_welcome_title' => 'Moisés AI — Digital Twin',
+    'rag_assistant_label' => 'MOISÉS AI',
+    'rag_welcome_desc' => 'Ask about Moisés’s hands-on experience, repositories, tech stacks, what he can build, and what is out of scope.',
+    'rag_input_placeholder' => 'Type a technical question or use microphone...',
+    'rag_send' => 'Send',
+    'rag_voice_toggle' => 'Voice',
+    'rag_listening' => 'Listening...',
+    'rag_sources_label' => 'Grounding Sources:',
+    'rag_suggestion_1' => 'What architecture did Moisés use in Leen Honey?',
+    'rag_suggestion_2' => 'Can Moisés build a mobile app with Flutter?',
+    'rag_suggestion_3' => 'What experience does he have with RAG & vector search?',
+    'rag_suggestion_4' => 'Does Moisés write blockchain smart contracts?',
 
     // ── Footer ───────────────────────────────────────────────────────────────
     'footer_made_with' => '© :year :name. Made with ❤️',

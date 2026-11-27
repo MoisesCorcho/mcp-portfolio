@@ -1,0 +1,164 @@
+[
+  {
+    "id": "GD-01",
+    "category": "Project Architecture",
+    "query": "¿Qué arquitectura utilizó Moisés en Leen Honey y cómo manejó los pagos?",
+    "expected_document_ids": ["02-leenhoney-ecommerce"],
+    "expected_concepts": ["DIP", "Dependency Inversion", "pasarelas de pago", "máquina de estados", "idempotencia"],
+    "forbidden_concepts": ["blockchain", "microservicios"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-02",
+    "category": "Architecture & SaaS",
+    "query": "¿Cómo implementó el multi-tenancy y la arquitectura limpia en CarFleet?",
+    "expected_document_ids": ["03-carfleet-saas"],
+    "expected_concepts": ["multi-tenant", "Clean Architecture", "SaaS", "roles", "vehículos"],
+    "forbidden_concepts": ["pgvector"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-03",
+    "category": "AI & Vector Search",
+    "query": "¿Qué motor de recomendación con IA y búsqueda vectorial desarrolló Moisés?",
+    "expected_document_ids": ["04-anime-recommender-ai"],
+    "expected_concepts": ["pgvector", "PostgreSQL", "embeddings", "similitud coseno", "FastAPI"],
+    "forbidden_concepts": ["MongoDB"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-04",
+    "category": "Mobile & Flutter",
+    "query": "¿Moisés sabe programar en Flutter y desarrollar aplicaciones móviles?",
+    "expected_document_ids": ["06-interval-timer-flutter", "01-profile-and-capabilities"],
+    "expected_concepts": ["Flutter", "Dart", "Android", "iOS", "móvil"],
+    "forbidden_concepts": ["React Native", "Swift nativo"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-05",
+    "category": "Frontend & Real-Time PWA",
+    "query": "¿Qué experiencia tiene con PWAs y datos en tiempo real en SkyTrack?",
+    "expected_document_ids": ["05-skytrack-flight-pwa"],
+    "expected_concepts": ["PWA", "Service Worker", "precios de vuelos", "offline"],
+    "forbidden_concepts": ["Kubernetes"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-06",
+    "category": "Negative Boundary / Out of Scope",
+    "query": "¿Moisés programa contratos inteligentes en Solidity o aplicaciones Web3?",
+    "expected_document_ids": ["01-profile-and-capabilities"],
+    "expected_concepts": ["fuera de su alcance", "no es su foco", "no programa contratos inteligentes"],
+    "forbidden_concepts": ["experto en solidity", "desarrollador web3"],
+    "is_out_of_scope": true
+  },
+  {
+    "id": "GD-07",
+    "category": "Negative Boundary / Out of Scope",
+    "query": "¿Moisés desarrolla videojuegos AAA en Unreal Engine con C++?",
+    "expected_document_ids": ["10-videogame-and-pdf-tooling", "01-profile-and-capabilities"],
+    "expected_concepts": ["2D", "arcade", "JavaScript", "Canvas", "fuera de su alcance"],
+    "forbidden_concepts": ["experto en Unreal", "AAA con C++"],
+    "is_out_of_scope": true
+  },
+  {
+    "id": "GD-08",
+    "category": "RAG Capabilities",
+    "query": "¿Qué experiencia tiene Moisés integrando RAG y bases de datos vectoriales?",
+    "expected_document_ids": ["01-profile-and-capabilities", "04-anime-recommender-ai"],
+    "expected_concepts": ["RAG", "Pinecone", "pgvector", "embeddings", "OpenAI"],
+    "forbidden_concepts": ["LangChain sobreingeniería"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-09",
+    "category": "Design & Frontend",
+    "query": "¿Qué stack frontend y principios de diseño domina Moisés?",
+    "expected_document_ids": ["01-profile-and-capabilities"],
+    "expected_concepts": ["Tailwind CSS", "Alpine.js", "GSAP", "Cyber-Industrial", "Neo-Brutalismo"],
+    "forbidden_concepts": ["Angular", "Bootstrap"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-10",
+    "category": "Hackathons & Quick Delivery",
+    "query": "¿Moisés ha participado en hackathons o retos de entrega rápida?",
+    "expected_document_ids": ["07-keep-coding-hackathon"],
+    "expected_concepts": ["hackathon", "KeepCoding", "prototipo rápido", "trabajo bajo presión"],
+    "forbidden_concepts": [],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-11",
+    "category": "Production Domains",
+    "query": "¿Cuál es la URL de producción del ecommerce de Leen Honey?",
+    "expected_document_ids": ["02-leenhoney-ecommerce"],
+    "expected_concepts": ["leenhoney.com"],
+    "forbidden_concepts": [],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-12",
+    "category": "Backend Core Stacks",
+    "query": "¿Cuáles son los frameworks de backend en los que Moisés es más fuerte?",
+    "expected_document_ids": ["01-profile-and-capabilities"],
+    "expected_concepts": ["Laravel", "PHP", "FastAPI", "Python", "Clean Architecture", "SOLID"],
+    "forbidden_concepts": ["Ruby on Rails", "Java Spring"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-13",
+    "category": "Production Incidents & Concurrency",
+    "query": "¿Cómo solucionó Moisés un problema de race conditions o duplicidad en transacciones en producción?",
+    "expected_document_ids": ["11-career-leadership-and-interviews"],
+    "expected_concepts": ["lockForUpdate", "pessimistic locking", "idempotency keys", "DB::transaction", "Andrestelocambia"],
+    "forbidden_concepts": ["MongoDB"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-14",
+    "category": "Leadership & Mentoring",
+    "query": "¿Qué experiencia tiene Moisés liderando equipos de desarrollo y cómo mentora ingenieros?",
+    "expected_document_ids": ["11-career-leadership-and-interviews"],
+    "expected_concepts": ["Tech Lead", "Novol Studio", "CI/CD", "Docker", "GitFlow", "mentoría"],
+    "forbidden_concepts": [],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-15",
+    "category": "AI-Assisted Engineering",
+    "query": "¿Cómo utiliza Moisés herramientas de inteligencia artificial en su flujo de trabajo diario de desarrollo?",
+    "expected_document_ids": ["11-career-leadership-and-interviews"],
+    "expected_concepts": ["Spec-Driven Development", "SDD", "MCP", "SOLID", "auditoría"],
+    "forbidden_concepts": ["generación a ciegas", "vibe coding"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-16",
+    "category": "Framework Modernization",
+    "query": "¿Cómo abordó Moisés una migración o modernización de versión en Laravel sin interrumpir el servicio?",
+    "expected_document_ids": ["11-career-leadership-and-interviews"],
+    "expected_concepts": ["Laravel 10 a Laravel 12", "PHP 8.4", "Docker", "Actions", "Services", "sin downtime"],
+    "forbidden_concepts": [],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-17",
+    "category": "Language & Timezone Availability",
+    "query": "¿Cuál es el nivel de inglés de Moisés y puede trabajar en la zona horaria de Estados Unidos?",
+    "expected_document_ids": ["11-career-leadership-and-interviews", "01-profile-and-capabilities"],
+    "expected_concepts": ["C1 Advanced", "EF SET", "US Eastern", "EST", "EDT", "UTC-5"],
+    "forbidden_concepts": ["inglés básico", "horario europeo exclusivo"],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-18",
+    "category": "Production Frontend",
+    "query": "¿Qué experiencia en producción tiene Moisés con Vue.js 3, Inertia.js o React?",
+    "expected_document_ids": ["11-career-leadership-and-interviews"],
+    "expected_concepts": ["Vue 3", "Composition API", "Inertia.js", "React", "Next.js", "Zustand"],
+    "forbidden_concepts": ["Angular", "Svelte"],
+    "is_out_of_scope": false
+  }
+]
