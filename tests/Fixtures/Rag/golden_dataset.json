@@ -160,5 +160,23 @@
     "expected_concepts": ["Vue 3", "Composition API", "Inertia.js", "React", "Next.js", "Zustand"],
     "forbidden_concepts": ["Angular", "Svelte"],
     "is_out_of_scope": false
+  },
+  {
+    "id": "GD-19",
+    "category": "Soft Skills & Values",
+    "query": "¿Cuáles son las habilidades blandas de Moisés y cómo trabaja en equipo?",
+    "expected_document_ids": ["12-soft-skills-and-personal-profile", "11-career-leadership-and-interviews"],
+    "expected_concepts": ["pensamiento crítico", "comunicación clara", "empatía", "liderazgo", "trabajo en equipo"],
+    "forbidden_concepts": [],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-20",
+    "category": "Hobbies & Personal Interests",
+    "query": "¿Qué hace Moisés fuera del trabajo y qué hobbies tiene (música, piano, guitarra, ciclismo)?",
+    "expected_document_ids": ["12-soft-skills-and-personal-profile"],
+    "expected_concepts": ["piano", "guitarra", "ciclismo", "dibujo", "videojuegos", "gatos"],
+    "forbidden_concepts": [],
+    "is_out_of_scope": false
   }
 ]

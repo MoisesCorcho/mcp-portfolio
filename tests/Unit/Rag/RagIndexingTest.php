@@ -9,6 +9,7 @@ use App\Contracts\Rag\EmbeddingProviderInterface;
 use App\Contracts\Rag\VectorStoreInterface;
 use App\Enums\Rag\EmbeddingModelEnum;
 use App\Services\Rag\MarkdownChunkerService;
+use App\Services\Rag\RagCacheService;
 use Mockery;
 use Tests\TestCase;
 
@@ -81,9 +82,30 @@ MD;
         $this->app->instance(EmbeddingProviderInterface::class, $embeddingMock);
         $this->app->instance(VectorStoreInterface::class, $vectorStoreMock);
 
+        $cacheService = app(RagCacheService::class);
+        $initialVersion = $cacheService->getKnowledgeBaseVersion();
+
         $this->artisan('rag:index', ['--file' => '01-profile-and-capabilities.md'])
             ->expectsOutputToContain('Starting RAG Knowledge Base indexing...')
+            ->expectsOutputToContain('Cache version bumped to v'.($initialVersion + 1).'.')
             ->expectsOutputToContain('Indexing completed!')
             ->assertSuccessful();
+
+        $this->assertSame($initialVersion + 1, $cacheService->getKnowledgeBaseVersion());
+    }
+
+    public function test_personal_and_soft_skills_knowledge_document_chunks_cleanly(): void
+    {
+        $path = storage_path('rag/knowledge/12-soft-skills-and-personal-profile.md');
+        $this->assertFileExists($path);
+
+        $chunks = (new MarkdownChunkerService)->chunk('12-soft-skills-and-personal-profile', (string) file_get_contents($path));
+
+        $this->assertCount(3, $chunks);
+        $this->assertSame('Soft Skills & Collaboration Style', $chunks[0]->metadata['section']);
+        $this->assertSame('Hobbies, Music & Personal Interests Outside Work', $chunks[1]->metadata['section']);
+        $this->assertSame('Personal Values & Human Perspective', $chunks[2]->metadata['section']);
+        $this->assertStringContainsString('piano', $chunks[1]->content);
+        $this->assertStringContainsString('ciclismo', $chunks[1]->content);
     }
 }
