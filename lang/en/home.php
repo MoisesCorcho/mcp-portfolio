@@ -40,6 +40,7 @@ return [
     'rag_suggestion_2' => 'Can Moisés build a mobile app with Flutter?',
     'rag_suggestion_3' => 'What experience does he have with RAG & vector search?',
     'rag_suggestion_4' => 'Does Moisés write blockchain smart contracts?',
+    'rag_out_of_scope_fallback' => 'I can only answer questions about Moisés Corcho’s technical experience, projects, soft skills, and documented personal interests. What would you like to know about him or his portfolio?',
 
     // ── Footer ───────────────────────────────────────────────────────────────
     'footer_made_with' => '© :year :name. Made with ❤️',

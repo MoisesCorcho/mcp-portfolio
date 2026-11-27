@@ -27,6 +27,7 @@ final class OpenAiLlmGateway implements LlmProviderInterface
                 'model' => $prompt->model->value,
                 'messages' => $messages,
                 'temperature' => $prompt->temperature,
+                'max_tokens' => $prompt->maxTokens,
             ]);
 
         if ($response->failed()) {
@@ -47,6 +48,7 @@ final class OpenAiLlmGateway implements LlmProviderInterface
             'model' => $prompt->model->value,
             'messages' => $messages,
             'temperature' => $prompt->temperature,
+            'max_tokens' => $prompt->maxTokens,
             'stream' => true,
         ]);
 
