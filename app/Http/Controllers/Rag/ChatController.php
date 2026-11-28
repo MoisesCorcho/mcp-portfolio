@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Rag;
 
+use App\Actions\Rag\ContextualizeQueryAction;
 use App\Actions\Rag\RecordRagInteractionAction;
 use App\Actions\Rag\RetrieveRelevantContextAction;
 use App\Contracts\Rag\LlmProviderInterface;
@@ -29,6 +30,7 @@ final class ChatController extends Controller
         private readonly SystemPromptService $systemPromptService,
         private readonly RagCacheService $cacheService,
         private readonly RecordRagInteractionAction $recordLog,
+        private readonly ContextualizeQueryAction $contextualizeQuery,
     ) {}
 
     public function stream(Request $request): StreamedResponse
@@ -73,7 +75,17 @@ final class ChatController extends Controller
             }
         }
 
-        $contextChunks = ($this->retrieveContext)($userMessage, topK: 4);
+        $searchQuery = $isFirstTurn
+            ? $userMessage
+            : ($this->contextualizeQuery)($userMessage, $history);
+
+        $contextChunks = ($this->retrieveContext)(
+            userQuery: $searchQuery,
+            topK: 6,
+            minScore: 0.27,
+            fetchK: 12,
+            maxPerDocument: 2,
+        );
         $sources = $this->formatSources($contextChunks);
         $topScore = $this->extractTopScoreFromChunks($contextChunks);
 
@@ -180,6 +192,13 @@ final class ChatController extends Controller
             new ChatMessageDTO(MessageRoleEnum::System, $this->systemPromptService->getSystemPrompt()),
         ];
 
+        if ($contextChunks === [] && $history !== []) {
+            $messages[] = new ChatMessageDTO(
+                MessageRoleEnum::System,
+                'No new knowledge base documents were retrieved for this follow-up turn. Do NOT invent or assume any technologies, databases, frameworks, or projects not explicitly grounded in verified retrieved context, and do NOT claim Moisés lacks a skill merely because no new chunk was retrieved. If you lack verified evidence to answer, state that transparently.'
+            );
+        }
+
         foreach ($history as $item) {
             $role = $item['role'] === 'assistant' ? MessageRoleEnum::Assistant : MessageRoleEnum::User;
             $messages[] = new ChatMessageDTO($role, (string) $item['content']);
@@ -246,7 +265,7 @@ final class ChatController extends Controller
             return $requested;
         }
 
-        if (preg_match('/[¿¡áéíóúñÁÉÍÓÚÑ]|\b(qué|como|cómo|cuál|cual|dime|puedes|puede|sobre|hola|proyecto|proyectos|receta)\b/iu', $userMessage) === 1) {
+        if (preg_match('/[¿¡áéíóúñÁÉÍÓÚÑ]|\b(el|la|los|las|un|una|unos|unas|de|del|en|con|por|para|que|qué|como|cómo|cual|cuál|cuales|cuáles|dame|dime|tienes|tiene|sabe|sabes|puedes|puede|sobre|hola|proyecto|proyectos|receta|codigo|código|prueba|hacer|lista|listame|tecnologia|tecnologias|pasatiempos|peliculas)\b/iu', $userMessage) === 1) {
             return 'es';
         }
 

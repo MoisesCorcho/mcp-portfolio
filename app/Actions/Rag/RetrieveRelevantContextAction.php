@@ -23,12 +23,17 @@ final class RetrieveRelevantContextAction
     }
 
     /**
-     * Retrieve relevant chunks for a user query.
+     * Retrieve relevant chunks for a user query with optional document-level diversification.
      *
      * @return array<int, ScoredChunkDTO>
      */
-    public function __invoke(string $userQuery, int $topK = 4, float $minScore = 0.30): array
-    {
+    public function __invoke(
+        string $userQuery,
+        int $topK = 4,
+        float $minScore = 0.30,
+        int $fetchK = 0,
+        ?int $maxPerDocument = null,
+    ): array {
         $cleanQuery = trim($userQuery);
         if (empty($cleanQuery)) {
             return [];
@@ -45,8 +50,35 @@ final class RetrieveRelevantContextAction
             $this->cacheService->putCachedEmbedding($cleanQuery, $model, $queryVector);
         }
 
-        $chunks = $this->vectorStore->query($queryVector, $topK);
+        $queryLimit = $fetchK > 0 ? $fetchK : $topK;
+        $chunks = $this->vectorStore->query($queryVector, $queryLimit);
 
-        return array_values(array_filter($chunks, fn (ScoredChunkDTO $chunk) => $chunk->score >= $minScore));
+        $filtered = array_values(array_filter($chunks, static fn (ScoredChunkDTO $chunk): bool => $chunk->score >= $minScore));
+        usort($filtered, static fn (ScoredChunkDTO $a, ScoredChunkDTO $b): int => $b->score <=> $a->score);
+
+        if ($maxPerDocument === null || $maxPerDocument <= 0) {
+            return array_slice($filtered, 0, $topK);
+        }
+
+        $selected = [];
+        $docCounts = [];
+
+        foreach ($filtered as $chunk) {
+            $docId = (string) ($chunk->metadata['document_id'] ?? explode('-chunk', $chunk->id)[0]);
+            $count = $docCounts[$docId] ?? 0;
+
+            if ($count >= $maxPerDocument) {
+                continue;
+            }
+
+            $selected[] = $chunk;
+            $docCounts[$docId] = $count + 1;
+
+            if (count($selected) >= $topK) {
+                break;
+            }
+        }
+
+        return $selected;
     }
 }

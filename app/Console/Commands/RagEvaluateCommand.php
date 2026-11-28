@@ -57,7 +57,7 @@ final class RagEvaluateCommand extends Command
             $expectedDocs = $item['expected_document_ids'] ?? [];
 
             $retrievalStart = microtime(true);
-            $chunks = $retrieveContext($query, topK: $topK, minScore: 0.25);
+            $chunks = $retrieveContext($query, topK: $topK, minScore: 0.27, fetchK: max($topK * 3, 12), maxPerDocument: 2);
             $durationMs = round((microtime(true) - $retrievalStart) * 1000);
 
             $retrievedDocIds = array_map(function (ScoredChunkDTO $chunk) {

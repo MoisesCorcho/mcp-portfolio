@@ -178,5 +178,32 @@
     "expected_concepts": ["piano", "guitarra", "ciclismo", "dibujo", "videojuegos", "gatos"],
     "forbidden_concepts": [],
     "is_out_of_scope": false
+  },
+  {
+    "id": "GD-21",
+    "category": "Catalog Aggregation / Tech Filter",
+    "query": "Listame todos los proyectos donde Moisés haya trabajado con PHP",
+    "expected_document_ids": ["00-portfolio-catalog"],
+    "expected_concepts": ["LeenHoney Ecommerce", "CarFleet", "SkyTrack", "Anime Recommender Engine", "InfoReal"],
+    "forbidden_concepts": [],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-22",
+    "category": "Catalog Aggregation / Tech Filter",
+    "query": "¿En qué proyectos ha utilizado Livewire y Tailwind CSS?",
+    "expected_document_ids": ["00-portfolio-catalog"],
+    "expected_concepts": ["Anime Recommender Engine", "SkyTrack", "InfoReal", "Livewire", "Tailwind"],
+    "forbidden_concepts": [],
+    "is_out_of_scope": false
+  },
+  {
+    "id": "GD-23",
+    "category": "Primary Stack Overview",
+    "query": "¿Cuál es la tecnología que más sabe y domina Moisés?",
+    "expected_document_ids": ["01-profile-and-capabilities", "00-portfolio-catalog"],
+    "expected_concepts": ["PHP", "Laravel", "PostgreSQL", "Flutter", "Livewire"],
+    "forbidden_concepts": ["MongoDB"],
+    "is_out_of_scope": false
   }
 ]
