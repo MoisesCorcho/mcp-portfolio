@@ -143,9 +143,15 @@ class RagGatewaysTest extends TestCase
         $gateway = new OpenAiLlmGateway(apiKey: 'test-key');
         $prompt = new ChatPromptDTO(
             messages: [new ChatMessageDTO(MessageRoleEnum::User, 'Explain Leen Honey')],
+            maxTokens: 450,
         );
 
         $response = $gateway->chat($prompt);
         $this->assertSame('Moisés engineered Leen Honey with robust webhooks.', $response);
+
+        Http::assertSent(function ($request): bool {
+            return $request->url() === 'https://api.openai.com/v1/chat/completions'
+                && ($request['max_tokens'] ?? null) === 450;
+        });
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Actions\Rag\IndexKnowledgeBaseAction;
+use App\Services\Rag\RagCacheService;
 use Illuminate\Console\Command;
 
 final class RagIndexCommand extends Command
@@ -23,7 +24,7 @@ final class RagIndexCommand extends Command
      */
     protected $description = 'Ingest markdown files from storage/rag/knowledge, generate embeddings, and upsert into Pinecone';
 
-    public function handle(IndexKnowledgeBaseAction $action): int
+    public function handle(IndexKnowledgeBaseAction $action, RagCacheService $cacheService): int
     {
         $this->info('Starting RAG Knowledge Base indexing...');
         $file = $this->option('file');
@@ -32,6 +33,11 @@ final class RagIndexCommand extends Command
             $count = $action($file, function (string $msg): void {
                 $this->line("  → {$msg}");
             });
+
+            if ($count > 0) {
+                $newVersion = $cacheService->bumpKnowledgeBaseVersion();
+                $this->line("  → Cache version bumped to v{$newVersion}.");
+            }
 
             $this->info("Indexing completed! Total vector records indexed: {$count}");
 
