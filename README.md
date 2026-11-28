@@ -7,7 +7,7 @@
 [![Pinecone](https://img.shields.io/badge/Pinecone-Vector_DB-000000?style=flat&logo=pinecone&logoColor=white)](https://www.pinecone.io)
 [![OpenAI](https://img.shields.io/badge/OpenAI-Embeddings_%26_LLM-412991?style=flat&logo=openai&logoColor=white)](https://openai.com)
 [![ElevenLabs](https://img.shields.io/badge/ElevenLabs-Voice_Cloning-black?style=flat)](https://elevenlabs.io)
-[![Tests](https://img.shields.io/badge/Tests-45%20Passed%20(394%20Assertions)-success?style=flat&logo=pest)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-50%20Passed%20(464%20Assertions)-success?style=flat&logo=pest)](tests/)
 
 Personal portfolio and professional showcase for **Moisés Corcho Pérez** (Systems Engineer, Full-Stack Developer & AI Developer). Built on a **Cyber-Industrial Neo-Brutalist Continuous Chassis** (V2) with an enterprise-grade, fully decoupled **RAG (Retrieval-Augmented Generation) Knowledge Engine** and bidirectional voice assistant.
 
@@ -21,9 +21,10 @@ The system strictly adheres to **Pragmatic SOLID** design principles and clean a
 mcp-portfolio/
 ├── app/
 │   ├── Actions/Rag/                  # Single-purpose domain verbs (Invokable)
-│   │   ├── IndexKnowledgeBaseAction.php       # Ingests, chunks, embeds & upserts to Pinecone
+│   │   ├── ContextualizeQueryAction.php       # Multi-turn query rewriting via LLM (DIP)
+│   │   ├── IndexKnowledgeBaseAction.php       # Ingests MD dossiers + SSOT catalog to Pinecone
 │   │   ├── RecordRagInteractionAction.php     # Non-blocking MySQL telemetry persistence
-│   │   └── RetrieveRelevantContextAction.php  # Cached embedding search + score threshold filter
+│   │   └── RetrieveRelevantContextAction.php  # Cached embedding search + doc diversification
 │   ├── Contracts/Rag/                # Ports / Inversion of Control interfaces (DIP)
 │   │   ├── EmbeddingProviderInterface.php     # Vector embedding generation contract
 │   │   ├── LlmProviderInterface.php           # Non-streaming & streaming LLM contract
@@ -59,9 +60,10 @@ mcp-portfolio/
 │   │   └── RagLogsCommand.php                 # artisan rag:logs (Inspect DB Q&A interactions)
 │   └── Services/Rag/
 │       ├── MarkdownChunkerService.php         # Semantic Markdown partitioning by headings
+│       ├── PortfolioCatalogService.php        # Dynamic SSOT project index from config/portfolio.php
 │       ├── RagCacheService.php                # Versioned exact response & embedding cache
-│       └── SystemPromptService.php            # 3rd-person persona, scope & anti-injection rules
-├── storage/rag/knowledge/            # 12 structured Markdown dossiers
+│       └── SystemPromptService.php            # 3rd-person persona, grounding & anti-injection rules
+├── storage/rag/knowledge/            # 12 structured Markdown dossiers (+ dynamic 00-portfolio-catalog)
 │   ├── 01-profile-and-capabilities.md
 │   ├── 02-leenhoney-ecommerce.md
 │   ├── 03-carfleet-saas.md
@@ -76,7 +78,7 @@ mcp-portfolio/
 │   └── 12-soft-skills-and-personal-profile.md
 ├── tests/
 │   ├── Fixtures/Rag/
-│   │   └── golden_dataset.json       # 20 Ground-truth test cases covering repos, skills & scope
+│   │   └── golden_dataset.json       # 23 Ground-truth test cases covering repos, catalog & scope
 │   └── Feature/Rag/
 │       └── RagGoldenDatasetTest.php  # Automated retrieval accuracy test (Hit Rate @ 4)
 └── resources/views/
@@ -110,9 +112,11 @@ flowchart TD
         end
 
         subgraph ACTIONS_LAYER["Domain Actions & Services"]
+            ACT_CONTEXT["ContextualizeQueryAction"]
             ACT_INDEX["IndexKnowledgeBaseAction"]
             ACT_RETRIEVE["RetrieveRelevantContextAction"]
             ACT_LOG["RecordRagInteractionAction"]
+            SRV_CATALOG["PortfolioCatalogService (SSOT)"]
             SRV_CHUNKER["MarkdownChunkerService"]
             SRV_CACHE["RagCacheService (v{N} Exact Cache)"]
             SRV_PROMPT["SystemPromptService"]
@@ -146,16 +150,19 @@ flowchart TD
     end
 
     %% Ingestion Pipeline
-    DOSSIERS["storage/rag/knowledge/*.md"] --> ACT_INDEX
+    DOSSIERS["storage/rag/knowledge/*.md + config/portfolio.php"] --> ACT_INDEX
+    ACT_INDEX --> SRV_CATALOG
     ACT_INDEX --> SRV_CHUNKER
     ACT_INDEX --> INT_EMBED
     ACT_INDEX --> INT_VECTOR
 
     %% Real-Time Chat Query Pipeline
     UI_MIC -.->|Normalized Voice Transcript| UI_INPUT
-    UI_INPUT -->|JSON: message + history| CTRL_CHAT
+    UI_INPUT -->|JSON: message + history + locale| CTRL_CHAT
     CTRL_CHAT --> SRV_CACHE
     SRV_CACHE --> CACHE_STORE
+    CTRL_CHAT --> ACT_CONTEXT
+    ACT_CONTEXT --> INT_LLM
     CTRL_CHAT --> ACT_RETRIEVE
     ACT_RETRIEVE --> SRV_CACHE
     ACT_RETRIEVE --> INT_EMBED
@@ -187,15 +194,15 @@ flowchart TD
 ### 🔄 The Three Core Workflows Explained
 
 #### 1. Batch Vectorization & Ingestion (`sail artisan rag:index`)
-1. **Source Dossiers:** Ingests 12 structured Markdown files from `storage/rag/knowledge/` representing Moisés's real repos, leadership scenarios, soft skills, personal interests, and boundaries.
+1. **Source Dossiers & SSOT Catalog:** `PortfolioCatalogService` dynamically generates `00-portfolio-catalog` from `config/portfolio.php` (expanding ecosystem taxonomies such as `Laravel -> PHP`, `Next.js -> React/TypeScript`, `Flutter -> Dart`) alongside the 12 Markdown files in `storage/rag/knowledge/`.
 2. **Semantic Partitioning:** `MarkdownChunkerService` parses files by H1/H2 boundaries, ensuring each chunk retains its `document_id`, `section`, and `document_title` metadata without slicing sentences across boundaries.
 3. **Dense Vectorization:** `OpenAiEmbeddingGateway` invokes OpenAI's `text-embedding-3-small` in batches of 20, generating 1536-dimensional floating point vectors.
 4. **Documents API Upsert & Cache Invalidation:** `PineconeVectorStoreGateway` formats records with unique IDs and flattens metadata, posting them in batches of 50 to `POST /namespaces/__default__/documents/upsert` with the mandatory `X-Pinecone-API-Version: 2026-07` header. `RagIndexCommand` then bumps the `rag:kb_version` cache key to invalidate stale cached responses and embeddings.
 
 #### 2. Real-Time Semantic Retrieval, Guardrails & SSE Streaming (`POST /api/rag/chat`)
-1. **Rate Limit & Exact Cache:** Protected by `throttle:10,1`. For first-turn queries (`history` empty), `ChatController` checks `RagCacheService` using normalized query hashes (`rag:resp:v{N}:{hash}`) and replays cached answers via SSE with zero OpenAI/Pinecone calls.
-2. **Context Retrieval:** `RetrieveRelevantContextAction` checks cached embeddings first, embeds on cache miss, queries Pinecone (`topK = 4`), and filters out noise (`minScore >= 0.30`).
-3. **Empty-Context Short-Circuit:** If retrieval returns `[]` on a first-turn query, `ChatController` short-circuits with a localized fallback (`home.rag_out_of_scope_fallback`) without calling OpenAI.
+1. **Rate Limit, Locale & Exact Cache:** Protected by `throttle:10,1`. The UI passes active `locale` (`document.documentElement.lang`), and for first-turn queries (`history` empty), `ChatController` checks `RagCacheService` using normalized query hashes (`rag:resp:v{N}:{hash}`) and replays cached answers via SSE with zero OpenAI/Pinecone calls.
+2. **Multi-Turn Contextualization & Diversified Retrieval:** When `history` is non-empty, `ContextualizeQueryAction` rewrites follow-up queries into standalone search queries before retrieval. `RetrieveRelevantContextAction` checks cached embeddings first, fetches `fetchK = 12` candidates from Pinecone (`minScore >= 0.27`), and diversifies up to `topK = 6` chunks (`maxPerDocument = 2`) so no single project crowds out others.
+3. **Empty-Context Short-Circuit & Strict Grounding:** If retrieval returns `[]` on a first-turn query, `ChatController` short-circuits with a localized fallback (`home.rag_out_of_scope_fallback`) without calling OpenAI. On multi-turn empty retrieval, an explicit system notice prevents technology hallucination or false negatives.
 4. **Guardrailed Assembly & Token Cap:** `SystemPromptService` enforces 3rd-person tone, strict portfolio/personal-profile scope, anti-prompt-injection rules, and professional abuse deflection, while `ChatPromptDTO` caps output via `max_tokens = 600`.
 5. **Non-Blocking SSE & Telemetry:** `OpenAiLlmGateway` streams tokens from `gpt-4o-mini` (`temperature: 0.2`) using a persistent cURL line buffer, emitting `context`, `token`, and `done` events. After completion, `RecordRagInteractionAction` persists anonymized telemetry (`session_hash`, `chunks_count`, `top_score`, `cache_hit`, `blocked_reason`, `latency_ms`, `status`) into `rag_logs`, inspectable via `php artisan rag:logs`.
 
@@ -204,7 +211,7 @@ flowchart TD
 2. **Zero-Crash Fallback (Browser Speech):** If the API key is unset, quotas are exhausted, or an HTTP 503 occurs, the frontend silently falls back to the browser's native `window.speechSynthesis`, providing a 100% reliable voice experience with zero external dependencies.
 
 #### 4. Ground Truth Quality Assurance (`sail artisan rag:evaluate`)
-The system includes a **Golden Dataset** benchmark (`tests/Fixtures/Rag/golden_dataset.json`) with 20 comprehensive test cases covering repositories, leadership, soft skills, personal profile, and negative boundaries. Running `sail artisan rag:evaluate` computes real-time retrieval metrics against Pinecone (`Hit Rate @ 4 >= 80%` threshold), backed by PHPUnit feature test `tests/Feature/Rag/RagGoldenDatasetTest.php`.
+The system includes a **Golden Dataset** benchmark (`tests/Fixtures/Rag/golden_dataset.json`) with 23 comprehensive test cases covering repositories, SSOT catalog aggregation queries, leadership, soft skills, personal profile, and negative boundaries. Running `sail artisan rag:evaluate` computes real-time retrieval metrics against Pinecone (`Hit Rate @ 4: 100%`, `Average Top Score: 0.557`), backed by PHPUnit feature test `tests/Feature/Rag/RagGoldenDatasetTest.php`.
 
 ---
 
@@ -341,15 +348,15 @@ php artisan test
 php artisan test --filter=Rag
 ```
 
-Current test matrix (45 tests, 394 assertions):
+Current test matrix (50 tests, 464 assertions):
 * `Tests\Unit\ExampleTest`: Baseline unit assertion (1 test).
-* `Tests\Unit\Rag\RagDomainTest`: DTOs, Enums, `maxTokens`, guardrail prompt rules (7 tests).
+* `Tests\Unit\Rag\RagDomainTest`: DTOs, Enums, `maxTokens`, anti-hallucination & guardrail prompt rules (7 tests).
 * `Tests\Unit\Rag\RagGatewaysTest`: Mocked OpenAI & Pinecone HTTP adapters, `max_tokens` payload, DI container binding (7 tests).
-* `Tests\Unit\Rag\RagIndexingTest`: Markdown semantic chunking (including personal profile), upsert orchestration, cache version bump on `rag:index` (4 tests).
+* `Tests\Unit\Rag\RagIndexingTest`: Markdown semantic chunking, `PortfolioCatalogService` SSOT generation, full catalog+docs indexing, cache version bump on `rag:index` (6 tests).
 * `Tests\Feature\ExampleTest`: V2 root, `/videogame`, `/v1`, and 301 redirects (5 tests).
-* `Tests\Feature\Rag\RagChatApiTest`: Embedding/response exact cache, history bypass, empty-context short-circuit, `rag_logs` persistence, `rag:logs` CLI, `throttle:10,1` (9 tests).
-* `Tests\Feature\Rag\RagDrawerRenderTest`: Blade view rendering, HUD triggers, localization (1 test).
-* `Tests\Feature\Rag\RagGoldenDatasetTest`: Golden dataset structure & Hit Rate @ 4 simulation across 20 cases (2 tests).
+* `Tests\Feature\Rag\RagChatApiTest`: Embedding/response exact cache, document diversification, `ContextualizeQueryAction`, multi-turn no-context guardrail, client/fallback `locale`, empty-context short-circuit, `rag_logs` persistence, `rag:logs` CLI, `throttle:10,1` (12 tests).
+* `Tests\Feature\Rag\RagDrawerRenderTest`: Blade view rendering, HUD triggers, `document.documentElement.lang` locale payload, localization (1 test).
+* `Tests\Feature\Rag\RagGoldenDatasetTest`: Golden dataset structure & Hit Rate @ 4 simulation across 23 cases (2 tests).
 * `Tests\Feature\Rag\RagTtsTest`: ElevenLabs audio synthesis, 503 fallback handling (4 tests).
 * `Tests\Feature\V2ExtrudedBoxTest`: 2.5D extruded box physics, CAD corner pins (5 tests).
 

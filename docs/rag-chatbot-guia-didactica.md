@@ -8,9 +8,9 @@ Este documento explica, desde los fundamentos hasta el código real de este repo
 
 Cuando alguien le hace una pregunta al chatbot, el sistema **no** le pide a la IA que "recuerde de memoria" quién eres ni le envía todo tu currículum en cada mensaje. En su lugar, aplica **RAG (*Retrieval-Augmented Generation* — Generación Aumentada por Recuperación)**:
 
-1. **Busca primero** en tus archivos de conocimiento (`storage/rag/knowledge/*.md`, incluyendo proyectos, liderazgo, habilidades blandas e intereses personales) únicamente los **4 fragmentos** más parecidos a la pregunta del usuario (usando **embeddings** + **Pinecone**), revisando antes si ya existe respuesta exacta en **caché**.
-2. **Aplica guardrails y short-circuit:** si en el primer turno no supera el umbral mínimo (`minScore = 0.30`), corta antes de llamar al LLM con una respuesta localizada sin gastar tokens.
-3. **Arma un paquete de contexto** con tus reglas endurecidas (`SystemPromptService`), esos 4 fragmentos y el historial reciente.
+1. **Busca primero** en tus archivos de conocimiento (`storage/rag/knowledge/*.md` + catálogo dinámico `00-portfolio-catalog` generado desde `config/portfolio.php`) los fragmentos más parecidos usando **embeddings** + **Pinecone** (con diversificación por documento sobre hasta `12` candidatos y tope de `6` chunks), revisando antes si ya existe respuesta exacta en **caché** y reescribiendo preguntas de seguimiento en multi-turno (`ContextualizeQueryAction`).
+2. **Aplica guardrails y short-circuit:** si en el primer turno ningún fragmento supera el umbral mínimo (`minScore = 0.27`), corta antes de llamar al LLM con una respuesta localizada en el idioma de la UI sin gastar tokens.
+3. **Arma un paquete de contexto** con tus reglas endurecidas (`SystemPromptService`), esos fragmentos diversificados y el historial reciente (o un aviso anti-alucinación si un turno multi-turno no obtuvo nuevos chunks).
 4. **Le pide a OpenAI (`gpt-4o-mini`)** que redacte la respuesta (con tope `max_tokens = 600`) basándose en ese paquete y la va enviando **palabra por palabra en tiempo real** (*streaming* SSE).
 5. **Registra la interacción en MySQL (`rag_logs`)** de forma no bloqueante y, **opcionalmente**, convierte esa respuesta en audio con **ElevenLabs** (o con la voz nativa del navegador si falla).
 
@@ -24,11 +24,11 @@ El módulo RAG está diseñado con **Inversión de Dependencias (DIP)** y arquit
 
 | Capa | Carpeta / Archivo | Responsabilidad |
 | :--- | :--- | :--- |
-| **Frontend (UI + Voz)** | [`rag-drawer.blade.php`](../resources/views/components/v2/rag-drawer.blade.php) | Panel Alpine.js, dictado por micrófono (STT), lector de streaming SSE, renderizado Markdown seguro y reproductor de audio (TTS). |
+| **Frontend (UI + Voz)** | [`rag-drawer.blade.php`](../resources/views/components/v2/rag-drawer.blade.php) | Panel Alpine.js, dictado por micrófono (STT), lector de streaming SSE, envío de `locale` (`document.documentElement.lang`), renderizado Markdown seguro y reproductor de audio (TTS). |
 | **Rutas API** | [`routes/api.php`](../routes/api.php) | Expone `POST /api/rag/chat` y `POST /api/rag/tts` con límite de `throttle:10,1` (10 peticiones por minuto por IP). |
-| **Controladores HTTP** | [`ChatController.php`](../app/Http/Controllers/Rag/ChatController.php) / [`TtsController.php`](../app/Http/Controllers/Rag/TtsController.php) | Valida los datos de entrada, consulta caché exacta, ejecuta short-circuit si no hay contexto, abre streaming SSE (`text/event-stream`) y registra logs en DB. |
-| **Acciones (Casos de uso)** | [`RetrieveRelevantContextAction.php`](../app/Actions/Rag/RetrieveRelevantContextAction.php) / [`IndexKnowledgeBaseAction.php`](../app/Actions/Rag/IndexKnowledgeBaseAction.php) / [`RecordRagInteractionAction.php`](../app/Actions/Rag/RecordRagInteractionAction.php) | Acciones invocables de un solo propósito: indexar en Pinecone, recuperar fragmentos (con caché de embeddings) y persistir telemetría en `rag_logs`. |
-| **Servicios de Dominio** | [`SystemPromptService.php`](../app/Services/Rag/SystemPromptService.php) / [`MarkdownChunkerService.php`](../app/Services/Rag/MarkdownChunkerService.php) / [`RagCacheService.php`](../app/Services/Rag/RagCacheService.php) | Reglas de personalidad y guardrails, chunking por `#` y `##`, y caché exacta normalizada con clave versionada `rag:kb_version`. |
+| **Controladores HTTP** | [`ChatController.php`](../app/Http/Controllers/Rag/ChatController.php) / [`TtsController.php`](../app/Http/Controllers/Rag/TtsController.php) | Valida los datos de entrada, consulta caché exacta, contextualiza multi-turno, ejecuta short-circuit si no hay contexto, abre streaming SSE (`text/event-stream`) y registra logs en DB. |
+| **Acciones (Casos de uso)** | [`ContextualizeQueryAction.php`](../app/Actions/Rag/ContextualizeQueryAction.php) / [`RetrieveRelevantContextAction.php`](../app/Actions/Rag/RetrieveRelevantContextAction.php) / [`IndexKnowledgeBaseAction.php`](../app/Actions/Rag/IndexKnowledgeBaseAction.php) / [`RecordRagInteractionAction.php`](../app/Actions/Rag/RecordRagInteractionAction.php) | Acciones invocables: reescritura multi-turno, indexación (dossiers + catálogo SSOT), búsqueda con caché de embeddings y diversificación por documento, y persistencia en `rag_logs`. |
+| **Servicios de Dominio** | [`PortfolioCatalogService.php`](../app/Services/Rag/PortfolioCatalogService.php) / [`SystemPromptService.php`](../app/Services/Rag/SystemPromptService.php) / [`MarkdownChunkerService.php`](../app/Services/Rag/MarkdownChunkerService.php) / [`RagCacheService.php`](../app/Services/Rag/RagCacheService.php) | Genera `00-portfolio-catalog` desde `config/portfolio.php` con expansión de taxonomía (`Laravel`→`PHP`, etc.), reglas anti-alucinación, chunking por `#` y `##`, y caché exacta versionada (`rag:kb_version`). |
 | **Modelo y Migración** | [`RagLog.php`](../app/Models/RagLog.php) / `create_rag_logs_table` | Persistencia estructurada en MySQL de preguntas, respuestas, chunks, scores, cache hits, bloqueos y latencia. |
 | **Contratos (Puertos)** | `app/Contracts/Rag/*Interface.php` | Interfaces `EmbeddingProviderInterface`, `VectorStoreInterface`, `LlmProviderInterface`, `TtsProviderInterface`. |
 | **Gateways (Adaptadores)** | `app/Gateways/Rag/*Gateway.php` | Código concreto que habla por HTTP/cURL con OpenAI, Pinecone y ElevenLabs usando las llaves de [`config/services.php`](../config/services.php). |
@@ -73,10 +73,10 @@ Cuando buscas en Pinecone, la base calcula qué tan alineado está el vector de 
 - `1.0` = significado prácticamente idéntico.
 - `0.0` = temas sin relación.
 
-En [`ChatController.php`](../app/Http/Controllers/Rag/ChatController.php#L38) y [`RetrieveRelevantContextAction.php`](../app/Actions/Rag/RetrieveRelevantContextAction.php#L24-L38) se aplican dos filtros:
+En [`ChatController.php`](../app/Http/Controllers/Rag/ChatController.php#L78-L88) y [`RetrieveRelevantContextAction.php`](../app/Actions/Rag/RetrieveRelevantContextAction.php#L27-L77) se aplican tres controles complementarios:
 
-- **`topK = 4`:** trae como máximo los **4** fragmentos más cercanos. Limitarlo a 4 evita saturar el prompt con texto irrelevante y controla el gasto de tokens.
-- **`minScore = 0.30`:** descarta cualquier fragmento cuyo puntaje sea menor a `0.30`. Es un filtro de ruido: si alguien pregunta por *"recetas de cocina"*, los fragmentos de tu CV tendrán un score muy bajo y serán filtrados.
+- **`fetchK = 12` + `maxPerDocument = 2` + `topK = 6`:** pide 12 candidatos a Pinecone (sin costo extra de tokens), limita a máximo 2 chunks por documento para que un solo proyecto no acapare todo el contexto, y entrega hasta **6** fragmentos diversos al LLM.
+- **`minScore = 0.27`:** descarta cualquier fragmento cuyo puntaje sea menor a `0.27`. Si alguien pregunta por *"recetas de cocina"*, los fragmentos de tu portafolio quedan por debajo y se descartan.
 
 ### 3.4 ¿Por qué usamos `https://api.openai.com/v1/chat/completions`?
 
@@ -141,8 +141,8 @@ En sistemas con LLMs expuestos al público, los **guardrails** son las reglas y 
 | Capa | Qué protege | Estado actual en el proyecto |
 | :--- | :--- | :--- |
 | **1. Guardrails de entrada (*Input*)** | Tamaño del mensaje, spam, saturación por IP. | [`ChatController.php`](../app/Http/Controllers/Rag/ChatController.php#L31-L36) valida `message` (`max:1000`), `history` (`max:10` items, `max:2000` cada uno), `locale` opcional (`es,en`), y [`routes/api.php`](../routes/api.php#L23) aplica `throttle:10,1` (máx. 10 req/min por IP). |
-| **2. Guardrails de recuperación (*Retrieval*)** | Evita gastar LLM en preguntas sin contexto relevante. | [`RetrieveRelevantContextAction.php`](../app/Actions/Rag/RetrieveRelevantContextAction.php#L28) filtra con `minScore = 0.30`. Si en el primer turno (`history` vacío) devuelve `[]`, [`ChatController.php`](../app/Http/Controllers/Rag/ChatController.php) aplica **short-circuit**, devuelve `home.rag_out_of_scope_fallback` por SSE con `0` llamadas al LLM y registra `status = blocked` (`empty_context`). |
-| **3. Guardrails de prompt (*System Prompt*)** | Define identidad, alcance, tono y anti-*prompt injection*. | [`SystemPromptService.php`](../app/Services/Rag/SystemPromptService.php#L11-L26) exige tercera persona, transparencia con tecnologías no dominadas (Solidity, Unreal Engine C++, firmware), enlaces reales, rechazo estricto de temas fuera de alcance (permitiendo proyectos, capacidades, habilidades blandas e intereses personales documentados), resistencia a *prompt injection* y compostura ante insultos/abuso. |
+| **2. Guardrails de recuperación (*Retrieval*)** | Evita gastar LLM en off-topic y evita alucinaciones en multi-turno. | [`RetrieveRelevantContextAction.php`](../app/Actions/Rag/RetrieveRelevantContextAction.php) filtra con `minScore = 0.27` (`fetchK = 12`, `maxPerDocument = 2`, `topK = 6`). Si en el primer turno (`history` vacío) devuelve `[]`, [`ChatController.php`](../app/Http/Controllers/Rag/ChatController.php) aplica **short-circuit** (`home.rag_out_of_scope_fallback`, `status = blocked`). En multi-turno (`history` no vacío), [`ContextualizeQueryAction.php`](../app/Actions/Rag/ContextualizeQueryAction.php) reescribe la consulta antes de buscar y, si aun así vuelve `[]`, `ChatController` inyecta un aviso estricto prohibiendo inventar tecnologías. |
+| **3. Guardrails de prompt (*System Prompt*)** | Define identidad, alcance, anti-alucinación y anti-*prompt injection*. | [`SystemPromptService.php`](../app/Services/Rag/SystemPromptService.php#L11-L26) exige tercera persona, prohíbe inventar tecnologías/bases de datos y prohíbe negar capacidades por ausencia en un fragmento parcial (solo niega límites explícitamente documentados como Solidity o Unreal C++), además de cubrir habilidades blandas/intereses documentados, anti-*prompt injection* y compostura ante insultos. |
 | **4. Guardrails de salida (*Output*)** | Seguridad en el navegador (XSS) y techo de tokens. | [`ChatPromptDTO.php`](../app/DTOs/Rag/ChatPromptDTO.php#L20) limita la salida a `maxTokens = 600`, y [`rag-drawer.blade.php`](../resources/views/components/v2/rag-drawer.blade.php#L450-L482) escapa `&`, `<`, `>` antes de renderizar Markdown restringiendo enlaces a `http://` o `https://`. |
 
 ### 3.9 Caché exacta versionada y Telemetría en MySQL (`rag_logs`)
@@ -165,7 +165,9 @@ El sistema tiene **dos momentos de vida**: uno *offline* (cuando tú actualizas 
 
 ```mermaid
 flowchart LR
+    CFG["config/portfolio.php\n(SSOT Proyectos/Skills)"] --> CAT["PortfolioCatalogService\n(00-portfolio-catalog)"]
     FILES["storage/rag/knowledge/*.md\n(12 archivos)"] --> CMD["RagIndexCommand\n(php artisan rag:index)"]
+    CAT --> CMD
     CMD --> ACT["IndexKnowledgeBaseAction"]
     ACT --> CHUNK["MarkdownChunkerService\n(Divide por # y ##)"]
     CHUNK --> BATCH["Lotes de 20 chunks"]
@@ -176,7 +178,7 @@ flowchart LR
 ```
 
 1. [`RagIndexCommand.php`](../app/Console/Commands/RagIndexCommand.php) ejecuta [`IndexKnowledgeBaseAction.php`](../app/Actions/Rag/IndexKnowledgeBaseAction.php).
-2. Lee los `.md` en `storage/rag/knowledge/` (puedes indexar uno solo con `--file=nombre.md`).
+2. [`PortfolioCatalogService.php`](../app/Services/Rag/PortfolioCatalogService.php) genera dinámicamente `00-portfolio-catalog` desde [`config/portfolio.php`](../config/portfolio.php) (con expansión genérica de taxonomía como `Laravel` → `PHP`, `Next.js` → `React`/`TypeScript`, `Flutter` → `Dart`) y lee los `.md` de `storage/rag/knowledge/` (puedes indexar uno solo con `--file=...`).
 3. [`MarkdownChunkerService.php`](../app/Services/Rag/MarkdownChunkerService.php) corta cada documento en secciones lógicas con un ID único (`{documentId}-chunk-{n}`).
 4. Agrupa los chunks en **lotes de 20** y los envía a OpenAI (`text-embedding-3-small`) para obtener sus vectores de 1,536 dimensiones.
 5. Agrupa los registros vectoriales (`VectorRecordDTO`) en **lotes de 50** y hace `upsert` en Pinecone (si la versión moderna Documents API devuelve `404`, hace fallback automático al endpoint clásico `/vectors/upsert`).
@@ -192,6 +194,7 @@ sequenceDiagram
     participant UI as rag-drawer.blade.php (Alpine.js)
     participant API as Laravel API + ChatController
     participant CACHE as RagCacheService
+    participant CTX as ContextualizeQueryAction
     participant RET as RetrieveRelevantContextAction
     participant OAI_E as OpenAiEmbeddingGateway
     participant PIN as PineconeVectorStoreGateway
@@ -200,7 +203,7 @@ sequenceDiagram
     participant TTS as TtsController + ElevenLabs
 
     U->>UI: Escribe o dicta por micrófono
-    UI->>API: POST /api/rag/chat (message + últimos 4 mensajes)
+    UI->>API: POST /api/rag/chat (message + últimos 4 mensajes + locale)
     API->>API: Middleware throttle:10,1 + Validate
     alt Primer turno (history vacío)
         API->>CACHE: Buscar respuesta exacta normalizada
@@ -208,22 +211,25 @@ sequenceDiagram
             API-->>UI: Replay SSE (context + token + done)
             API->>LOG: Guarda interacción (cache_hit=true)
         end
+    else Turno de seguimiento (history no vacío)
+        API->>CTX: Reescribir pregunta autocontenida
+        CTX-->>API: Query contextualizada
     end
-    API->>RET: Invoca búsqueda semántica (topK=4, minScore=0.30)
+    API->>RET: Búsqueda semántica (fetchK=12, topK=6, maxPerDoc=2, minScore=0.27)
     RET->>CACHE: Buscar embedding cacheado
     opt Embedding MISS
         RET->>OAI_E: POST /v1/embeddings (text-embedding-3-small)
         OAI_E-->>RET: Vector [1536 floats]
         RET->>CACHE: Guardar embedding (24h)
     end
-    RET->>PIN: POST /documents/search (top_k=4)
+    RET->>PIN: POST /documents/search (top_k=12)
     PIN-->>RET: Chunks con score
-    RET-->>API: Chunks con score >= 0.30
+    RET-->>API: Hasta 6 chunks diversificados (score >= 0.27)
     alt Primer turno sin chunks relevantes
         API-->>UI: SSE fallback localizado (0 tokens LLM)
         API->>LOG: Guarda interacción (status=blocked, empty_context)
     else Con chunks o con history
-        API->>LLM: streamChat(SystemPrompt + Chunks + History + Query, max_tokens=600)
+        API->>LLM: streamChat(SystemPrompt + Chunks/Aviso + History + Query, max_tokens=600)
         API-->>UI: SSE event: context (fuentes)
         LLM->>LLM: POST /v1/chat/completions (stream: true, temp: 0.2, max_tokens: 600)
         loop Token a token
@@ -246,11 +252,11 @@ sequenceDiagram
 
 | Paso | Componente / Servicio | Qué hace exactamente | Posibles escenarios y errores | Qué devuelve |
 | :--- | :--- | :--- | :--- | :--- |
-| **1. Captura en UI** | [`rag-drawer.blade.php`](../resources/views/components/v2/rag-drawer.blade.php) | Si usa micrófono, `SpeechRecognition` (`es-CO` / `en-US`) transcribe y `normalizeSpokenText()` corrige errores fonéticos comunes (*"Moisés Escorpio"* → *"Moisés Corcho"*). Empaqueta `message` + últimos 4 turnos (`slice(-5, -1)`). | • Navegador sin `SpeechRecognition` → alerta amigable.<br>• Input vacío o `isLoading` activo → no envía. | `fetch('/api/rag/chat')` con header `Accept: text/event-stream` y token CSRF. |
+| **1. Captura en UI** | [`rag-drawer.blade.php`](../resources/views/components/v2/rag-drawer.blade.php) | Si usa micrófono, `SpeechRecognition` (`es-CO` / `en-US`) transcribe y `normalizeSpokenText()` corrige errores fonéticos comunes (*"Moisés Escorpio"* → *"Moisés Corcho"*). Empaqueta `message`, últimos 4 turnos (`slice(-5, -1)`) y `locale` (`document.documentElement.lang`). | • Navegador sin `SpeechRecognition` → alerta amigable.<br>• Input vacío o `isLoading` activo → no envía. | `fetch('/api/rag/chat')` con header `Accept: text/event-stream` y token CSRF. |
 | **2. Puerta HTTP + Caché** | [`routes/api.php`](../routes/api.php), [`ChatController`](../app/Http/Controllers/Rag/ChatController.php) y [`RagCacheService`](../app/Services/Rag/RagCacheService.php) | Aplica `throttle:10,1` y valida `message` (`max:1000`), `history` (`max:10`, rol `user`/`assistant`, `max:2000` c/u) y `locale` (`es`/`en`). Si `history` está vacío, revisa la caché exacta normalizada. | • Más de 10 req/min → **HTTP 429**.<br>• Payload inválido → **HTTP 422**.<br>• **Cache HIT:** responde por SSE al instante con `0` llamadas a OpenAI/Pinecone y registra `cache_hit = true`. | Hit de caché o variables validadas `$userMessage` e `$history`. |
-| **3. Embedding de la query** | [`RetrieveRelevantContextAction`](../app/Actions/Rag/RetrieveRelevantContextAction.php) → [`OpenAiEmbeddingGateway`](../app/Gateways/Rag/OpenAiEmbeddingGateway.php) | Revisa primero si el vector de la query normalizada está en caché; si no, envía `$userMessage` a `POST /v1/embeddings` (`text-embedding-3-small`) y lo guarda 24h. | • Falta `OPENAI_API_KEY` o OpenAI falla → lanza `EmbeddingException` (HTTP 500 antes de abrir el stream). | Vector de `1,536` números flotantes. |
-| **4. Búsqueda Vectorial y Short-Circuit** | [`PineconeVectorStoreGateway`](../app/Gateways/Rag/PineconeVectorStoreGateway.php) → `RetrieveRelevantContextAction` / `ChatController` | Consulta Pinecone (`top_k = 4`) y filtra `score >= 0.30`. | • Error de red/key en Pinecone → `VectorStoreException` (HTTP 500).<br>• Chunks `< 0.30` en primer turno (`[]`) → **Short-circuit**: responde `home.rag_out_of_scope_fallback` sin llamar al LLM y guarda `status = blocked` (`empty_context`).<br>• Con `history` no vacío → continúa usando la conversación previa. | Arreglo de `ScoredChunkDTO` (de 0 a 4 elementos). |
-| **5. Armado del Prompt** | [`SystemPromptService`](../app/Services/Rag/SystemPromptService.php) + [`OpenAiLlmGateway::buildMessages()`](../app/Gateways/Rag/OpenAiLlmGateway.php) | Construye `messages`:<br>1. `system`: los chunks de Pinecone (solo si hay chunks).<br>2. `system`: las 8 reglas de `SystemPromptService` (persona, alcance técnico/personal, anti-injection, respeto).<br>3. `user`/`assistant`: historial.<br>4. `user`: pregunta actual. | • Si `$contextChunks` está vacío (con `history`), omite el contexto de Pinecone y mantiene `SystemPromptService` + historial + pregunta. | Estructura `messages` lista para OpenAI Chat Completions. |
+| **3. Contextualización + Embedding** | [`ContextualizeQueryAction`](../app/Actions/Rag/ContextualizeQueryAction.php) → [`RetrieveRelevantContextAction`](../app/Actions/Rag/RetrieveRelevantContextAction.php) → [`OpenAiEmbeddingGateway`](../app/Gateways/Rag/OpenAiEmbeddingGateway.php) | Si hay `history`, reescribe preguntas cortas/anafóricas en una consulta autocontenida (fallback al texto original si falla). Luego revisa caché de embeddings o llama a `POST /v1/embeddings`. | • Falta `OPENAI_API_KEY` o OpenAI falla en embeddings → lanza `EmbeddingException` (HTTP 500 antes del stream). | Vector de `1,536` números flotantes. |
+| **4. Búsqueda Vectorial, Diversificación y Short-Circuit** | [`PineconeVectorStoreGateway`](../app/Gateways/Rag/PineconeVectorStoreGateway.php) → `RetrieveRelevantContextAction` / `ChatController` | Consulta Pinecone (`fetchK = 12`), filtra `score >= 0.27`, ordena por score y selecciona hasta `6` chunks con máximo `2` por `document_id`. | • Error de red/key en Pinecone → `VectorStoreException` (HTTP 500).<br>• Chunks `< 0.27` en primer turno (`[]`) → **Short-circuit**: responde `home.rag_out_of_scope_fallback` sin llamar al LLM y guarda `status = blocked` (`empty_context`).<br>• Con `history` no vacío y `[]` → inyecta aviso anti-alucinación. | Arreglo de hasta 6 `ScoredChunkDTO` diversificados. |
+| **5. Armado del Prompt** | [`SystemPromptService`](../app/Services/Rag/SystemPromptService.php) + [`OpenAiLlmGateway::buildMessages()`](../app/Gateways/Rag/OpenAiLlmGateway.php) | Construye `messages`:<br>1. `system`: chunks recuperados de Pinecone (o aviso anti-alucinación en multi-turno sin chunks).<br>2. `system`: las 8 reglas de `SystemPromptService`.<br>3. `user`/`assistant`: historial.<br>4. `user`: pregunta actual. | • Garantiza grounding estricto sin inventar stacks ni negar skills por ausencia en un solo fragmento. | Estructura `messages` lista para OpenAI Chat Completions. |
 | **6. Inferencia, Streaming y Log DB** | [`ChatController`](../app/Http/Controllers/Rag/ChatController.php), [`OpenAiLlmGateway::streamChat()`](../app/Gateways/Rag/OpenAiLlmGateway.php) y [`RecordRagInteractionAction`](../app/Actions/Rag/RecordRagInteractionAction.php) | Abre `StreamedResponse` (`200 OK`, `text/event-stream`):<br>1. Emite `event: context`.<br>2. Conecta por cURL a OpenAI (`gpt-4o-mini`, `temperature: 0.2`, `max_tokens: 600`, `stream: true`).<br>3. Emite `event: token` + `flush()`.<br>4. Guarda respuesta en caché (si primer turno) y emite `event: done`.<br>5. Registra fila en `rag_logs`. | • Error HTTP `>= 400` o corte cURL → `event: error` y log con `status = error`.<br>• Si falla MySQL al guardar el log, `RecordRagInteractionAction` hace `Log::warning` sin romper la respuesta SSE. | Flujo continuo SSE + registro auditable en `rag_logs`. |
 | **7. Síntesis de Voz (Opcional)** | [`TtsController`](../app/Http/Controllers/Rag/TtsController.php) → [`ElevenLabsTtsGateway`](../app/Gateways/Rag/ElevenLabsTtsGateway.php) | Al recibir `done`, si `voiceEnabled` está activo, el frontend limpia URLs y símbolos Markdown, recorta a **500 caracteres** y llama a `POST /api/rag/tts`. ElevenLabs usa `eleven_multilingual_v2` (`stability: 0.5`, `similarity_boost: 0.8`). | • **Éxito:** devuelve `audio/mpeg` (cacheado por 24h con `max-age=86400`) y se reproduce.<br>• **Fallo** (sin key, cuota agotada, HTTP 402/503): `console.warn` y **fallback automático** a `window.speechSynthesis` del navegador. | Audio MP3 clonado o locución nativa del navegador. |
 
@@ -272,19 +278,19 @@ No todos los servicios cobran "tokens", ni todas las partes de tu flujo gastan l
 | Etapa del flujo | Proveedor / Modelo | Unidad que consume | Estimación por pregunta |
 | :--- | :--- | :--- | :--- |
 | **1. Vectorizar pregunta** | OpenAI `text-embedding-3-small` | Tokens de entrada | **10 – 250 tokens** (`0` tokens si hay hit en caché de embeddings o respuesta). |
-| **2. Buscar contexto** | Pinecone Serverless | Unidades de lectura (RU), **0 tokens** | 1 consulta `top_k = 4` (`0` consultas si hay hit de caché de respuesta). |
-| **3. Input del LLM** | OpenAI `gpt-4o-mini` | Tokens de entrada | **~1,200 – 2,800+ tokens** (`0` tokens en short-circuit o cache hit). |
+| **2. Buscar contexto** | Pinecone Serverless | Unidades de lectura (RU), **0 tokens** | 1 consulta `fetchK = 12` (`0` consultas si hay hit de caché de respuesta). |
+| **3. Input del LLM** | OpenAI `gpt-4o-mini` | Tokens de entrada | **~1,500 – 3,200+ tokens** (`0` tokens en short-circuit o cache hit; hasta `6` chunks diversificados). |
 | **4. Output del LLM** | OpenAI `gpt-4o-mini` | Tokens de salida | **~150 – 600 tokens** (tope `maxTokens = 600` en `ChatPromptDTO`). |
 | **5. Audio (opcional)** | ElevenLabs `eleven_multilingual_v2` | **Caracteres** (no tokens) | Máximo **500 caracteres** por reproducción ([`ElevenLabsTtsGateway.php`](../app/Gateways/Rag/ElevenLabsTtsGateway.php#L39)). |
 
 #### Desglose real de los tokens de entrada en el paso 3 (`gpt-4o-mini`):
 
 1. **System Prompt ([`SystemPromptService.php`](../app/Services/Rag/SystemPromptService.php)):** ~1,200 caracteres ≈ **~300 tokens** fijos en cada petición.
-2. **Contexto recuperado (hasta 4 chunks):** si cada chunk recuperado promedia 250–450 tokens, son **~1,000 – 1,800 tokens** (si `minScore < 0.30` los descarta todos, aquí son `0` tokens).
+2. **Contexto recuperado (hasta 6 chunks diversificados):** si cada chunk recuperado promedia 250–450 tokens, son **~1,200 – 2,500 tokens** (si `minScore < 0.27` los descarta todos, aquí son `0` tokens).
 3. **Historial conversacional (`history`):** el frontend envía los últimos 4 mensajes previos de la sesión (el backend acepta hasta `10` mensajes de hasta `2,000` chars). En una charla normal añade **~200 – 1,200 tokens** (en el peor caso de abuso directo a la API, hasta ~5,000+ tokens).
 4. **Pregunta actual (`userMessage`):** hasta `1,000` caracteres ≈ **~10 – 250 tokens**.
 
-> **Nota importante sobre costos:** cada turno de conversación vuelve a enviar el System Prompt + nuevos chunks + el historial acumulado. Por eso limitar el historial en el frontend (últimos 4 mensajes) y restringir `topK` a `4` mantiene el consumo muy bajo y predecible.
+> **Nota importante sobre costos:** cada turno de conversación vuelve a enviar el System Prompt + nuevos chunks + el historial acumulado. Por eso limitar el historial en el frontend (últimos 4 mensajes) y restringir `topK` a `6` (con máximo `2` por documento) mantiene el consumo bajo y predecible.
 
 ---
 
@@ -306,7 +312,7 @@ En desarrollo tradicional escribes `assertEquals(4, 2 + 2)`. En IA eso no basta,
 Si puedes responder estas 5 preguntas con tus propias palabras, ya dominas la arquitectura completa del chatbot:
 
 - [ ] ¿Por qué `MarkdownChunkerService` divide los documentos por encabezados `##` en lugar de vectorizar todo el archivo completo?
-- [ ] ¿Cuál es la diferencia práctica entre `topK = 4` y `minScore = 0.30` en `RetrieveRelevantContextAction`?
+- [ ] ¿Cuál es la diferencia práctica entre `fetchK = 12`, `maxPerDocument = 2`, `topK = 6` y `minScore = 0.27` en `RetrieveRelevantContextAction`?
 - [ ] ¿Por qué `OpenAiLlmGateway` usa `/v1/chat/completions` con `temperature: 0.2` y un buffer persistente en cURL?
 - [ ] ¿En qué pasos exactos de una petición se consumen tokens de OpenAI y en cuáles se consumen caracteres o lecturas sin tokens?
 - [ ] ¿Cómo detienen el gasto de tokens los guardrails actuales (`short-circuit`, `SystemPromptService`, `max_tokens`, `throttle:10,1`) y la caché versionada `rag:kb_version`?

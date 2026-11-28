@@ -16,5 +16,6 @@ class RagDrawerRenderTest extends TestCase
         $response->assertSee('MOISÉS AI');
         $response->assertSee('RAG ENGINE: ONLINE');
         $response->assertSee('Leen Honey');
+        $response->assertSee('document.documentElement.lang', false);
     }
 }

@@ -9,6 +9,7 @@ use App\Contracts\Rag\EmbeddingProviderInterface;
 use App\Contracts\Rag\VectorStoreInterface;
 use App\Enums\Rag\EmbeddingModelEnum;
 use App\Services\Rag\MarkdownChunkerService;
+use App\Services\Rag\PortfolioCatalogService;
 use App\Services\Rag\RagCacheService;
 use Mockery;
 use Tests\TestCase;
@@ -107,5 +108,53 @@ MD;
         $this->assertSame('Personal Values & Human Perspective', $chunks[2]->metadata['section']);
         $this->assertStringContainsString('piano', $chunks[1]->content);
         $this->assertStringContainsString('ciclismo', $chunks[1]->content);
+    }
+
+    public function test_portfolio_catalog_service_builds_ssot_chunks_from_config(): void
+    {
+        $catalog = new PortfolioCatalogService(new MarkdownChunkerService);
+        $chunks = $catalog->buildChunks();
+
+        $this->assertCount(2, $chunks);
+        $this->assertSame('00-portfolio-catalog', $chunks[0]->documentId);
+
+        $projectsIndex = $chunks[0]->content;
+        foreach (config('portfolio.projects') as $project) {
+            $this->assertStringContainsString($project['title'], $projectsIndex);
+        }
+
+        // Ecosystem expansion covers parent languages & shared stacks generically
+        $this->assertStringContainsString('PHP', $projectsIndex);
+        $this->assertStringContainsString('Livewire 3', $projectsIndex);
+        $this->assertStringContainsString('Tailwind CSS 4', $projectsIndex);
+        $this->assertStringContainsString('Dart', $projectsIndex);
+        $this->assertStringContainsString('TypeScript', $projectsIndex);
+    }
+
+    public function test_full_index_knowledge_base_includes_dynamic_portfolio_catalog(): void
+    {
+        $chunker = new MarkdownChunkerService;
+        $embeddingMock = Mockery::mock(EmbeddingProviderInterface::class);
+        $vectorStoreMock = Mockery::mock(VectorStoreInterface::class);
+
+        $embeddingMock->shouldReceive('embedBatch')
+            ->atLeast()->once()
+            ->andReturnUsing(fn (array $texts) => array_fill(0, count($texts), array_fill(0, 1536, 0.01)));
+
+        $upsertedIds = [];
+        $vectorStoreMock->shouldReceive('upsert')
+            ->atLeast()->once()
+            ->andReturnUsing(function (array $records) use (&$upsertedIds): void {
+                foreach ($records as $record) {
+                    $upsertedIds[] = $record->id;
+                }
+            });
+
+        $action = new IndexKnowledgeBaseAction($chunker, $embeddingMock, $vectorStoreMock);
+        $count = $action();
+
+        $this->assertGreaterThan(30, $count);
+        $this->assertContains('00-portfolio-catalog-chunk-1', $upsertedIds);
+        $this->assertContains('12-soft-skills-and-personal-profile-chunk-1', $upsertedIds);
     }
 }

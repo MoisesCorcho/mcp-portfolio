@@ -9,18 +9,25 @@ use App\Contracts\Rag\VectorStoreInterface;
 use App\DTOs\Rag\VectorRecordDTO;
 use App\Enums\Rag\EmbeddingModelEnum;
 use App\Services\Rag\MarkdownChunkerService;
+use App\Services\Rag\PortfolioCatalogService;
 use Illuminate\Support\Facades\File;
 
 final class IndexKnowledgeBaseAction
 {
+    private readonly PortfolioCatalogService $catalogService;
+
     public function __construct(
         private readonly MarkdownChunkerService $chunker,
         private readonly EmbeddingProviderInterface $embeddingProvider,
         private readonly VectorStoreInterface $vectorStore,
-    ) {}
+        ?PortfolioCatalogService $catalogService = null,
+    ) {
+        $this->catalogService = $catalogService ?? new PortfolioCatalogService($this->chunker);
+    }
 
     /**
-     * Ingest and index technical markdown files from storage/rag/knowledge.
+     * Ingest and index technical markdown files from storage/rag/knowledge
+     * plus the dynamically generated SSOT portfolio catalog.
      *
      * @param  ?callable(string $message): void  $progressCallback
      * @return int Total chunks indexed
@@ -28,36 +35,47 @@ final class IndexKnowledgeBaseAction
     public function __invoke(?string $specificFile = null, ?callable $progressCallback = null): int
     {
         $dir = storage_path('rag/knowledge');
-
-        if (! File::isDirectory($dir)) {
-            return 0;
-        }
-
-        $files = $specificFile
-            ? [new \SplFileInfo($dir.'/'.basename($specificFile))]
-            : File::files($dir);
-
         $allChunks = [];
+        $includeCatalog = $specificFile === null
+            || pathinfo($specificFile, PATHINFO_FILENAME) === PortfolioCatalogService::CATALOG_DOCUMENT_ID;
 
-        foreach ($files as $file) {
-            if ($file->getExtension() !== 'md') {
-                continue;
-            }
-
-            $content = File::get($file->getPathname());
-            $documentId = $file->getBasename('.md');
-            $chunks = $this->chunker->chunk($documentId, $content);
-
-            foreach ($chunks as $chunk) {
+        if ($includeCatalog) {
+            $catalogChunks = $this->catalogService->buildChunks();
+            foreach ($catalogChunks as $chunk) {
                 $allChunks[] = $chunk;
             }
-
             if ($progressCallback) {
-                $progressCallback("Chunked {$file->getFilename()} (".count($chunks).' chunks)');
+                $progressCallback('Generated '.PortfolioCatalogService::CATALOG_DOCUMENT_ID.' from config/portfolio.php ('.count($catalogChunks).' chunks)');
             }
         }
 
-        if (empty($allChunks)) {
+        if ($specificFile === null || pathinfo($specificFile, PATHINFO_FILENAME) !== PortfolioCatalogService::CATALOG_DOCUMENT_ID) {
+            if (File::isDirectory($dir)) {
+                $files = $specificFile
+                    ? [new \SplFileInfo($dir.'/'.basename($specificFile))]
+                    : File::files($dir);
+
+                foreach ($files as $file) {
+                    if (! $file->isFile() || $file->getExtension() !== 'md') {
+                        continue;
+                    }
+
+                    $content = File::get($file->getPathname());
+                    $documentId = $file->getBasename('.md');
+                    $chunks = $this->chunker->chunk($documentId, $content);
+
+                    foreach ($chunks as $chunk) {
+                        $allChunks[] = $chunk;
+                    }
+
+                    if ($progressCallback) {
+                        $progressCallback("Chunked {$file->getFilename()} (".count($chunks).' chunks)');
+                    }
+                }
+            }
+        }
+
+        if ($allChunks === []) {
             return 0;
         }
 

@@ -602,7 +602,8 @@ document.addEventListener('alpine:init', () => {
                     },
                     body: JSON.stringify({
                         message: query,
-                        history: historyPayload
+                        history: historyPayload,
+                        locale: document.documentElement.lang || 'es'
                     })
                 });
 

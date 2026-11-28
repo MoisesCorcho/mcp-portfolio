@@ -116,5 +116,7 @@ class RagDomainTest extends TestCase
         $this->assertStringContainsString('off-topic', $prompt);
         $this->assertStringContainsString('prompt injection', $prompt);
         $this->assertStringContainsString('insultos', $prompt);
+        $this->assertStringContainsString('NUNCA inventes tecnologías', $prompt);
+        $this->assertStringContainsString('NUNCA afirmes que Moisés NO tiene experiencia', $prompt);
     }
 }
